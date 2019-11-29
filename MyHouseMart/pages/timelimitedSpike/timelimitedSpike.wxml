@@ -1,0 +1,177 @@
+<view class='shops' wx:if="{{cartQuantity>0}}" catchtap="cartDetail">
+  <view class='shops-view'>
+    <image src='../../images/shop.svg'></image>
+    <text>{{cartQuantity}}</text>
+  </view>
+</view>
+<scroll-view bindscroll='layoutScroll' scroll-y="true" style="height: {{windowHeight}}px;" wx:if="{{!noShop}}">
+  <!-- 顶部banner -->
+  <image class="spike-banner" src="{{backgroundUrl}}"></image>
+  <view class="time-countdown {{navFixed? 'positionFixed':''}}">
+    <!-- 时段状态 -->
+    <scroll-view upper-threshold="0" scroll-into-view="{{intoView}}" scroll-with-animation="true" scroll-x="true" class="timeslot">
+      <view id="view{{index}}" class="time-status" wx:for="{{timeText}}" wx:for-item="item" wx:key="index">
+
+        <view class="click-content" wx:if="{{item.timeStatus==0}}" data-index="{{index}}" data-item="{{item}}" catchtap="showResult">
+          <text class="{{clickIndex==index?'time-start':'end-time'}}">{{we.toString(item.timeFrom)}}-{{we.toString(item.timeTo)}}</text>
+          <view class="{{clickIndex==index?'time-tips':'end-tips'}}">
+            <text>已结束</text>
+          </view>
+        </view>
+
+        <view class="click-content" wx:if="{{item.timeStatus==1}}" data-index="{{index}}" data-item="{{item}}" catchtap="showResult">
+          <text class="{{clickIndex==index?'time-start':'about-start'}}">{{we.toString(item.timeFrom)}}-{{we.toString(item.timeTo)}}</text>
+          <view class="{{clickIndex==index?'time-tips':'start-tips'}}">
+            <text>已开抢</text>
+          </view>
+        </view>
+
+        <view class="click-content" wx:if="{{item.timeStatus==2}}" data-index="{{index}}" data-item="{{item}}" catchtap="showResult">
+          <text class="{{clickIndex==index?'time-start':'about-start'}}">{{we.toString(item.timeFrom)}}-{{we.toString(item.timeTo)}}</text>
+          <view class="{{clickIndex==index?'time-tips':'start-tips'}}">
+            <text>即将开始</text>
+          </view>
+        </view>
+
+      </view>
+    </scroll-view>
+    <!-- 倒计时 -->
+    <!--已结束  -->
+    <view class="countdown" wx:if="{{timeText.length!=0 && timeStatus==0}}">
+      <view class="countdown-tip">活动已结束，看看有没有错过的宝贝！</view>
+    </view>
+
+    <!-- 已开始 -->
+    <view class="countdown" wx:if="{{timeText.length!=0 && timeStatus==1}}">
+      <view class="countdown-tip">抢购中，下手要快哦！</view>
+      <view class="countdown-time">
+        <view class="countdown-content">
+          <text class="countdown-text">距离结束</text>
+          <text class="second">{{Today[0]}}</text>
+          <text class="comma">:</text>
+          <text class="second">{{Today[1]}}</text>
+          <text class="comma">:</text>
+          <text class="second">{{Today[2]}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 即将开始 -->
+    <view class="countdown" wx:if="{{timeText.length!=0 && timeStatus==2}}">
+      <view class="countdown-tip">即将开始，记得来哦!</view>
+      <view class="countdown-time">
+        <view class="countdown-content">
+          <text class="countdown-text">距离开始</text>
+          <text class="second">{{Today[0]}}</text>
+          <text class="comma">:</text>
+          <text class="second">{{Today[1]}}</text>
+          <text class="comma">:</text>
+          <text class="second">{{Today[2]}}</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 秒杀商品列表 -->
+  <view class="shoplist {{navFixed? 'shopmarTop':''}}">
+
+    <!-- 已结束 -->
+    <view class="shop-message" catchtap="toDetails" wx:for="{{shopList}}" wx:key="index" data-item="{{item}}" wx:if="{{timeStatus==0}}">
+      <image src="{{item.picAddr?item.picAddr:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'}}"></image>
+      <view class="shop-content">
+        <view class="shop-end-name">{{(item.remarksName=="" || item.remarksName==null)?item.itemName:item.remarksName}}</view>
+        <view class="purchase-end-limit">
+          <text>平台总售 {{item.salesQty}}</text>
+          <text>已售 {{item.currentQuantity}}</text>
+        </view>
+        <view class="current-price">¥{{we.toFixed(item.activitySalePrice!=null?item.activitySalePrice:item.salePrice)}}</view>
+        <view wx:if="{{item.activitySalePrice!=null}}" class="original-price">¥{{we.toFixed(item.salePrice)}}</view>
+        <button class="end-btn" catchtap="stopBubbling">已结束</button>
+      </view>
+    </view>
+
+    <!-- 已开始 -->
+    <view class="shop-message" catchtap="toDetails" wx:for="{{shopList}}" wx:key="index" data-item="{{item}}" wx:if="{{timeStatus==1}}">
+      <image src="{{item.picAddr?item.picAddr:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'}}"></image>
+      <view class="shop-content">
+        <view class="shop-name">{{(item.remarksName=="" || item.remarksName==null)?item.itemName:item.remarksName}}</view>
+        <view class="purchase-limit">
+          <text>平台总售 {{item.salesQty}}</text>
+          <text wx:if="{{item.limitedByUser!=null}}">限购{{item.limitedByUser}}件</text>
+        </view>
+        <view class="shop-sale">
+          <text class="restricted-sale">限售{{item.vQuantityTotal}}</text>
+          <text class="hased-sale">已售{{we.percentage(item.currentQuantity,item.vQuantityTotal)}}%</text>
+        </view>
+        <progress class="sale-progress" percent="{{we.percentage(item.currentQuantity,item.vQuantityTotal)}}" border-radius="2rpx" backgroundColor="#FFE0E0" activeColor="#FF5A52" stroke-width="2"></progress>
+        <view class="current-price">¥{{we.toFixed(item.activitySalePrice!=null?item.activitySalePrice:item.salePrice)}}</view>
+        <view wx:if="{{item.activitySalePrice!=null}}" class="original-price">¥{{we.toFixed(item.salePrice)}}</view>
+        <button wx:if="{{we.toNum(item.stockQty)!=0 && item.limitedByUser!=0}}" style="{{item.confine?'background:#D6D6D6':''}}" class="sale-btn" data-item="{{shopList}}" data-index="{{index}}" catchtap="saleBtn">{{item.confine?"已达上限":"马上抢"}}</button>
+        <button wx:if="{{we.toNum(item.stockQty)==0 || item.limitedByUser==0}}" class="end-btn" catchtap="stopBubbling">抢光了</button>
+      </view>
+    </view>
+
+    <!-- 即将开始 -->
+    <view class="shop-message" catchtap="toDetails"  wx:for="{{shopList}}" wx:key="index" data-item="{{item}}" wx:if="{{timeStatus==2}}">
+      <image src="{{item.picAddr?item.picAddr:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'}}"></image>
+      <view class="shop-content">
+        <view class="shop-end-name">{{(item.remarksName=="" || item.remarksName==null)?item.itemName:item.remarksName}}</view>
+        <view class="purchase-staring-limit"></view>
+        <view class="current-price">¥{{we.toFixed(item.activitySalePrice!=null?item.activitySalePrice:item.salePrice)}}</view>
+        <view wx:if="{{item.activitySalePrice!=null}}" class="original-price">¥{{we.toFixed(item.salePrice)}}</view>
+        <view catchtap="stopBubbling">
+          <form wx:if="{{item.remindMe==true}}" report-submit bindsubmit="formSubmitDebounce" data-item="{{item}}" >
+            <button class="warn-btn" form-type="submit">提醒我</button>
+          </form>
+          <form wx:else report-submit bindsubmit="formSubmitDebounce" data-item="{{item}}" >
+            <button class="cancel-btn" form-type="submit">取消提醒</button>
+          </form>
+        </view>
+      </view>
+    </view>
+
+  </view>
+  <view class="good_box" hidden="{{hide_good_box}}"  style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+</scroll-view>
+
+<!-- 没有秒杀活动 -->
+<view class="noshop" wx:if="{{noShop}}">
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/65252c0d5e7d4ebcbc1cba2d8817a746.svg" />
+  <text>暂无活动</text>
+</view>
+  
+<wxs module="we">
+  var toFixed = function(num) {
+    num = Number(num);
+    return num.toFixed(2);
+  }
+
+  var percentage = function(num1, num2) {
+    num1 = Number(num1)
+    num2 = Number(num2)
+    if(num1==num2){
+      return 100
+    }else{
+      var nums = (num1 / num2) * 100;
+      return nums.toFixed(2);
+    }
+  }
+
+  var toNum = function(num){
+    num = Number(num)
+    return num
+  }
+
+  var toString = function(str){
+    str = str.slice(0,5)
+    return str;
+  }
+
+  module.exports = {
+    toFixed: toFixed,
+    percentage: percentage,
+    toNum:toNum,
+    toString:toString
+  }
+</wxs>

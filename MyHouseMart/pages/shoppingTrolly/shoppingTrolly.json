@@ -1,0 +1,11 @@
+{
+    "component": true,
+    "usingComponents": {
+          "quit": "../../component/quit/quit",
+          "loseEfficacy":"./loseEfficacy/loseEfficacy",
+          "shade":"./shade/shade"
+    },
+    "navigationBarTitleText": "购物车",
+    "navigationBarBackgroundColor": "#FFEC14",
+    "navigationBarTextStyle": "black"
+}

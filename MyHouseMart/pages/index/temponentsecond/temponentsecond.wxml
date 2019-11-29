@@ -1,0 +1,50 @@
+<view class='temponent' wx:for="{{twoList}}" wx:key='index'>
+  <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+  <view class='temponent-img'>
+    <view style='background:url({{item.blPic}}) no-repeat;background-size:cover;'>
+      <text class='title'>{{item.title}}</text>
+      <text class='subtitle' style='{{item.subtitle.length<9?"line-height:72rpx":""}}'>{{item.subtitle}}</text>
+    </view>
+  </view>
+  <view class="temponent-margin">
+    <block wx:for="{{item.items}}" wx:for-item='items' wx:key="index">
+      <view class='temponent-goods' catchtap='details' data-item="{{items}}">
+        <view class='goods'>
+          <image lazy-load="true" src='{{items.picAddr?items.picAddr:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+          <text class="text" style='{{items.stockQty==0 || items.itemStatus=="FORSALE"?"background:rgba(160, 161, 163, 1)":""}}' wx:if="{{items.refundValue!==0 && items.refundValue!==null}}">返现{{items.refundValue}}元</text>
+          <text class="text1" wx:if="{{items.secKilling}}">限时秒杀中</text>
+          <view class='complete' wx:if="{{items.stockQty==0 || items.itemStatus=='FORSALE'}}">
+            <view>{{items.stockQty==0?"已售罄":"待售"}}</view>
+          </view>
+        </view>
+        <view class='goods-text'>
+          <view class='goods-name'>
+            {{items.itemName}}
+          </view>
+          <view class='goods-price'>
+            <view class='discount' style='{{items.stockQty==0||items.itemStatus=="FORSALE"?"border:2rpx solid #A0A1A3;color:#A0A1A3;":""}}' wx:if="{{items.satisfied.length!==0}}">{{items.satisfied[0]}}</view>
+            <view class='morning' wx:if="{{items.stTimes.length!==0}}" style="{{items.satisfied.length==0?'margin-left:24rpx':''}}">{{items.stTimes[0].stName}}</view>
+          </view>
+          <view class='price'>
+            <view class='vipprice' style='{{items.stockQty==0 || items.itemStatus=="FORSALE"?"color:#A0A1A3;":""}}' wx:if="{{items.disPrice!==null}}">¥{{we.toFixed(items.disPrice)}}</view>
+            <view class='saleprice' style='{{items.disPrice==null && (items.stockQty==0 ||items.itemStatus=="FORSALE")?"color:#A0A1A3;font-size:30rpx;font-weight:500;margin-left:24rpx":items.disPrice==null ?"color:#FF5A52;font-size:30rpx;margin-left:24rpx":"text-decoration: line-through"}}'>¥{{we.toFixed(items.salePrice)}}</view>
+            <view class='add' wx:if="{{items.stockQty!==0 && items.itemStatus!=='FORSALE'}}" catchtap="touchOnGoods" data-item="{{items}}">
+              <image src='../../../images/adds.svg'></image>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+<specification wx:if="{{option}}"  cartQuantity="{{cartQuantity}}" bind:myevent="toggleToast" bind:hide="hide" options="{{options}}" specification="{{specification}}" ></specification>
+<wxs module="we">
+  var toFixed = function(value) {
+    if (typeof value == "number") {
+      return value.toFixed(2)
+    }
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

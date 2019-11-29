@@ -1,0 +1,176 @@
+/* pages/invoice/invoice.wxss */
+page{
+  background: #F5F6F7;
+}
+.invoice{
+  height: 100%;
+  padding-top: 8px;
+}
+.background{
+  width: 100%;
+  height: 8px;
+  position: fixed;
+  top: 0;
+  border-top: 1px solid #D8D8D8;
+}
+.invoice_type{
+  width: 100%;
+  height: 108rpx;
+  background: #ffffff;
+  line-height: 108rpx;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  border-bottom: 1px solid #E8E8E8;
+}
+.invoice_type text:nth-child(1){
+  color: #63646B;
+  font-size: 15px;
+}
+.invoice_type text:nth-child(2){
+  color: #2B2D33;
+  font-size: 15px;
+  margin-left: 48rpx;
+}
+.title_type{
+  width: 100%;
+  height: 108rpx;
+  background: #ffffff;
+  line-height: 108rpx;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  border-bottom: 1px solid #E8E8E8;
+}
+.title_type text:nth-child(1){
+  color: #63646B;
+  font-size: 30rpx;
+}
+radio{
+  margin-left: 48rpx;
+}
+.radio>text{
+  color: #2B2D33;
+  font-size: 13px;
+}
+radio .wx-radio-input{ 
+  /* 自定义样式.... */
+    height: 36rpx; 
+    width: 36rpx;
+    border-radius: 50%;
+ }
+/* 选中后的 背景样式 （红色背景 无边框 可根据UI需求自己修改） */
+radio .wx-radio-input.wx-radio-input-checked{
+   border: none;
+   background: #FFD814;
+}
+/* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */
+radio .wx-radio-input.wx-radio-input-checked::before{
+   border-radius: 50%;/* 圆角 */
+   width: 40rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+   height: 40rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+   line-height: 40rpx;
+   text-align: center;
+   font-size:30rpx; /* 对勾大小 30rpx */
+   color:#000; /* 对勾颜色 白色 */
+   background: #FFD814;
+   transform:translate(-50%, -50%) scale(1);
+   -webkit-transform:translate(-50%, -50%) scale(1);
+}
+.radio-group{
+  display: inline;
+}
+.title_name{
+  width: 100%;
+  height: 108rpx;
+  background: #ffffff;
+  line-height: 108rpx;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  border-bottom: 1px solid #E8E8E8;
+  position: relative;
+}
+.title_name text:nth-child(1){
+  color: #63646B;
+  font-size: 30rpx;
+}
+.title_name>input{
+  font-size: 30rpx;
+  position: absolute;
+  top: 31rpx;
+  display: inline;
+  margin-left: 48rpx;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+.invoice_number{
+  width: 100%;
+  height: 108rpx;
+  background: #ffffff;
+  line-height: 108rpx;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  border-bottom: 1px solid #E8E8E8;
+  position: relative;
+}
+.invoice_number text:nth-child(1){
+  color: #63646B;
+  font-size: 30rpx;
+}
+.invoice_number>input{
+  font-size: 30rpx;
+  position: absolute;
+  top: 31rpx;
+  display: inline;
+  margin-left: 48rpx;
+}
+.invoice_money{
+  width: 100%;
+  height: 108rpx;
+  background: #ffffff;
+  line-height: 108rpx;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+}
+.invoice_money text:nth-child(1){
+  color: #63646B;
+  font-size: 30rpx;
+}
+.invoice_money text:nth-child(2){
+  color: #2B2D33;
+  font-size: 30rpx;
+  margin-left: 48rpx;
+}
+.email{
+  width: 100%;
+  height: 108rpx;
+  background: #ffffff;
+  line-height: 108rpx;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  position: relative;
+  margin-top: 8px;
+}
+.email text:nth-child(1){
+  color: #63646B;
+  font-size: 30rpx;
+}
+.email>input{
+  font-size: 30rpx;
+  position: absolute;
+  top: 31rpx;
+  display: inline;
+  margin-left: 48rpx;
+}
+.invoice_commit{
+  margin-top:16px;
+}
+.commit{
+  background:#FFEB0D;
+  color:#2B2D33;
+  font-size:32rpx;
+  font-weight:bold;
+  width:640rpx;
+  height:92rpx;
+  line-height:92rpx;
+  text-align:center;
+}

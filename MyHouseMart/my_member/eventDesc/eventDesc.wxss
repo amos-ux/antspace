@@ -1,0 +1,38 @@
+page {
+  background-color: #fff;
+  width: 100%;
+  padding: 48rpx 36rpx;
+  box-sizing: border-box;
+  border-top: 20rpx solid #F5F6F7;
+}
+
+.content {
+  margin-top: 32rpx;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.title {
+  color: #2b2d33;
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.content .content-title {
+  color: #67686b;
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.content .content-text {
+  font-size: 30rpx;
+  color: #2b2d33;
+  font-weight: 400;
+  line-height: 42rpx;
+}
+
+.content-tip{
+  margin-top: 12rpx;
+}

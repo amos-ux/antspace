@@ -1,0 +1,172 @@
+<view class='page'>
+  <view class='page-view'>
+    <view class='page-view-left'>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='UNPAID'  && message.orderType!=='NONE'}}">待支付</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='GROUPING'}}">待成团</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='PAID'}}">配货中</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='PICKING'}}">{{message.branchNo=='888888'?'配送中':'配货中'}}</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='REFUNDED'}}">退款中</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='REJECTED'}}">退货驳回</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='INVOICED'}}">已开票</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='COMPLETED' || message.orderStatus=='INVOICING' || message.orderStatus=='INVOICED'}}">已完成</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='CANCELLED' || (message.orderStatus=='UNPAID' && message.orderType=='NONE')}}">已取消</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='TORETURN'}}">已退款</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='DISPATCHING' && message.orderType=='SELF'}}">待自提</view>
+      <view class='page-view-left-view' wx:if="{{message.orderStatus=='DISPATCHING' && message.orderType=='DIST'}}">{{message.branchNo=='888888'?'已送达':'配送中'}}</view>
+      <view class='page-view-left-text' wx:if="{{message.orderStatus=='UNPAID'&&  message.orderType!=='NONE'}}">请在
+        <text class='red'>{{countdown}}</text>内完成支付</view>
+      <!-- <view class='page-view-left-text' wx:if="{{message.orderStatus=='DISPATCHING' && message.orderType=='SELF'}}">请在<text class='red'>{{message.requireDate}}</text>取件</view> -->
+      <view class='page-view-left-text' style='color:#63646B;font-size:26rpx' wx:if="{{message.orderStatus=='DISPATCHING' && message.orderType=='SELF'}}">已为您准备好了,随时来取!</view>
+      <view class='page-view-left-text' wx:if="{{message.orderStatus=='CANCELLED' || (message.orderStatus=='UNPAID' && message.orderType=='NONE')}}">你已成功取消订单</view>
+      <view class='page-view-left-text' wx:if="{{message.orderStatus=='DISPATCHING'}}"></view>
+      <view class='page-view-left-text' wx:if="{{message.orderStatus=='COMPLETED' || message.orderStatus=='INVOICING' || message.orderStatus=='INVOICED'}}">感谢您选择我家</view>
+      <view class='page-view-left-text' wx:if="{{message.orderStatus=='DISPATCHING'&& message.orderType=='DIST'}}">店员配送</view>
+      <view class='page-view-left-text' wx:if="{{message.orderStatus=='PICKING'}}">店员正在准备货物中...</view>
+    </view>
+  </view>
+
+  <view class='salt' wx:if="{{ message.orderStatus=='PICKING' || message.orderStatus=='PAID' ||(message.orderStatus=='DISPATCHING' && message.orderType=='SELF')}}">
+    <view class='take' wx:if="{{ message.orderStatus=='PICKING' || message.orderStatus=='PAID' ||(message.orderStatus=='DISPATCHING' && message.orderType=='SELF') }}">
+
+      <view class='take-yard'>
+        <view class="take-pickupCode">{{message.pickupCode}}</view>
+        <view class="take-text">向店员展示取件码</view>
+      </view>
+      <view class='yard-view' catchtap='yardView'>
+        <text>取件二维码</text>
+      </view>
+    </view>
+    <!-- <view class='salt-view'>
+                <view class='hot'>
+                      <view style='font-size:40rpx;font-weight:500;'>{{message.cabinetGridNo}}</view>
+                      <view style='font-size:26rpx'>热柜码</view>
+                </view>
+                <view class='yard' style='font-size:26rpx'></view>
+            </view> -->
+  </view>
+  <view class='pick' wx:if="{{message.orderType=='SELF'}}">
+    <view class='pick-view1'>自提门店</view>
+    <view class='pick-view2' wx:if="{{isCustomerService==false}}">{{message.branchName}}<button catchtap="callPhone"  wx:if="{{message.branchNo!='888888'}}"><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
+    <view class='pick-view2' wx:else>{{message.branchName}}<button open-type="contact"  wx:if="{{message.branchNo!='888888'}}"><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
+    <view class='pick-view3'>{{message.bsLocDetail}}</view>
+  </view>
+  <view class='pick' style='height:155px;margin-top:16rpx' wx:if="{{message.orderType =='DIST'}}">
+    <view class='pick-view2' style='margin-top:16px;'>{{message.branchName}}<button catchtap="callPhone"  wx:if="{{message.branchNo!='888888'}}"><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
+    <view class='pick-view3' style='border-bottom:1px dashed #D1D1D1;height:30px;'>{{message.bsLocDetail}}</view>
+    <view class='pick-view4'>[收货地址]{{message.locDetail}}</view>
+    <view class='pick-view5'>
+      <text>{{message.lcUserName}}</text>
+      <text>{{message.userMobile}}</text>
+    </view>
+  </view>
+  <view class='content'>
+    <view class='content-top'>
+      <text class='content-top-title'>商品清单</text>
+      <text class='content-top-num'>共{{message.itemTotal}}件</text>
+    </view>
+    <view class='inventory'>
+      <view class='content-center' wx:for="{{item}}" wx:key="{{index}}">
+        <view class='content-center-view'>
+          <view class='content-center-view-left'>
+            <image class='img' src='{{item.itemPicture==""?"../../images/null.svg":item.itemPicture}}'></image>
+          </view>
+          <view class='content-center-view-right'>
+            <view class='item-money'>
+              <view class='itemName'>{{item.itemName}}</view>
+              <view class='money'>¥{{we.toFixed(item.quantity*item.salePrice)}}</view>
+            </view>
+            <view class='quantity'>数量: {{item.quantity}}</view>
+          </view>
+        </view>
+      </view>
+      <view class='content-centers' wx:for="{{combo}}" wx:key="{{index}}">
+        <view class='content-center-views'>
+          <view class='content-center-view-left'>
+            <image class='img' src='{{item.comboPic==""?"../../images/null.svg":item.thumbPicture}}'></image>
+          </view>
+          <view class='content-center-view-right'>
+            <view class='item-money'>
+              <view class='itemName'>{{item.comboName}}</view>
+              <view class='quantity'>*{{item.combItemQty}}</view>
+              <view class='money'>¥{{we.toFixed(item.combItemQty*item.combItemPrice)}}</view>
+            </view>
+            <view class="comboList" wx:for="{{item.comItems}}" wx:key="index" wx:for-item="goods">
+              <text class="combo-text">{{goods.itemName}}</text> *{{goods.quantity}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='content-center-bottom'>
+      <text class='content-center-bottom-text' wx:if="{{message.refundMoney!==0 && message.refundMoney!=null}}">会员返现：¥{{message.refundMoney}}</text>
+      <view class='content-center-bottom-view'>
+        <text class="text">合计：</text>
+        <text class="money">¥{{message.totalPayAmount}}</text>
+      </view>
+    </view>
+    <view class='adjust'>
+      <view class='content-top-text2'>订单编号：<text>{{message.orderNos}}</text></view>
+      <view class='content-top-text2'>创建时间：<text>{{message.createdDate}}</text></view>
+      <view class="content-top-text2" wx:if="{{message.notes}}">
+        <text class="recommend">订单备注：</text>
+        <text class="rec-text">{{message.notes}}</text>
+      </view>
+    </view>
+  </view>
+  <view class='pay' wx:if="{{message.orderStatus=='UNPAID' && message.orderType!=='NONE'}}" bindtap='pay'>
+    <view class='payview'>立即支付</view>
+  </view>
+  <view class='pays' wx:if="{{message.orderStatus=='GROUPING'}}">邀请好友拼团</view>
+</view>
+<view class='modal' wx:if="{{yard}}" catchtouchmove="preventTouchMove">
+  <view class='modalYard'>请向店员展示二维码</view>
+  <view class='qrcode-view'>
+    <view class='centered'>
+      <view class='centered-top'>
+        <view class='centered-location'>{{message.branchName}}</view>
+        <view class='centered-quantity'>共{{message.itemTotal}}件</view>
+      </view>
+      <view class='centered-bottom'>{{message.bsLocDetail}}</view>
+    </view>
+    <view class='qrcode'>
+     <canvas class="canvas-code" canvas-id="myQrcode" style="background:#fff;width: 150px;height: 150px;"/>
+    </view>
+    <view class='pick-up'>
+      <text>取件码：{{message.pickupCode}}</text>
+    </view>
+
+  </view>
+  <view class='modal-img'>
+    <view class='imgView'>
+      <image src='../../images/close.svg' bindtap='clear'></image>
+    </view>
+  </view>
+</view>
+<view class="newOrder-right">
+      <view bindtap='afterSales' class='page-view-rights' wx:if="{{message.orderStatus=='COMPLETED' || message.orderStatus=='INVOICING' || message.orderStatus=='INVOICED'}}">售后服务</view>
+      <view class='page-view-right' wx:if="{{message.orderStatus=='INVOICING'}}" catchtap='invoiceState'>开票中</view>
+      <view class='page-view-right' wx:if="{{message.orderStatus=='INVOICED'}}" catchtap='invoiceState'>已开票</view>
+
+      <view class='page-view-right' wx:if="{{message.orderStatus=='COMPLETED'}}" catchtap='invoice'>申请开票</view>
+      <view class='page-view-right' wx:if="{{message.orderStatus=='UNPAID' && message.orderType!=='NONE'}}" catchtap='cancel'>取消订单</view>
+
+      <view class='page-view-right' wx:if="{{message.bizLine=='CVS'&&message.orderStatus=='DISPATCHING'&& message.orderType=='SELF' ||message.bizLine=='COFFEE'&&message.orderStatus=='DISPATCHING'&& message.orderType=='SELF'|| message.orderStatus=='PICKING'&&message.bizLine=='COFFEE'||message.orderStatus=='PICKING'&&message.bizLine=='CVS'}}"
+        bindtap='jumpTo'>申请退款</view>
+      <view class="viewLogistics" wx:if="{{message.expressNo!=''}}" catch:tap="toLogIstics">查看物流</view>
+      <view class="confirmReceipt"  wx:if="{{message.branchNo=='888888'&&message.orderType=='DIST'&&message.orderStatus=='DISPATCHING'&&(message.userConfirmed==''||message.userConfirmed==null)}}" catch:tap="isModel">确认收货</view>  
+  </view>
+  <view class="model" wx:if="{{model}}">
+    <view class="tc">
+      <view class="tc-title">商品是否已送达</view>
+      <view class="no" catch:tap="closeModel">暂无还没有</view>
+       <view class="yes" catchtap="confirmReceipt">是的</view>
+    </view>
+  </view>
+<wxs module="we">
+  var toFixed = function(value) {
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

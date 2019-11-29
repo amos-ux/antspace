@@ -1,0 +1,196 @@
+page {
+  background: #fff;
+}
+
+.page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-top: 1rpx solid #e6e6e6;
+  box-sizing: border-box;
+}
+
+.page-view,.page-view-address{
+  width: 100%;
+  height: 108rpx;
+  line-height: 108rpx;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f7f7f7;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 30rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-text {
+  flex:1;
+  font-size: 32rpx;
+  margin-left: 40rpx;
+  margin-right: 54rpx;
+  color: #2B2D33;
+}
+
+.default-address{
+  display: inline-block;
+  height: 120rpx;
+  line-height: 120rpx;
+  color: #67686B;
+  font-size: 32rpx;
+  margin-left: 12rpx;
+}
+
+.page-view-address::after {
+  content: " ";
+  display: inline-block;
+  height: 18rpx;
+  width: 18rpx;
+  border-width: 2rpx 2rpx 0 0;
+  border-color: #c8c8cd;
+  border-style: solid;
+  transform: matrix(0.71, 0.71, -.71, 0.71, 0, 0);
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+  right: 36rpx;
+}
+
+.address-label {
+  margin-left: 40rpx;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.page-company{
+  width: 106rpx;
+  font-size: 26rpx;
+  height: 48rpx;
+  border-radius: 24rpx;
+  color: #ffa333;
+  border: 2rpx solid #ffa333;
+  line-height: 48rpx;
+  text-align: center;
+  background-color: #fff2d9;
+}
+
+.page-companys {
+  width: 106rpx;
+  height: 48rpx;
+  font-size: 26rpx;
+  border: 2rpx solid #d9d9d9;
+  color: #67686b;
+  line-height: 48rpx;
+  text-align: center;
+  border-radius: 24rpx;
+}
+
+.page-home {
+  width: 106rpx;
+  font-size: 26rpx;
+  height: 48rpx;
+  border-radius: 24rpx;
+  color: #ffa333;
+  border: 2rpx solid #ffa333;
+  line-height: 48rpx;
+  text-align: center;
+  margin-left: 12rpx;
+  background-color: #fff2d9;
+}
+
+.page-homes{
+  width: 106rpx;
+  height: 48rpx;
+  font-size: 26rpx;
+  border: 2rpx solid #d9d9d9;
+  color: #63646b;
+  line-height: 48rpx;
+  text-align: center;
+  margin-left: 12rpx;
+  border-radius: 24rpx;
+}
+
+.save {
+  text-align: center;
+  width: 680rpx;
+  line-height: 92rpx;
+  height: 92rpx;
+  background: #ffeb0d;
+  border-radius: 12rpx;
+  color: #2B2D33;
+  font-weight: 500;
+  margin-left: 35rpx;
+}
+
+checkbox .wx-checkbox-input {
+  width: 40rpx; 
+  height: 40rpx;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+  background: #FFA333;
+  border: 1rpx solid #FFA333;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  font-size: 24rpx;
+  background: transparent;
+  color: #fff;
+  transform: translate(-50%, -50%) scale(1);
+  -webkit-transform: translate(-50%, -50%) scale(1);
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+.checkbox {
+  margin-left: 32rpx;
+  height: 120rpx;
+  display: block;
+  line-height: 120rpx;
+  color: #67686b;
+  font-size: 32rpx;
+}
+
+label {
+  font-size: 13px;
+}
+
+.flex-grow-1 {
+  min-width: 0;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+}
+
+.del-btn {
+  margin-top: 28rpx;
+  text-align: center;
+  width: 680rpx;
+  line-height: 92rpx;
+  height: 92rpx;
+  border-radius: 12rpx;
+  color: #2B2D33;
+  font-weight: 500;
+  margin-left: 35rpx;
+  box-sizing: border-box;
+  border: 1rpx solid #d9d9d9;
+}
+
+.page-view-title {
+  color: #67686B;
+  width: 170rpx;
+  padding-left: 32rpx;
+  font-size: 32rpx;
+  box-sizing: border-box;
+}

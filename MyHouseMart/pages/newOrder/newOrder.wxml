@@ -1,0 +1,115 @@
+<view class="page">
+  <view class="page-nav">
+    <view class="page-all" wx:for="{{nav}}" wx:key="index" catchtap="clickNav" data-type="{{item.type}}" data-index="{{index}}">{{item.name}}
+      <text class="label" wx:if="{{i==index}}"></text>
+      <!-- <text class="number">1</text> -->
+    </view>
+    <!-- <view class="page-paid">待支付</view>
+              <view class="page-catgo">配货中</view>
+              <view class="page-distribution">带自提/配送中</view>
+              <view class="page-refund">售后/退款</view> -->
+  </view>
+  <view>
+    <view class='no-order' wx:if="{{!ordeMessage.length && userAuthorization}}">
+      <view class='view-order'>
+        <view class='view-img'>
+          <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16a5983cab4.svg'></image>
+        </view>
+        <view class='order-text'>你还没有下单</view>
+        <view class='order-text2'>快去选购商品吧</view>
+      </view>
+    </view>
+  </view>
+  <view class="order">
+    <view class="order-list" wx:for="{{ordeMessage}}" wx:key="index" catchtap="orderDetail" data-item="{{item}}">
+      <view class="order-list-nav">
+        <view class="order-list-nav-left">
+          <image src="{{item.orderType=='DIST'?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/ziti.svg':'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/self.svg'}}"></image>
+          <view class="branchName">{{item.branchName}}</view>
+        </view>
+        <view wx:if="{{item.orderType=='NONE' && item.orderStatus=='UNPAID'}}" class="order-list-nav-right" style="color:#A0A1A3}}">
+          已取消
+        </view>
+        <view wx:else class="order-list-nav-right" style="{{item.orderStatus=='CANCELLED' || item.orderStatus=='TORETURN' ||item.orderStatus=='INVOICED' || item.orderStatus=='COMPLETED'?'color:#A0A1A3':'color:#FFA333'}}">
+          {{item.orderStatus=="UNPAID"?"待支付"
+          :item.orderStatus=="PICKING"?
+          item.orderStatus=='DISPATCHING' && item.orderType=='DIST'?'配送中'
+          :"配货中"
+          :item.orderStatus=="COMPLETED"?
+          "已完成":item.orderStatus=="CANCELLED"
+          ?"已取消"
+          :item.orderStatus=="REFUNDED"?
+          "退款中":item.orderStatus=="REJECTED"
+          ?"退款驳回":item.orderStatus=="TORETURN"
+          ?"已退款":item.orderStatus=="INVOICING"?"开票中":item.orderStatus=="INVOICED"?"已开票":item.orderStatus=="DISPATCHING"&&item.orderType=="SELF"?"待自提":item.orderStatus=="DISPATCHING"&&item.branchNo=='888888'&&item.orderType=='DIST'?'已送达':item.orderType=='PAID'?"配货中":'配送中'}}
+        </view>
+      </view>
+      <view class="order-content">
+        <view class="order-content-top">
+          <view class="order-contet-img">
+            <image src="{{item.items[0].saleItems[0].itemPicture?item.items[0].saleItems[0].itemPicture:item.items[0].saleItems[0].thumbPicture?item.items[0].saleItems[0].thumbPicture:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'}}"></image>
+          </view>
+          <view class="order-goods">
+            {{item.items[0].saleItems[0].itemName?item.items[0].saleItems[0].itemName:item.items[0].saleItems[0].comboName}}
+          </view>
+        </view>
+        <view class="order-contetn-bottom">
+          <view class="order-time">{{item.createdDate}}</view>
+          <view class="order-messge">
+            <view class="order-message-quantity">共{{item.itemTotal}}件商品</view>
+            <view class="order-message-price">合计：¥{{item.totalPayAmount}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="order-button">
+        <view class="order-cancel" wx:if="{{item.orderStatus=='UNPAID'&&item.orderType!=='NONE'}}" catchtap="cancel" data-item="{{item}}">取消订单</view>
+        <view class="order-confirm" wx:if="{{item.orderStatus=='UNPAID'&&item.orderType!=='NONE'}}" catchtap="pay" data-item="{{item}}">立即支付</view>
+        <!-- <view class="order-refund">退款进度</view> -->
+        <view class="order-yard" wx:if="{{item.orderStatus=='PICKING'||(item.orderStatus=='DISPATCHING' && item.orderType=='SELF')}}">取件码：{{item.pickupCode}}</view>
+        <view class="order-collect" wx:if="{{item.orderStatus=='PICKING'||(item.orderStatus=='DISPATCHING' && item.orderType=='SELF')}}" catchtap="clickYard" data-item='{{item}}'>取件码</view>
+        <view class="order-cancel" wx:if="{{item.expressNo!=''}}"  catchtap="toLogIstics" data-item="{{item}}" data-index="{{index}}">查看物流</view>
+        <view class="order-confirm" wx:if="{{item.branchNo=='888888'&&item.orderType=='DIST'&&item.orderStatus=='DISPATCHING'&&(item.userConfirmed==''||item.userConfirmed==null)}}" data-index="{{index}}" data-item="{{item}}" catchtap="isModel">确认收货</view>
+      </view>
+
+      <view class='modal' wx:if="{{yard}}" catchtap="stopBubble" catchtouchmove="preventTouchMove">
+        <view class='modalYard'>请向店员展示二维码</view>
+        <view class='qrcode-view'>
+          <view class='centered'>
+            <view class='centered-top'>
+              <view class='centered-location'>{{codeItem.branchName}}</view>
+              <view class='centered-quantity'>共{{codeItem.itemTotal}}件</view>
+            </view>
+            <view class='centered-bottom'>{{codeItem.bsLocDetail}}</view>
+          </view>
+          <view class='qrcode'>
+            <canvas class="canvas-code" canvas-id="myQrcode" style="background:#fff;width: 150px;height: 150px;"/>
+          </view>
+          <view class='pick-up'>
+            <text>取件码：{{codeItem.pickupCode}}</text>
+          </view>
+        </view>
+        <view class='modal-img'>
+          <view class='imgView' catchtap='padlock'>
+            <image src='../../images/close.svg'></image>
+          </view>
+        </view>
+      </view>
+<!-- 不是这个 看清楚文字  -->
+    </view>
+  </view>
+  <view class="nLogin" wx:if="{{!userAuthorization}}">
+    <view class="nLogin-image">
+      <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16a5983cab4.svg"></image>
+    </view>
+    <view class="nLogin-text">您还没登录，请点击登陆</view>
+    <view class="nLogin-button" catchtap="goLogin">立即登录</view>
+  </view>
+</view>
+  <view class="model" wx:if="{{model}}">
+    <view class="tc">
+      <view class="tc-title">商品是否已送达</view>
+      <view class="no" catch:tap="closeModel">暂无还没有</view>
+      <view class="yes" catchtap="confirmReceipt">是的</view>
+    </view>
+  </view>
+<quit wx:if="{{quit}}"></quit>

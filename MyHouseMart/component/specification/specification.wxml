@@ -1,0 +1,37 @@
+<view class="page" catchtap="close">
+      <view class="specification">
+              <view class="specification-top">
+                    <view class="big-box">
+                            <view class="specification-img">
+                                    <image src="{{specification.picAddr}}"></image>
+                            </view>
+                            <view class="specification-right">
+                                    <view class="text-Name">
+                                          <view class="text">{{specification.itemName}}</view>
+                                          <view class="text-close" catchtap="close">
+                                                <image src="../../images/close1.svg"></image>
+                                          </view>
+                                    </view>
+                                    <view class="price">
+                                          <view class="price-view" wx:if="{{specification.satisfied.length}}">{{specification.satisfied[0]}}</view>
+                                          <view class="price-view1">
+                                                <view class="vip-price" style='{{specification.stockQty==0||specification.specificationtatus=="FORSALE"?"color:#A0A1A3;":""}}' wx:if="{{specification.disPrice!==null}}">¥{{specification.disPrice}}</view>
+                                                <view class="sale-price" style='{{specification.disPrice==null && (specification.stockQty==0||specification.specificationtatus=="FORSALE")?"color:#A0A1A3;font-size:30rpx;font-weight:500":specification.disPrice==null ?"color:#FF5A52;font-size:30rpx":"text-decoration: line-through;color:#A0A1A3"}}'>¥{{specification.salePrice}}</view>
+                                          </view>
+                                    </view>
+                            </view>
+                    </view>
+              </view>
+              <!-- <view class="specification-bottom"> -->
+                    <view class="option" wx:for="{{options}}" wx:key="{{index}}" wx:for-index='a'>
+                          <view class="select">{{item.dataName}}</view>
+                          <view class="option-content">
+                                <view wx:for="{{item.options}}" wx:key="item" data-a="{{a}}" style="{{items.s && item.i?'color:#FFA333;background:rgba(255, 163, 51, 0.1);border:1rpx solid #FFA333;':''}}" class="content" data-item="{{item}}" data-index="{{index}}" catchtap="click" wx:for-item="items">{{items.j}}</view>
+                          </view>
+                    </view>
+                    <view class="button">
+                          <view catchtap="shoppingCart" data-item="{{specification}}">加入购物车</view>
+                    </view>
+              <!-- </view> -->
+      </view>
+</view>

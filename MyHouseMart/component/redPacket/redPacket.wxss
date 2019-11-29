@@ -1,0 +1,147 @@
+.select-red, .one-lick {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 998;
+}
+
+.select-view {
+  width: 580rpx;
+  /* height: 420rpx; */
+  background: #fff;
+  border-radius: 12rpx;
+}
+
+.nearby {
+  width: 100%;
+  height: 121rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.nearby image {
+  width: 28rpx;
+  height: 28rpx;
+  position: absolute;
+  right: 24rpx;
+  top: 44rpx;
+}
+
+.selectBranch {
+  width: 100%;
+  margin-top: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.select-text1 {
+  color: #67686b;
+  font-size: 36rpx;
+  margin-left: 36rpx;
+}
+
+.select-text2 {
+  color: #ffa333;
+  font-size: 36rpx;
+  margin-right: 36rpx;
+}
+
+.selectbranch {
+  width: 100%;
+  border-top: 2rpx solid #ebebeb;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  color: #2b2d33;
+  font-size: 36rpx;
+}
+
+.selectbranch::after {
+  content: '';
+  display: inline-block;
+  width: 14rpx;
+  height: 14rpx;
+  border-top: 1px solid #656565;
+  border-right: 1px solid #656565;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin-bottom: 4rpx;
+}
+
+.good_box {
+  width: 14px;
+  height: 14px;
+  position: fixed;
+  border-radius: 50%;
+  overflow: hidden;
+  left: 50%;
+  top: 50%;
+  z-index: +99;
+  background: red;
+}
+
+.background_image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.background_image image {
+  width: 100%;
+  height: 100%;
+}
+
+.new_block {
+  width: 638rpx;
+  height: 844rpx;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -35%);
+  z-index: 1005;
+  /* animation: newOpen 0.5s forwards; */
+}
+
+.new_user {
+  width: 100%;
+  height: 100%;
+}
+
+.user_close {
+  position: absolute;
+  width: 80rpx;
+  height: 80rpx;
+  z-index: -1;
+  left: 50%;
+  margin-left: -33rpx;
+  bottom: -130rpx;
+}
+
+.new_block .open_btn {
+  position: absolute;
+  width: 230rpx;
+  height: 230rpx;
+  left: 50%;
+  top: 460rpx;
+  line-height: 230rpx;
+  transform: translateX(-50%);
+}
+
+.open_btn .open_btn_bg {
+  position: absolute;
+  width: 230rpx;
+  height: 230rpx;
+  left: 0;
+  top: 0;
+}

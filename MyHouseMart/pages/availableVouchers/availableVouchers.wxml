@@ -1,0 +1,97 @@
+         <!--pages/availableVouchers/availableVouchers.wxml-->
+<view class='coverage'></view>
+<view class='unused-message'>
+  <view class='nonuse'>
+    <text>选择优惠券</text>
+    <text catchtap='nonuse'>不使用优惠券</text>
+  </view>
+  <!-- 可用商品券 -->
+  <view class='goodsTicket' catchtap='goodsTicket' data-item="{{item}}" wx:for="{{useProductList}}" wx:key="{{index}}">
+    <view class="goods-content">
+      <view class='goodsMessage'>
+        <view class='goods-name'>
+          <text>{{item.itemName}}</text>
+          <text>{{item.targe}}</text>
+        </view>
+      </view>
+      <view class='goodsDate'>
+        <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+        <text catchtap='playing' data-message="{{item.rule}}">使用规则</text>
+      </view>
+    </view>
+  </view>
+  <!-- 可用优惠券 -->
+  <view class='outer' catchtap='goodsTicket' data-item="{{item}}" wx:for="{{useCouponList}}" wx:key="{{index}}">
+    <view class='core'>
+      <view class='discount-name'>
+        <text>{{item.couponTitle}}</text>
+        <view class='discount-money'>
+          <text class='discount-money-full' wx:if="{{item.couponType!=='DISCOUNT_COUPON'}}">￥</text>
+          <text class='discountMoney' wx:if="{{item.couponType!=='DISCOUNT_COUPON'}}">{{item.becoming}}</text>
+          <text class='discountMoney' wx:if="{{item.couponType!=='PRICE_FULL_COUPON'}}">{{item.becoming*10}}</text>
+          <text class='discount-money-break' wx:if="{{item.couponType!=='PRICE_FULL_COUPON'}}">折</text>
+        </view>
+      </view>
+      <view class='discount-rule'>
+        <text>{{item.condition}} / {{item.targe}}</text>
+      </view>
+      <view class='discount-date'>
+        <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+        <text catchtap='playing' data-message="{{item.rule}}">活动规则</text>
+      </view>
+    </view>
+  </view>
+  <!-- 不可使用商品券 -->
+  <view class='lose-efficacy' wx:for="{{disabledProductList}}" wx:key="{{index}}">
+    <view class='goodsMessage'>
+      <view class='lose-efficacy-name'>
+        <text>{{item.itemName}}</text>
+        <text>{{item.targe}}</text>
+      </view>
+    </view>
+    <view class='lose-efficacy-date'>
+      <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+      <text catchtap='playing' data-message="{{item.rule}}">使用规则</text>
+    </view>
+  </view>
+  <!-- 不可使用优惠券 -->
+  <view class='outer' wx:for="{{couponProductList}}" wx:key="{{index}}">
+    <view class='core core-no'>
+      <view class='discount-name'>
+        <text>{{item.couponTitle}}</text>
+        <view class='discount-money'>
+          <text class='discount-money-full' wx:if="{{item.couponType!=='DISCOUNT_COUPON'}}">￥</text>
+          <text class='discountMoney' wx:if="{{item.couponType!=='DISCOUNT_COUPON'}}">{{item.becoming}}</text>
+          <text class='discountMoney' wx:if="{{item.couponType!=='PRICE_FULL_COUPON'}}">{{item.becoming*10}}</text>
+          <text class='discount-money-break' wx:if="{{item.couponType!=='PRICE_FULL_COUPON'}}">折</text>
+        </view>
+      </view>
+      <view class='discount-rule'>
+        <text>{{item.condition}} / {{item.targe}}</text>
+      </view>
+      <view class='discount-date'>
+        <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+        <text catchtap='playing' data-message="{{item.rule}}">活动规则</text>
+      </view>
+    </view>
+  </view>
+  <!-- 活动规则 -->
+  <view class='pop' wx:if="{{pop}}" catchtouchmove="preventTouchMove">
+    <view class='pop-up'>
+      <view>活动规则</view>
+      <scroll-view scroll-y="true" class='scroll'>
+        <text class='scrollText'>{{messages}}</text>
+      </scroll-view>
+    </view>
+    <view class='pop-img' catchtap='popImg'>
+      <image src='../../images/closeS.svg'></image>
+    </view>
+  </view>
+  <!-- 没有券时显示 -->
+  <view class='unusedImg' wx:if="{{unusedImg}}">
+    <view class='unused-Img'>
+      <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16a6c16cf17.svg'></image>
+      <text>暂无可用券</text>
+    </view>
+  </view>
+</view>

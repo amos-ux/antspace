@@ -1,0 +1,56 @@
+.page{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, .4);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.content{
+  width: 580rpx;
+  height: 800rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  position: relative
+}
+.title{
+  height: 150rpx;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(43, 45, 51, 1);
+  font-size: 36rpx;
+  font-weight: 500
+}
+.page-content{
+  width: 520rpx;
+  height: 600rpx;
+  overflow-y: scroll;
+  color: rgba(99, 100, 107, 1);
+  font-size: 30rpx
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+.icon{
+  width: 80rpx;
+  height: 80rpx;
+  position: absolute;
+  bottom: -96rpx;
+  left: 50%;
+  margin-left: -40rpx
+}
+.icon image{
+  width: 100%;
+  height: 100%;
+}

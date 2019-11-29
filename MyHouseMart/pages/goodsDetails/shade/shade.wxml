@@ -1,0 +1,20 @@
+<view class="page" wx:if="{{show}}" catchtouchmove="preventTouchMove">
+  <view class="window">
+    <view class="window-top">
+      什么是会员返现
+    </view>
+    <view class="window-text">关于会员返现说明</view>
+    <view class="window-content">
+      <text>1.返现金是我家用以回馈付费会员用户的代币</text>
+      <text>2.返现金可与现金1:1抵扣使用</text>
+      <text>3.在购物时无门槛使用</text>
+      <text>4.可在个人中心-我的钱包查看返现金</text>
+      <text>5.使用返现金付款时，不能再参与返现</text>
+    </view>
+    <view class="window-bottom" catchtap="close">
+      <view class="window-button">
+        我知道了
+      </view>
+    </view>
+  </view>
+</view>

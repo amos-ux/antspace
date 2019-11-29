@@ -1,0 +1,10 @@
+{
+    "component": true,
+    "usingComponents": {
+      "shade": "./shade/shade",
+      "specification": "../../component/specification/specification"
+    },
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "商品详情"
+}

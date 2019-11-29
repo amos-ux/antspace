@@ -1,0 +1,16 @@
+{
+  "component": true,
+  "usingComponents": {
+    "wux-qrcode": "../../component/qrcode/index",
+    "temponent":"./temponent/temponent",
+    "temponentfirst": "./temponentfirst/temponentfirst",
+    "temponentsecond": "./temponentsecond/temponentsecond",
+    "shade":"./shade/shade",
+    "invite":"./invite/invite",
+    "quit": "../../component/quit/quit",
+    "redPacket":"../../component/redPacket/redPacket"
+  },
+  "navigationBarTitleText": "我家会员",
+  "navigationBarBackgroundColor": "#FFEC14",
+  "navigationBarTextStyle": "black"
+}

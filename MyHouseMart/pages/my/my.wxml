@@ -1,0 +1,63 @@
+<view class='my'>
+  <!-- 用户信息 -->
+  <!-- <view class='myUser'>
+    <open-data type="userAvatarUrl" class='myImg'>
+      <image src="{{src}}"></image>
+    </open-data>
+    <view class='myMessage'>
+      <view class='myName'>
+        <open-data type="userNickName">{{name}}</open-data>
+        <image src='../../images/superMembers.svg' wx:if="{{isMember}}"></image>
+        <image src='../../images/regularMembers.svg' wx:if="{{ofMember}}"></image>
+        <image src='../../images/regularMembers.svg'></image>
+      </view>
+      <text class='dueDate' wx:if="{{isMember}}">会员到期：{{maxDateTime}}</text>
+      <text class='dueDate' wx:if="{{ofMember}}">普通会员</text>
+      <text class='dueDate'>普通会员</text>
+    </view>
+    <view class='memberCode' wx:if="{{memberYard}}" catchtap='memberCode'>
+      <image src='../../images/memberCode.svg' ></image>
+    </view>
+  </view> -->
+  <view class='mycenter'>
+    <open-data type="userAvatarUrl" class='myImage'>
+      <image src="{{src}}"></image>
+    </open-data>
+    <open-data class="MyName" type="userNickName">{{name}}</open-data>
+  </view>
+
+  <!-- 优惠券 -->
+  <view class='ticket'>
+    <view class='discount' catchtap='discount'>
+      <text>{{couponNum}}</text>
+      <text>优惠券</text>
+    </view>
+    <view class='wire'></view>
+    <view class='goods' catchtap='goods'>
+      <text>{{productCouponNum}}</text>
+      <text>商品券</text>
+    </view>
+  </view>
+
+  <!-- 会员  刷脸  地址 -->
+  <view class='serve'>
+    <!-- <view class='member' catchtap='buyCard'>
+      <image src='../../images/member.svg'></image>
+      <text class='member-text'>开通会员</text>
+      <text class='experienceCard' wx:if="{{membership}}">领取体验卡</text>
+    </view> -->
+    <view class='face' catchtap='openFacePay'>
+      <image src='../../images/face.svg'></image>
+      <text class='faceText'>刷脸支付</text>
+      <text class='state'>{{signing}}</text>
+    </view>
+    <view class='site' catchtap='myOrder'>
+      <image src='../../images/site.svg'></image>
+      <text>地址管理</text>
+    </view>
+  </view>
+
+  <view class='watermark'>
+    <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/6da740ad4dea46718d7035d24b8b91b7.svg'></image>
+  </view>
+</view>

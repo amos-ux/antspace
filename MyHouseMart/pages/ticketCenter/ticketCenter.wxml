@@ -1,0 +1,138 @@
+<!-- 选择框 -->
+<view class="selectBar">
+  <text class="{{num==1?'myCard':'pending'}}" data-num="1" catchtap="cardCoupon">我的卡券</text>
+  <text class="{{num==2?'myCard':'pending'}}" data-num="2" catchtap="cardCoupon">待领取</text>
+  <view class="underLine" animation="{{animation}}"></view>
+</view>
+
+<!-- 我的卡券 -->
+<view class='ticketCenter' wx:if="{{allVouchers.length && num==1}}">
+  <view wx:for="{{allVouchers}}" wx:key="{{index}}">
+    <view class='discount' style="height:auto;">
+      <view class='ticket'>
+        <view class='ticketMessage'>
+          <text class='ticketName'>{{item.couponTitle}}</text>
+          <view class='discountTicket' wx:if="{{item.couponType=='DISCOUNT_COUPON'}}">
+            <text>{{item.becoming*10}}</text>
+            <text>折</text>
+          </view>
+          <view class='discountBecoming' wx:if="{{item.couponType=='PRICE_FULL_COUPON'}}">
+            <text>￥</text>
+            <text>{{item.becoming}}</text>
+          </view>
+        </view>
+        <view class='ticketCondition'>
+          <text>{{item.targe}}</text>
+        </view>
+        <view class='ticketDay'>
+          <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+          <text catchtap='playing' data-message="{{item.rule}}">使用规则</text>
+        </view>
+      </view>
+      <view class='ticketBox' wx:if="{{item.couponType=='ITEM_COUPON'}}">
+        <view></view>
+        <button catchtap="toDetail" data-index="{{index}}" class='ticketBtn'>立即使用</button>
+      </view>
+    </view>
+  </view>
+  <!-- 使用规则 -->
+  <view class='pop' wx:if="{{pop}}" catchtouchmove="preventTouchMove">
+    <view class='pop-up'>
+      <view>使用规则</view>
+      <scroll-view scroll-y="true" class='scroll'>
+        <text class='scrollText'>{{messages}}</text>
+      </scroll-view>
+    </view>
+    <view class='pop-img' catchtap='popImg'>
+      <image src='../../images/closeS.svg'></image>
+    </view>
+  </view>
+</view>
+
+<!-- 待领取 -->
+<view class='ticketCenter' wx:if="{{allVouchers.length && num==2}}">
+  <view wx:for="{{allVouchers}}" wx:key="{{index}}">
+    <!-- 满减券 -->
+    <view class='discount' wx:if="{{item.couponSendType=='PRICE_FULL_COUPON'}}">
+      <view class='ticket'>
+        <view class='ticketMessage'>
+          <text class='ticketName'>{{item.dataTemplate.planName}}</text>
+          <view class='ticketMoney'>
+            <text>￥</text>
+            <text>{{item.dataTemplate.becoming}}</text>
+          </view>
+        </view>
+        <view class='ticketCondition'>
+          <text>{{item.dataTemplate.condition}}</text>
+        </view>
+        <view class='ticketDay'>
+          <text>可领劵日期：{{item.dataTemplate.beginDate}} - {{item.dataTemplate.endDate}}</text>
+          <text catchtap='playing' data-message="{{item.dataTemplate.rule}}">使用规则</text>
+        </view>
+      </view>
+      <view class='btnBox'>
+        <text></text>
+        <button catchtap='immediatelyToReceive' data-index="{{index}}" disabled='{{!item.dataTemplate.getStatus}}' class='getBtn'>{{item.dataTemplate.getStatus === false?alreadyReceived:unclaimed}}</button>
+      </view>
+    </view>
+    <!-- 折扣券 -->
+    <view class='discount' wx:if="{{item.couponSendType=='DISCOUNT_COUPON'}}">
+      <view class='ticket'>
+        <view class='ticketMessage'>
+          <text class='ticketName'>{{item.dataTemplate.planName}}</text>
+          <view class='discountTicket'>
+            <text>{{item.dataTemplate.becoming*10}}</text>
+            <text>折</text>
+          </view>
+        </view>
+        <view class='ticketCondition'>
+          <text>{{item.dataTemplate.condition}}</text>
+        </view>
+        <view class='ticketDay'>
+          <text>有效日期：{{item.dataTemplate.beginDate}} - {{item.dataTemplate.endDate}}</text>
+          <text catchtap='playing' data-message="{{item.dataTemplate.rule}}">使用规则</text>
+        </view>
+      </view>
+      <view class='btnBox'>
+        <text></text>
+        <button catchtap='immediatelyToReceive' data-index="{{index}}" disabled='{{!item.dataTemplate.getStatus}}' class='getBtn'>{{item.dataTemplate.getStatus === false?alreadyReceived:unclaimed}}</button>
+      </view>
+    </view>
+    <!-- 商品券 -->
+    <view class='discount' wx:if="{{item.couponSendType=='ITEM_COUPON'}}">
+      <view class='ticket'>
+        <view class='ticketMessage'>
+          <text class='ticketName'>{{item.dataTemplate.planName}}</text>
+        </view>
+        <view class='ticketCondition'>
+          <text>{{item.dataTemplate.condition}}</text>
+        </view>
+        <view class='ticketDay'>
+          <text>有效日期：{{item.dataTemplate.beginDate}} - {{item.dataTemplate.endDate}}</text>
+          <text catchtap='playing' data-message="{{item.dataTemplate.rule}}">使用规则</text>
+        </view>
+      </view>
+      <view class='btnBox'>
+        <text></text>
+        <button catchtap='immediatelyToReceive' data-index="{{index}}" disabled='{{!item.dataTemplate.getStatus}}' class='getBtn'>{{item.dataTemplate.getStatus === false?alreadyReceived:unclaimed}}</button>
+      </view>
+    </view>
+  </view>
+  <!-- 使用规则 -->
+  <view class='pop' wx:if="{{pop}}" catchtouchmove="preventTouchMove">
+    <view class='pop-up'>
+      <view>使用规则</view>
+      <scroll-view scroll-y="true" class='scroll'>
+        <text class='scrollText'>{{messages}}</text>
+      </scroll-view>
+    </view>
+    <view class='pop-img' catchtap='popImg'>
+      <image src='../../images/closeS.svg'></image>
+    </view>
+  </view>
+</view>
+
+<view class='allVouchers' wx:if="{{hint}}">
+  <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16a6c16cf17.svg'></image>
+  <text>暂无可领优惠券</text>
+</view>

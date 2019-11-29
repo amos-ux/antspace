@@ -1,0 +1,41 @@
+<view class='lose' style='{{show?"overflow:none;height:auto":""}}' wx:if="{{outmodedItems.length!==0}}">
+  <view class='lose-nav'>
+    <view class='empty' catchtap='empty'>清空</view>
+    <view class='lose-unfold'>
+      <view class='lose-number'>失效商品{{outmodedItems.length}}件</view>
+      <view class='lose-unfold' catchtap='open'>
+        <text class='lose-text'>{{show?"收起":"展示"}}</text>
+        <text class='lose-text1' style='{{show?"transform: rotate(180deg);":""}}'></text>
+      </view>
+    </view>
+  </view>
+  <view class='cart-goods' wx:for="{{outmodedItems}}" wx:key="index">
+    <view class='cart-icon'>
+      <view class='icon'>失效</view>
+    </view>
+    <view class='cart-commodity'>
+      <view class='commodity-img'>
+        <image src='{{item.thumbPic?item.thumbPic:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+      </view>
+      <view class='commodity-content'>
+        <view class='commodity-name'>{{item.itemName}}</view>
+        <!-- <view class='commodity-specification' wx:if="{{item.extOptions.lenght!==0}}">{{item.extOptions}}</view> -->
+        <view class='commodity-discount'></view>
+        <view class='commodity-price'>
+          <view style='display:flex;align-items:center'>
+            <view class='commodity-vipprice'>¥{{we.toFixed(item.salePrice)}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    value = Number(value)
+    return value.toFixed(2)
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

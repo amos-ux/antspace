@@ -1,0 +1,138 @@
+<!--pages/after/after.wxml-->
+<view class='coverage'></view>
+<scroll-view scroll-y="true" class='after'>
+  <view class='afterBox'>
+    <view class='refundAdd'>
+      <text>退款的商品</text>
+      <text>订单号：{{goodsList.orderNo}}</text>
+    </view>
+    <scroll-view class='goods'>
+
+      <view class='goodList' wx:for="{{showGoodsList}}" wx:key="{{index}}">
+        <!-- 单品 -->
+        <block wx:if="{{item.combItemNo==''}}">
+          <view class='pitchImg' >
+            <image src='../../images/selected.svg' class='selected' wx:if="{{item.isShow}}"></image>
+          </view>
+          <view class='addMessage'>
+            <image class='addImg' src='{{item.itemPicture==""?"../../images/null.svg":item.itemPicture}}'></image>
+            <view class='addDetails'>
+              <view class='addName'>
+                <text>{{item.itemName}}</text>
+                <text>￥{{item.payPrice}}</text>
+              </view>
+              <view class='addNun'>
+                <text>数量：{{item.quantity}}</text>
+                <text class="refound-right" wx:if="{{item.refundAmt!=0}}">返现￥{{item.refundAmt*item.quantity}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+        <!-- 套餐 -->
+        <block wx:else>
+          <view class='pitchImg'>
+            <image src='../../images/selected.svg' class='selected' wx:if="{{item.isShow}}"></image>
+          </view>
+          <view class='addMessage'>
+            <image class='addImg' src='{{item.thumbPicture==""?"../../images/null.svg":item.thumbPicture}}'></image>
+            <view class='addDetails'>
+              <view class='addName'>
+                <text>{{item.comboName}}</text>
+                <text>￥{{item.combItemPrice}}</text>
+              </view>
+              <view class='addNun'>
+                <text>数量：{{item.combItemQty}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+    <view class='selectAdd'>共选{{getTotal}}件商品<button open-type="contact"><text class="callPhone">联系客服</text><image src='/images/kefu.svg' class="selectAdd-img" /></button></view>
+  </view>
+  
+  <view class='_style'></view>
+  <view class='time' wx:if="{{time}}">
+    <text>退货时间</text>
+    <!-- 多列选择器 -->
+    <picker bindchange="bindPickerstartTimeChange" mode="multiSelector" range="{{timeTemp}}">
+      <view class="picker" wx:if="{{bon}}">
+        {{pleaseTime}}
+      </view>
+      <view class="picker" wx:else>
+        {{timeTemp[0][multiIndex[0]]}},{{timeTemp[1][multiIndex[1]]}}
+      </view>
+    </picker>
+  </view>
+  <view class='_style' wx:if="{{time}}"></view>
+  <view class='money'>
+    <text>退款金额：</text>
+    <text>￥{{totalPrice}}</text>
+  </view>
+  <view class="Aside" wx:if="{{goodsList.refundMoney!=0||isDelivery==true}}"><text wx:if="{{goodsList.refundMoney!=0}}">若退款成功，将回收返现金额¥{{goodsList.refundMoney}}</text><text wx:if="{{isDelivery==true&&goodsList.refundMoney!=0}}">,</text><text wx:if="{{isDelivery==true||isDeliveryMoney==0}}">配送费¥{{isDeliveryMoney}}不会退哦！</text></view>
+  <view class="select-radio">
+    <text class="AfterSale">售后方式</text>
+    <radio-group class="par-check" bindchange="radioChange">
+        <radio value="REFUND" checked="{{true}}" class="radio1">
+          <text class="radiu-text">仅退款</text>
+        </radio>
+        <radio value="BOTH" class="radio2">
+          <text class="radiu-text">退款退货</text>
+        </radio>
+      </radio-group>
+  </view>
+  <view class='cause'>
+    <text>退货原因：</text>
+    <picker bindchange="bindPickerChange" style='width:70%;' value="{{index}}" range="{{array}}">
+      <view class="picker" wx:if="{{bln}}">
+        请选择原因
+      </view>
+      <view class="picker" style='{{fontColor}}' wx:else>
+        {{array[index]}}
+      </view>
+    </picker>
+  </view>
+  <view class='_style'></view>
+  <view class='explain '>
+    <text>退货说明：</text>
+    <input class='put' placeholder='选填' bindinput='instructions' placeholder-style='color:#A3A5AD;'></input>
+  </view>
+  <view class='_style'></view>
+  <view class='voucherBox'>
+    <view class='voucher'>
+      <text>凭证图片</text>
+      <!-- <text>最多三张</text> -->
+    </view>
+    <view class='voucher_Box'>
+      <view wx:for="{{imgURL}}" wx:key="{{index}}" class='img_url'>
+        <image src='{{item}}'></image>
+        <view class='closeImg' bindtap='removeImg' data-index="{{index}}">
+          <image src='../../images/close.svg'></image>
+        </view>
+      </view>
+      <view class='voucher_img' bindtap='addimage' wx:if="{{imgURL.length < 3}}">
+        <image src='../../images/add.svg' mode="widthFix"></image>
+        <text>点击添加</text>
+      </view>
+    </view>
+  </view>
+  <view class='commit'>
+    <button class='commit_btn' bindtap='commitBtn'>提交</button>
+    <view class='mark' bindtap='refund' wx:if="{{false}}">
+      <image src='../../images/mark.svg'></image>
+      <text>退款退货说明</text>
+    </view>
+  </view>
+  <!-- 弹框 -->
+  <view class='pop_box' wx:if="{{mode}}">
+    <view class='pop_up'>
+      <view>退款退货说明</view>
+      <scroll-view>
+
+      </scroll-view>
+      <view class='closes'>
+        <image src='../../images/closes.svg' bindtap='closes'></image>
+      </view>
+    </view>
+  </view>
+</scroll-view>

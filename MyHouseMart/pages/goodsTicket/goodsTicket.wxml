@@ -1,0 +1,91 @@
+<view class='discount'>
+  <view class='discountState'>
+    <view class='unused {{num==1?"active":""}}' data-num='1' catchtap='couponUse'>
+      <text>未使用</text>
+    </view>
+    <view class='noUse {{num==2?"active":""}}' data-num='2' catchtap='couponUse'>
+      <text>已使用</text>
+    </view>
+    <view class='lose {{num==3?"active":""}}' data-num='3' catchtap='couponUse'>
+      <text>已失效</text>
+    </view>
+    <view class='slidingBlock' animation="{{animation}}"></view>
+  </view>
+
+  <!-- 未使用商品券 -->
+  <view class='unused-message' wx:if="{{num==1}}">
+    <view class='goodsTicket' wx:for="{{discountType}}" wx:key="{{index}}">
+      <view class="goods-content">
+        <view class='goodsMessage'>
+          <view class='goods-name'>
+            <text>{{item.itemName}}</text>
+            <text>{{item.targe}}</text>
+          </view>
+        </view>
+        <view class='goodsDate'>
+          <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+          <text catchtap='playing' data-index="{{index}}">使用规则</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 已使用商品券 -->
+  <view class='unused-message' wx:if="{{num==2}}">
+    <view class='goodsTicket' wx:for="{{discountType}}" wx:key="{{index}}">
+      <view class="goods-used">
+        <view class='goodsMessage'>
+          <view class='goods-name'>
+            <text>{{item.itemName}}</text>
+            <text>{{item.targe}}</text>
+          </view>
+        </view>
+        <view class='goodsDate'>
+          <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+          <text catchtap='playing' data-index="{{index}}">使用规则</text>
+        </view>
+      </view>
+      <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16231a735.svg' class='goodsTicket-img'></image>
+    </view>
+  </view>
+
+  <!-- 已失效商品券 -->
+  <view class='unused-message' wx:if="{{num==3}}">
+    <view class='lose-efficacy' wx:for="{{discountType}}" wx:key="{{index}}">
+      <view class="goods-Invalid">
+        <view class='goodsMessage'>
+          <view class='lose-efficacy-name'>
+            <text>{{item.itemName}}</text>
+            <text>{{item.targe}}</text>
+          </view>
+        </view>
+        <view class='lose-efficacy-date'>
+          <text>有效日期：{{item.effectiveFrom}} - {{item.effectiveTo}}</text>
+          <text catchtap='playing' data-index="{{index}}">使用规则</text>
+        </view>
+        <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/222d58367.svg' class='goodsTicket-img'></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 活动规则 -->
+  <view class='pop' wx:if="{{pop}}" catchtouchmove="preventTouchMove">
+    <view class='pop-up'>
+      <view>活动规则</view>
+      <scroll-view scroll-y="true" class='scroll'>
+        <text class='scrollText'>{{message}}</text>
+      </scroll-view>
+    </view>
+    <view class='pop-img' catchtap='popImg'>
+      <image src='../../images/closeS.svg'></image>
+    </view>
+  </view>
+
+  <!-- 没有券时显示 -->
+  <view class='unusedImg' wx:if="{{unusedImg}}">
+    <view class='unused-Img'>
+      <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16a6c16cf17.svg'></image>
+      <text>暂无商品券</text>
+    </view>
+  </view>
+</view>

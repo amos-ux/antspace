@@ -1,0 +1,111 @@
+<view class="wallet">
+  <view class="top">
+    <view class="left" catch:tap="toOpenVip">
+      <view class="left-top">返现余额(元)
+        <image class="left-top-img" src="/images/Question.svg" />
+      </view>
+      <view class="moneny">{{we.toFixed(list.balanceAmount)}}</view>
+      <view class="lastMoneny">上次返现(元)
+        <text class="moneny-min">+{{we.toFixed(list.lastRefund)}}</text>
+      </view>
+    </view>
+    <view class="right">
+      <view class="left-top">总计返现(元)</view>
+      <view class="moneny">{{we.toFixed(list.totalRefund)}}</view>
+    </view>
+    <view class="top-bottom">
+      <view class="bottom-left" catchtap="tabBar" data-index="1">
+        <view class="{{index==1?'title':'title-click'}}">当月返现</view>
+      </view>
+      <view class="bottom-right" catchtap="tabBar" data-index="2">
+        <view class="{{index==2?'title':'title-click'}}">总累计返现</view>
+      </view>
+      <view class="underline" animation="{{animation}}"></view>
+    </view>
+  </view>
+  <view class="container">
+    <view class="list1">
+      <text class="radiu1"></text>
+      <text class="container-title">消费返现</text>
+      <text class="container-right">￥ {{we.toFixed(index==1?list.consumeRefundAmtM:list.consumeRefundAmt)}}</text>
+    </view>
+    <view class="list1">
+      <text class="radiu2"></text>
+      <text class="container-title">续费返现</text>
+      <text class="container-right">￥ {{we.toFixed(index==1?list.chargeRefundAmtM:list.chargeRefundAmt)}}</text>
+    </view>
+    <view class="list1">
+      <text class="radiu3"></text>
+      <text class="container-title">邀请返现</text>
+      <text class="container-right">￥ {{we.toFixed(index==1?list.newRefundAmtM:list.newRefundAmt)}}</text>
+    </view>
+  </view>
+  <view class="renew" wx:if="{{vip}}">
+    <text class="radiu4"></text>
+    <text class="renew-title">预计下个月有</text>
+    <text class="renew-moneny">{{now}}</text>
+    <text class="renew-title2">元续费返现到账</text>
+    <image class="renew-img" src="../../images/right-wallet.svg" />
+    <text class="start-renew" catch:tap="toJoinMember">立即续费</text>
+  </view>
+  <view wx:if="{{endvip}}" class="renew">
+    <text class="radiu4"></text>
+    <text class="renew-title">过期期间发生</text>
+    <text class="renew-moneny">{{quantity}}</text>
+    <text class="renew-title2">次续费,累计损失</text>
+    <text class="renew-moneny">{{totalAmount}}</text>
+    <text class="renew-title2">元</text>
+    <image class="renew-img" src="../../images/right-wallet.svg" />
+    <text class="start-renew" catch:tap="toJoinMember">立即续费</text>
+  </view>
+  <view class="content-view">
+    <view class="content-title">现金支出占比<text class='content-title-date'>最近更新:{{date}}</text></view>
+    <view class="content-left">
+      <view class="content-cash">现金支付</view>
+      <view class="content-Percentage">{{list.cashPayPercent?we.toFloor(list.cashPayPercent):0}}
+        <text class="Percent">%</text>
+      </view>
+    </view>
+    <view class="content-right">
+      <view class="content-cash">返现钱包</view>
+      <view class="content-Percentage">{{list.cashPayPercent?we.toFloor(list.cashPercent):0}}
+        <text class="Percent">%</text>
+      </view>
+    </view>
+    <view class="progress">
+      <view class="parallelogram" wx:if="{{(list.progress_act_width!=0 || list.progress_pay_width!=700) && list.parallelogram && list.parallelogram != -8}}" style="left:{{list.parallelogram}}rpx"></view>
+      <view class="progress-pay" wx:if="{{list.progress_pay_width}}" style="width:{{list.progress_pay_width}}rpx"></view>
+      <view class="progress-act" wx:if="{{list.progress_act_width}}" style="width:{{list.progress_act_width}}rpx"></view>
+    </view>
+  </view>
+  <view class="content-list">
+    <view class="content-list-top">
+      <text class="content-list-title">近5笔返现收支</text>
+      <image class="content-list-title-img" src="../../images/right-wallet.svg" />
+      <text class="content-list-max" catch:tap="toDetailed">更多</text>
+    </view>
+    <view class="item"  wx:for="{{account}}" wx:key="{{index}}">
+      <view class="item-title">{{ item.transType=='REFUND'?'消费返现': item.transType=='NEWREFUND'?'邀请返现': item.transType=='CHGREFUND'?'分享续费返现': item.transType=='SALES'?'返现抵扣': item.transType=='ORETURN'?'系统回收': '赠送返现' }}
+      </view>
+      <view class="{{item.transType=='ORETURN'||item.transType=='SALES'?'item-reduce-moneny':'item-moneny'}}">{{item.transType=='ORETURN'||item.transType=='SALES'?item.transAmt!=0?'-':'':'+'}}{{we.toFixed(item.transAmt)}}</view>
+      <view class="item-date">{{item.tranDate}}</view>
+    </view>
+    <view wx:if="{{account.length==0}}" class="item">
+      <image class="noRecord-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/db397fc362bc47b4886b622cca3aafdf.png" />
+    </view>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    value = Number(value ? value : 0)
+    return value.toFixed(2);
+  }
+  var toFloor = function(value) {
+    value = Number(value ? value : 0)
+    return Math.floor(value.toFixed(2))
+  }
+  module.exports = {
+    toFixed: toFixed,
+    toFloor:toFloor
+  }
+</wxs>

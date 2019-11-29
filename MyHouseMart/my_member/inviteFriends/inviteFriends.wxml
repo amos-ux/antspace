@@ -1,0 +1,173 @@
+<view class="invitefriends">
+  <view class="invaite-tips">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/be68d7c3224b474a9d01ef37d6cb9e29.svg" />
+    <text class="invaite-text">功能正在建设中，当前为体验阶段。体验阶段将不产生实际收益。功能正式上线后，您之前的关系会为您保留。</text>
+  </view>
+  <view class="content-top" style='{{(userInfo.memberStatus == "NON_MEMBERS")?"background:url(https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c5666a1fd654405582d0279528b0ed01.png); background-size: 100% 100%;":""}}'>
+    <view class="top-content">
+      <!-- <view class="tooplit">
+        <view class="tooplit-text">文**呀邀请好友成功 +10</view>
+      </view> -->
+    </view>
+    <view class="red-content" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus == 'EXPERIENCE' || userInfo.memberStatus ==  'ENTERPRISE' || userInfo.memberStatus ==  'EXPIRED_MEMBERS')}}">
+      <view class="invite-btn">
+        <view class="invite-link">
+          <form report-submit bindsubmit="bindsubmit">
+            <button form-type="submit" class="link-btn" open-type='share'>
+              <!-- <view class="light">
+              </view> -->
+              <image class="invite-link-weixin ballon" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/fee276f7a39141e9adb45a512668114a.svg"></image>
+            </button>
+          </form>
+          <text>链接邀请</text>
+        </view>
+        <view class="none"></view>
+        <view class="invite-code">
+          <button class="link-btn" bindtap="onFaceInvitation">
+            <image class="ballon" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/d0dde587ec1e4975916d68679ee076a1.svg"></image>
+          </button>
+          <text>面对面邀请</text>
+        </view>
+      </view>
+      <view class="within-code">
+        <view class="within-code-btn">内邀码</view>
+        <view class="within-code-text">
+          <text>{{userInfo.uniqueCode}}</text>
+          <text class="within-code-text-copy" bindtap='copyBtn'>复制</text>
+        </view>
+      </view>
+    </view>
+    <view class="red-content" wx:if='{{!userInfo.firstOrderState && (userInfo.memberStatus == "MEMBERS" || userInfo.memberStatus == "EXPERIENCE" || userInfo.memberStatus ==  "ENTERPRISE")}}'>
+      <view class="within-code within-code-b">
+        <view class="within-code-btn">内邀码</view>
+        <view class="within-code-no-text">未激活</view>
+      </view>
+      <view class="to-home">
+        <text> 需要完成一笔{{money}}元的订单</text>
+        <text> 才能激活内邀码</text>
+        <view class="home-order-btn ballon" catchtap="joinPreference">立即激活内邀码</view>
+      </view>
+    </view>
+    <view class="red-content red-content-c" wx:if='{{userInfo.memberStatus == "NON_MEMBERS"}}'>
+      <view class="add-vip">
+        <!-- <view> -->
+        <!-- <view class="hint ballons">
+        <image  class="reminder" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/258e07dcb2944f859668e4c397dbd77a.png"></image> -->
+        <!-- <view class="hint-view">
+         <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/97d47364942742239a8949a23fd61c08.png"></image>
+         <text class="hint-text"></text>
+        </view> -->
+             
+<!--               
+        </view> -->
+          <!-- <image class="text" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/49b6380056a842c0aef57be03378b0d6.png"></image> -->
+          <!-- <view class="text">加入会员即可参加</view> -->
+        <!-- </view> -->
+        <view class="add-vip-btn ballon" catchtap="joinVip">0元领会员</view>
+        <view class="return-text">悄悄告诉你，在商城购物只有会员才有返现喔！</view>
+      </view>
+    </view>
+  </view>
+  <view class="content-bottom">
+    <view class="title-content" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS'|| userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE'||userInfo.memberStatus == 'EXPIRED_MEMBERS')}}">
+      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c188df56129245b4a0688395f9a42fad.svg"></image>
+      <text class="text">邀请战绩</text>
+      <view class="line line4"></view>
+    </view>
+    <view class="detail" wx:if="{{(userInfo.firstOrderState && userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE')||(userInfo.memberStatus == 'EXPIRED_MEMBERS')}}">
+      <view class="expired-box" wx:if="{{userInfo.memberStatus == 'EXPIRED_MEMBERS'}}">
+        <text>会员已过期{{we.toAbs(userInfo.expiredDate)}}天，立即续费可避免收益损失</text>
+        <view class="expired-btn" catchtap="vtRenew">立即续费></view>
+      </view>
+      <view class="record">
+        <view class="recordLi">
+          <view class="prson-content">
+            <text class="prson-count">{{gradeInfo.onTheWaySize?gradeInfo.onTheWaySize:0}}</text>
+            <text class="prson-text">人</text>
+          </view>
+          <text class="prson-bottom">在路上</text>
+        </view>
+        <view class="dividing-line"></view>
+        <view class="recordLi">
+          <view class="prson-content">
+            <text class="prson-count">{{gradeInfo.successSize?gradeInfo.successSize:0}}</text>
+            <text class="prson-text">人</text>
+          </view>
+          <text class="prson-bottom">邀请成功</text>
+        </view>
+        <view class="dividing-line"></view>
+        <view class="recordLi">
+          <view class="prson-content">
+            <text class="prson-count">{{gradeInfo.totalInviteAmount?gradeInfo.totalInviteAmount:0}}</text>
+            <text class="prson-text">元</text>
+          </view>
+          <text class="prson-bottom">邀请返现</text>
+        </view>
+        <view class="dividing-line"></view>
+        <view class="recordLi">
+          <view class="prson-content">
+            <text class="prson-count">{{gradeInfo.totalChargeAmount?gradeInfo.totalChargeAmount:0}}</text>
+            <text class="prson-text">元</text>
+          </view>
+          <text class="prson-bottom">续费返现</text>
+        </view>
+      </view>
+      <view class="look-detail" catchtap="click">
+        <view class="detail-btn">查看详情</view>
+      </view>
+    </view>
+    <view class="title-content">
+      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c188df56129245b4a0688395f9a42fad.svg"></image>
+      <text class="text">返现攻略</text>
+      <view class="line line4"></view>
+    </view>
+    <view class="detail return-strategy">
+      <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/b864f51bd11342d9b0f92aed96050646.png"></image>
+    </view>
+    <view class="title-content" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE')}}">
+      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c188df56129245b4a0688395f9a42fad.svg"></image>
+      <text class="text">轻松返现加倍</text>
+      <view class="line line5"></view>
+    </view>
+    <view class="detail redoubling" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE')}}">
+      <view class="title-1">一重邀请赏金</view>
+      <view class="title-2">每邀1位好友，您将获得10元返现</view>
+      <image class="invitation-top-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/f08fa061c70c467ba345a76c189271b0.png"></image>
+      <view class="title-1">二重续费赏金</view>
+      <view class="title-2">1位好友每续费1个月，您将获得20元返现</view>
+      <view class="title-3">1人*1月*20元=20元</view>
+      <view class="invitation-img-box">
+        <image class="track" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/7473b083af09497685027a1b666f9b71.png"></image>
+        <image class="invitation-bottom-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/94fd0eb29d6248d4ac878bc083b3da69.png"></image>
+        <view class="bor"></view>
+      </view>
+    </view>
+    <view class="activity-rules">
+      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/e589bc350ac8431e80148ed3e6d2a806.png"></image>
+    </view>
+  </view>
+  <view class="alter-code" catchtouchmove="preventTouchMove" hidden="{{showCanvas}}">
+    <view class="alter-code-bg"></view>
+    <view class="canvas-box">
+      <canvas class="canvas-code" canvas-id="shareImg" />
+      <!-- 点击这里保存 -->
+      <view bindtap="clickShare" class="save-btn">保存到本地</view>
+      <image class="close-btn" bindtap="close" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/25a2e274245f4975aab2b9418cd7cf16.png"></image>
+    </view>
+  </view>
+</view>
+<view class="back" wx:if="{{isHome}}">
+    <view class="back_home" catchtap='tohome'>
+      <image src="../../images/soul_home.svg" />
+    </view>
+</view>
+<wxs module="we">
+  var toAbs = function(value) {
+    if (value) {
+      return Math.abs(value);
+    }
+  }
+  module.exports = {
+    toAbs: toAbs
+  }
+</wxs>

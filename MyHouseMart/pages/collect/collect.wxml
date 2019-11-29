@@ -1,0 +1,52 @@
+<view class='page'>
+  <view class='shops' wx:if="{{cartQuantity>0}}" catchtap="skipSearch">
+    <view class='shops-view'>
+      <image src='../../images/shop.svg'></image>
+      <text>{{cartQuantity}}</text>
+    </view>
+
+  </view>
+  <view class='header' wx:if="{{satisfied.length>0}}">
+    <text class='header-text'></text>
+    <text class="header-title" style='margin-left:16rpx'>以下商品参与活动：</text>
+    <block wx:for="{{satisfied}}" wx:key="index">
+      <text class='header-text1'>{{item}}</text>
+    </block>
+  </view>
+  <view class="goodslist">
+    <view class='goods' wx:for="{{order}}" wx:key="index">
+      <view class='goods-img'>
+        <image lazy-load="true" src='{{item.picAddr?item.picAddr:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+      </view>
+      <view class='goods-text'>
+        <view class='goods-name'>{{item.itemName}}</view>
+        <view class='goods-price'>
+          <view class='discount' wx:if="{{item.satisfied}}" style='{{item.stockQty==0?"border:2rpx solid #A0A1A3;color:#A0A1A3;":""}}'>{{item.satisfied[0]}}</view>
+          <view class='morning' wx:for="{{item.stTimes}}" wx:for-item="stTimes" wx:key="index" wx:if="{{item.stTimes}}">{{stTimes.stName}}供应</view>
+        </view>
+        <view class='vipprice' style='{{item.stockQty==0?"color:#A0A1A3;":""}}' wx:if="{{item.disPrice!==null}}">¥{{item.disPrice}}</view>
+        <view class='saleprice'>
+          <view class='price' style='{{item.disPrice==null && item.stockQty==0?"color:#A0A1A3;font-size:30rpx;font-weight:500":items.disPrice==null ?"color:#FF5A52;font-size:30rpx;margin-top:46rpx":"text-decoration: line-through"}}'>¥{{item.salePrice}}</view>
+          <view class='add' catchtap='touchOnGoods' data-item="{{item}}">
+            <image src='../../images/adds.svg'></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+  <view class="noshop" wx:if="{{noshop}}">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/65252c0d5e7d4ebcbc1cba2d8817a746.svg" />
+    <text>暂无商品</text>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    if (typeof value == "number") {
+      return value.toFixed(2);
+    }
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

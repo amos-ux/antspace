@@ -1,0 +1,29 @@
+<view class='page'>
+  <view class='scroll'>
+    <view class='swiper'>
+      <swiper class='swiperPage' indicator-dots="true" circular="true" autoplay="true" interval="4000" duration="500" indicator-active-color="#FFA333" indicator-color="rgba(0,0,0,.2)">
+        <block wx:for="{{imgUrls}}" wx:key="index">
+          <swiper-item>
+            <image src="{{item}}" lazy-load='true' class="slide-image" />
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class='page-content' wx:for="{{setMeal}}" wx:key="index">
+      <view class='block' catchtap='setMeal' data-index='{{index}}' data-itemno="{{item.combItemNo}}" data-combNum="{{item.combNum}}">
+        <view class='block-img'>
+          <image lazy-load='true' src='{{item.combPicture?item.combPicture:"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1135555521,2032795892&fm=26&gp=0.jpg"}}'></image>
+        </view>
+        <view class='block-text'>
+          <view class='block-top'>
+            <text class='text1'>{{item.combName}}</text>
+            <text class='text2'>{{item.combDetail}}</text>
+          </view>
+          <view class='block-right'>
+            <text class='text3'>¥{{item.combPrice}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

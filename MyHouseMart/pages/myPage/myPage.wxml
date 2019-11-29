@@ -1,0 +1,306 @@
+<view class="page" style="{{userInfo.isMobile?'padding-bottom:80rpx':''}}" wx:if="{{isLoading}}">
+  <view class="pages">
+    <view class="myview">
+      <!-- 未登录状态 -->
+      <view class="myimg" wx:if="{{!userAuthorization}}">
+        <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/b6a0863124b1496abae013f6c38c9fd9.png"></image>
+      </view>
+      <view class="mylogin" catchtap="toLogin" wx:if="{{!userAuthorization}}">
+        <view>登录/注册</view>
+      </view>
+      <!-- 登录状态 -->
+      <view class="myimg" wx:if="{{userAuthorization}}">
+        <image src="{{userImg?userImg:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/b6a0863124b1496abae013f6c38c9fd9.png'}}"></image>
+      </view>
+      <view class="mytext" wx:if="{{userAuthorization}}">
+        <view class="name">{{userName?userName:userInfo.userName}}</view>
+        <view class="flex">
+          <view class="vip" catchtap="skipToVip" style="{{userInfo.memberStatus=='NON_MEMBERS'?'background:#FFF9DB;color:#67686B;':''}}" wx:if="{{userInfo.memberStatus=='EXPERIENCE' || userInfo.memberStatus=='NON_MEMBERS'}}">
+            <image class="general-img" src="{{userInfo.memberImg}}"></image>
+            <view class="viptext">{{userInfo.memberName}}</view>
+          </view>
+          <view class="vip" catchtap="skipToVip" style="{{userInfo.memberStatus=='EXPIRED_MEMBERS'?'background:#FFF9DB;color:#67686B;':''}}" wx:if="{{userInfo.memberStatus=='EXPIRED_MEMBERS' || userInfo.memberStatus=='MEMBERS' || userInfo.memberStatus=='ENTERPRISE'}}">
+            <image class="{{userInfo.memberStatus=='ENTERPRISE'?'myhome-vip':'vip-img'}}" src="{{userInfo.memberImg}}"></image>
+            <view class="vipname">{{userInfo.memberName}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="myyard" catchtap="yardSkip">
+        <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/payYard.gif"></image>
+      </view>
+    </view>
+    <!-- 开通会员 立即续费 -->
+    <view class="image">
+      <image class="pages-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/fab92c40092845d28f70c37a084c3502.png" />
+      <view class="vip-card">
+        <view class="vip-text">
+          <image class="vip-image" src="../../images/vip-exper.svg" />
+          <text class="vip-card-text">我家会员可享3大权益</text>
+        </view>
+        <view class="vip-btn" catchtap="skip">{{userInfo.memberStatus == 'NON_MEMBERS'?"加入会员":"立即续费"}}</view>
+      </view>
+      <view class="vip-showtip">
+        <view class="vip-fun" wx:if="{{userInfo.memberStatus=='EXPIRED_MEMBERS' && userAuthorization || userInfo.memberStatus=='NON_MEMBERS' && userAuthorization || !userAuthorization}}">
+          <text>会员返现权</text>
+          <text>专属邀请码</text>
+          <text>专享特价</text>
+        </view>
+        <view class="vip-date" wx:else>
+          <text class="vip-exipredate">{{userInfo.userText}}</text>
+          <text class="vip-exipredate" wx:if="{{userInfo.memberStatus=='ENTERPRISE'}}">自动续费</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="radian">
+    <view class="general-user" wx:if="{{userInfo.memberStatus=='NON_MEMBERS' || !userAuthorization}}">
+      <view class="user-left" catchtap="toWallet">
+        <view class="user-price">
+          <text>{{userInfo.balanceAmount?we.toRound(userInfo.balanceAmount):0}}</text>
+          <text>元</text>
+        </view>
+        <view class="user-wallet">
+          <text>我的钱包</text>
+          <text wx:if="{{amount.lastRefund!=0 && userAuthorization}}">上次返</text>
+          <text wx:if="{{amount.lastRefund!=0 && userAuthorization}}">+{{we.toFixed(amount.lastRefund)}}</text>
+        </view>
+      </view>
+      <view class="user-right" catchtap="toJoin">
+        <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/679d9931665c4b81aac9936678ba7867.png" />
+        <view class="user-desc">
+          <text>入会邀请</text>
+          <text>会员专属内邀资格</text>
+        </view>
+      </view>
+    </view>
+    <!-- 钱包总览 -->
+    <view class="card" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' && userAuthorization}}">
+      <view class="card-cont" style="{{slideupAnimation}}">
+        <view class="wallet" catchtap="toWallet">
+          <view class="wallet-title">钱包总览</view>
+          <view class="toWallet">
+            <text>进入钱包</text>
+          </view>
+        </view>
+        <view class="balance">
+          <view class="cashback">
+            <text class="balance-price">{{we.toFixed(amount.balanceAmount)}}</text>
+            <text class="balance-title">返现余额</text>
+          </view>
+          <view class="cashback">
+            <text class="balance-price">{{we.toFixed(amount.totalRefund)}}</text>
+            <text class="balance-title">总累计返现</text>
+          </view>
+          <view class="slideup" catchtap="slideup">
+            <text>{{slideup?'展开':'收起'}}</text>
+            <image src="../../images/right.svg" style="{{slideup?'transform: rotate(90deg)':'transform: rotate(-90deg)'}}" />
+          </view>
+        </view>
+        <view class="price-list">
+          <view class="price-content">
+            <text class="price-num">¥ {{we.toFixed(amount.consumeRefundAmtM)}}</text>
+            <text class="price-name">消费返现/月</text>
+          </view>
+          <view class="price-content">
+            <text class="price-num">¥ {{we.toRound(amount.chargeRefundAmtM)}}</text>
+            <text class="price-name">续费返现/月</text>
+          </view>
+          <view class="price-content">
+            <text class="price-num">¥ {{we.toRound(amount.newRefundAmtM)}}</text>
+            <text class="price-name">邀请返现/月</text>
+          </view>
+          <view class="price-content">
+            <text class="price-num">¥ {{we.toFixed(amount.consumeRefundAmt)}}</text>
+            <text class="price-name">消费返现累计</text>
+          </view>
+          <view class="price-content">
+            <text class="price-num">¥ {{we.toRound(amount.chargeRefundAmt)}}</text>
+            <text class="price-name">续费返现累计</text>
+          </view>
+          <view class="price-content">
+            <text class="price-num">¥ {{we.toRound(amount.newRefundAmt)}}</text>
+            <text class="price-name">邀请返现累计</text>
+          </view>
+        </view>
+      </view>
+      <view class="renewal" wx:if="{{userInfo.hasTerminate}}">
+        <!-- 未过期 -->
+        <view class="rene-price" wx:if="{{!userInfo.isExpired}}">
+          <text class="circle"></text>预计下个月有<text class='price'>{{we.toRound(userInfo.cashbackAmount)}}</text>元续费返现到账
+        </view>
+        <!-- 已过期 -->
+        <view class="rene-price" wx:if="{{userInfo.isExpired}}">
+          <text class="circle"></text>过期期间发生<text class='price'>{{we.toRound(userInfo.quantity)}}</text>次续费，累计损失<text class='price'>{{we.toRound(userInfo.totalAmount)}}</text>元
+        </view>
+        <view class="toPay" catchtap="skip">
+          <text>立即续费</text>
+          <image class="toPaysvg" src="../../images/myright.svg" />
+        </view>
+      </view>
+    </view>
+    <!-- 邀请战绩 -->
+    <view class="records" wx:if="{{userAuthorization && userInfo.memberStatus!='NON_MEMBERS'}}">
+      <view class="reconds-top">
+        <text class="reconds-title">邀请战绩</text>
+        <view class="reconds-num">
+          <view class="reconds-succ">邀请成功<text class="reconds-number"> {{we.toRound(amount.totalReferences)}} </text>人</view>
+          <view class="reconds-month">本月续费<text class="reconds-number"> {{we.toRound(amount.totalChargesM)}} </text>人</view>
+        </view>
+      </view>
+      <view class="reconds-bottom" catchtap="toJoin">
+        <image class="reconds-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/679d9931665c4b81aac9936678ba7867.png" />
+        <view class="reconds-cont">
+          <text class="resonds-tips">邀请得返现</text>
+          <view class="reconds-desc">每邀请一位好友得<text> 10 </text>元</view>
+        </view>
+        <image class="reconds-tosvg" src="../../images/myright.svg" />
+      </view>
+    </view>
+    <!-- 新会员超值购 -->
+    <view class="sendmember" wx:if="{{memberPromotions.length!=0 && !userInfo.firstPackStatus}}">
+      <view class="package-mess" data-status="sendMember" catchtap="toActivity">
+        <view class="package-names">
+          <text class="package-title">新会员超值购</text>
+          <text class="package-text">任意选购一件超值商品，新用户专享</text>
+        </view>
+        <view class="to-activity">
+          <image class="tosvg" src="../../images/myright.svg" />
+          <text class="act-title">活动说明</text>
+        </view>
+      </view>
+      <swiper class="member-cont" duration="500" interval="6000" autoplay="true" scroll-x="true" indicator-dots="true" indicator-color="#D4D4D4" indicator-active-color="#e2e2e2" circular="true">
+        <swiper-item class="member-main" wx:for="{{memberPromotions}}" wx:key="index">
+          <view class="member-shop">
+            <view class="member-goods" wx:for="{{item}}" data-status='sendMember' data-iscanbuy="{{userInfo.isfirstPackStatus}}" catchtap="details" data-item="{{data}}" wx:for-item="data" wx:key="index">
+              <view class="package-img">
+                <image src="{{data.picAddr}}" />
+              </view>
+              <view class="member-join">
+                <view class="member-name">{{data.itemName}}</view>
+                <view class="member-price">
+                  <text class="disprice">¥{{we.toFixed(data.disPrice)}}</text>
+                  <text class="saleprice">¥{{we.toFixed(data.salePrice)}}</text>
+                </view>
+                <view class="buy-btn {{userInfo.isfirstPackStatus?'':'noclick-btn'}}" data-status='sendMember' data-item="{{data}}" catchtap="freeBuy" data-iscanbuy="{{userInfo.isfirstPackStatus}}">{{userInfo.isfirstPackStatus?'立即购买':'已加购'}}</view>
+              </view>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+    <!-- 我的服务 -->
+    <view class="my-service">
+      <view class="service-cont">
+        <view class="service-name">我的服务</view>
+        <view class="service-list">
+          <view class="service" catchtap="rollSkip">
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8d7a5991358242ff9069383d8709f290.svg" />
+            <view>优惠券</view>
+          </view>
+          <view class="service" catchtap='openFacePay' wx:if='{{userInfo.showFace || !userAuthorization}}'>
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/9450d2a4aac74d3ca88b59ede9f6130e.svg" />
+            <view>刷脸支付</view>
+          </view>
+          <view class="service" catchtap="myOrder">
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/dbdb8f2c04dd4e3d8c579eaab3775892.svg" />
+            <view>地址管理</view>
+          </view>
+          <view class="service" catchtap="scanCode">
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/30d604e8130445f9b7e92804b602a3a0.svg" />
+            <view>扫一扫</view>
+          </view>
+          <view class="service" catchtap="toInvite" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' && userAuthorization}}">
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/80a9fdeafc9b49a5928c0fd9c4fd168b.svg" />
+            <view>内邀码</view>
+          </view>
+          <view class="service" catchtap="militaryExploits" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' && userAuthorization}}">
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/d086f1bb736c4cc6872baab15185afea.svg" />
+            <view>邀请战绩</view>
+          </view>
+          <view class="service" catchtap="toCustomer">
+            <image wx:if="{{!userAuthorization}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/a327cfd2fcc14758916b1d600f76f206.svg" />
+            <view wx:if="{{!userAuthorization}}">联系客服</view>
+            <button class="customer" open-type="contact" wx:if="{{userAuthorization}}">
+              <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/a327cfd2fcc14758916b1d600f76f206.svg" />
+              <view>联系客服</view>
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 超值续费大礼包 -->
+    <view class="package" wx:if="{{greatPackage.length!=0}}">
+      <view class="package-mess" data-status="greatPackage" catchtap="toActivity">
+        <view class="package-names">
+          <view class="package-hasbuy" wx:if="{{userInfo.isChargeTime}}">(当月已购买)</view>
+          <text class="package-title">超值续费大礼包</text>
+          <text class="package-text">购买礼包直接续费一个月会员，每月限购一次</text>
+        </view>
+        <view class="to-activity">
+          <image class="tosvg" src="../../images/myright.svg" />
+          <text class="act-title">活动说明</text>
+        </view>
+      </view>
+      <view class="package-cont">
+        <view class="package-member" data-item="{{item}}" data-iscanbuy="{{!userInfo.isChargeTime}}"  data-status='greatPackage' catchtap="details" wx:for="{{greatPackage}}" wx:key="index">
+          <view class="package-img">
+            <image src="{{item.picAddr}}" />
+            <view class="member-title">赠送会员</view>
+          </view>
+          <view class="package-main">
+            <view class="package-name">{{item.itemName}}</view>
+            <view class="package-price">
+              <text class="disprice">¥{{we.toFixed(item.disPrice)}}</text>
+              <text class="saleprice">¥{{we.toFixed(item.salePrice)}}</text>
+            </view>
+            <view class="buy-btn {{userInfo.isChargeTime?'noclick-btn':''}}" data-status='greatPackage' catchtap="freeBuy" data-iscanbuy="{{!userInfo.isChargeTime}}" data-item="{{item}}">{{userInfo.isChargeTime?'下个月可购买':'立即购买'}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+   <view class="alter-code" hidden="{{showCanvas}}"  catchtouchmove="preventTouchMove">
+    <view class="alter-code-bg"></view>
+    <view class="canvas-box">
+      <canvas class="canvas-code" canvas-id="shareImg" />
+      <view bindtap="clickShare" class="save-btn">保存到本地</view>
+      <image class="close-btn" bindtap="close" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/25a2e274245f4975aab2b9418cd7cf16.png"></image>
+    </view>
+  </view>
+</view>
+<!-- 未授权 手机号码 -->
+<view class="number" wx:if="{{userInfo.isMobile?userInfo.isMobile:false && isLoading}}">
+  <view class="number-text">获取手机号码，便于为你提供更好服务</view>
+  <button class="number-button" open-type="getPhoneNumber" bindgetphonenumber="number">去登录</button>
+</view>
+<!-- 骨架屏 -->
+<view class="screen" wx:if="{{!isLoading}}">
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/09f9d93593f147aaa699aa58ac814811.jpg" />
+</view>
+<!-- 我家企业会员卡 -->
+<view class="memberCard" wx:if="{{isShowCard}}">
+  <view class="card-content">
+    <image class="bgImg" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/a9e5e8149e7a48889a35f539d99fdac4.png"></image>
+    <view class="title">{{isMember?'您已是我家企业会员':'欢迎加入我家企业会员'}}</view>
+    <view class="period">有效期至{{effectiveToCard}}</view>
+    <view class="card-btn">
+      <text catchtap="{{isMember==false?'joinNow':'noJoin'}}">{{isMember==false?'立即加入':'我知道了'}}</text>
+    </view>
+    <image catchtap="noJoin" wx:if="{{!isMember}}" class="del" src="../../images/close_mh.svg" />
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value, num) {
+    num = num || 2
+    value = Number(value ? value : 0)
+    return value.toFixed(num);
+  }
+  var toRound = function(value) {
+    value = Number(value ? value : 0)
+    return Math.round(value)
+  }
+  module.exports = {
+    toFixed: toFixed,
+    toRound: toRound
+  }
+</wxs>

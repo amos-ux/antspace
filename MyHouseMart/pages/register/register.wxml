@@ -1,0 +1,14 @@
+<view class="page">
+  <view class="page-image">
+    <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/85a38aa59209428289cf5c557c574f44.png"></image>
+  </view>
+  <view class="page-text1">{{!getPhoneNumber?"您还没登录":"授权手机号"}}</view>
+  <view class="page-text2">{{!getPhoneNumber?"请先登录再进行操作":"请完成手机号授权以继续使用"}}</view>
+  <view class="page-button">
+    <!-- <view catchtap="Nlogin">暂不登录</view> -->
+    <form report-submit  bindsubmit="bindsubmit" wx:if="{{!getPhoneNumber}}">
+          <button class="button" form-type="submit" open-type="getUserInfo" bindgetuserinfo="userInfo">立即登录</button>
+    </form>
+    <button wx:if="{{getPhoneNumber}}" open-type="getPhoneNumber" bindgetphonenumber="number">微信手机号快捷登录</button>
+  </view>
+</view>

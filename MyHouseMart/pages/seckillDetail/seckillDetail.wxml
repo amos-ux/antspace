@@ -1,0 +1,195 @@
+<view class='shops' wx:if="{{cartQuantity>0}}" catchtap="cartDetail">
+  <view class='shops-view'>
+    <image src='../../images/shop.svg'></image>
+    <text>{{cartQuantity}}</text>
+  </view>
+</view>
+<view class='goodsDetails' style="position:relative">
+  <text class="fixed" wx:if='{{bigPic.length}}'>{{current+1}}/{{bigPic.length}}</text>
+  <view class='titleImg'>
+    <swiper autoplay="true" interval="3000" duration="500" circular="true" bindchange="bindchange" indicator-dots="{{indicatordots}}">
+      <block wx:for="{{videoLink}}" wx:key="index" wx:if="{{videoLink.length}}">
+        <swiper-item>
+          <video  style="width:100%;height:100%" muted="true" show-mute-btn="true"	enable-play-gesture="true" bindplay="bindplay" bindpause="bindpause" bindended="bindended" page-gesture="true" object-fit="contain" src="{{item}}"></video>
+        </swiper-item>
+      </block>
+      <block wx:if="{{bigPic.length}}">
+        <block wx:for="{{bigPic}}" wx:key="index">
+          <swiper-item>
+            <image src="{{item}}" class="slide-image" width="355" height="150" />
+          </swiper-item>
+        </block>
+      </block>
+      <block wx:else>
+        <block>
+          <swiper-item>
+            <image src="{{commodity.picAddr}}" class="slide-image" width="355" height="150" />
+          </swiper-item>
+        </block>
+      </block>
+    </swiper>
+  </view>
+
+  <view class="presell">
+    <view class="presell-left">
+      <view class="presell-saleprice">
+        ¥{{we.toFixed(commodity.activitySalePrice)}}
+      </view>
+      <view class="presell-vipprice">¥{{we.toFixed(commodity.salePrice)}}</view>
+    </view>
+    <view class="presell-right" wx:if="{{commodity.dateStatus!==0}}">
+      <view class="box">
+        <view class="presell-text">
+          {{commodity.dateStatus==1?"":"即将开始"}}{{commodity.dateStatus==1?"距结束":"，距开始"}}
+        </view>
+        <view class="presell-time">
+          <text class="time">{{Today[0]}}</text>
+          <text class="colon">:</text>
+          <text class="time">{{Today[1]}}</text>
+          <text class="colon">:</text>
+          <text class="time">{{Today[2]}}</text>
+        </view>
+      </view>
+      <view class="big-box" wx:if="{{commodity.dateStatus!==2}}">
+        <text class="box-text">限售{{commodity.vQuantityTotal}}</text>
+        <text class="box-text1">已售{{percentage}}%</text>
+        <progress class="progress" border-radius="6rpx" stroke-width="6" backgroundColor="rgba(0, 0, 0, .15)" activeColor="#fff" percent="{{percentage}}" active-mode="backwards" active="true"></progress>
+      </view>
+    </view>
+  </view>
+
+  <view class='goodsMessage' style="{{commodity.dateStatus==2?'height:100rpx':''}}">
+    <text>{{commodity.itemName}}</text>
+    <view class="salesVolume" wx:if="{{commodity.dateStatus!==2}}">
+      平台总销量
+      <view class="salesVolume-view">{{commodity.salesQty}}</view>
+    </view>
+  </view>
+
+  <navigator class="vipCrd" url="../buyVip/buyVip" wx:if="{{memberStatus!=='MEMBERS' || memberStatus!=='EXPERIENCE'}}">
+    <view class="vImg">
+      <image src="../../images/vip.svg"></image>
+    </view>
+
+    <view class="vipCrdMain">
+      <view>我家会员月卡
+        <text class='vipCrd-name'>(29.9元/月)</text>
+      </view>
+      <view wx:if="{{commodity.refundValue!==0 && commodity.refundValue!==null}}">
+        <text class='vipCrd-text'>开通后，本单</text>
+        <text class='vipCrd-warn'>立返现{{we.toFixed(commodity.refundValue)}}元</text>
+      </view>
+    </view>
+    <view class="vImg rightImg">
+      <image src="../../images/right_gray.svg"></image>
+    </view>
+  </navigator>
+
+  <view class='promotion'>
+    <view class='promotion-view' wx:if='{{commodity.satisfied.length!==0}}'>
+      <view class='promation-name'>促销</view>
+      <view class='cart-left'>
+        <view class='cart-img'>满减</view>
+        <view class='cart-text' wx:for="{{commodity.satisfied}}" wx:key="index">{{item}}</view>
+      </view>
+    </view>
+    <view class='returnMoney' wx:if="{{commodity.refundValue!==0 && commodity.refundValue!==null}}" catchtap="shade">
+      <view class='return'>返现</view>
+      <view class='return-item'>本次返现
+        <text>{{we.toFixed(commodity.refundValue)}}元</text>
+      </view>
+    </view>
+    <view class='supply ' wx:if="{{commodity.stTimes.length!==0 && commodity.date=='TOMORROW'}}">
+      <view class='supply-name'>供应</view>
+      <view class='cart-left'>
+        <view class='cart-img'>{{commodity.stTimes[0].stName}}供应</view>
+        <view class='cart-text'>{{commodity.stTimes.stName}}供应时间：{{commodity.stTimes[0].activityTimeFrom}}-{{commodity.stTimes[0].activityTimeTo}}
+          <text wx:if="{{commodity.stTimes[0].deliveryTimeFrom}}">预计送达时间{{commodity.stTimes[0].deliveryTimeFrom}}-{{commodity.stTimes[0].deliveryTimeTo}}</text>
+        </view>
+
+      </view>
+    </view>
+  </view>
+  <view class='ShippingInstructions' wx:if="{{shoppingNoticImg==''?false:true}}">
+    <view class='instructions'>
+      <text>——</text>
+      <text>配送说明</text>
+      <text>——</text>
+    </view>
+    <view class='instructionsImg'>
+      <image lazy-load='true' src="{{shoppingNoticImg}}" mode='widthFix'></image>
+    </view>
+  </view>
+
+  <view class='details' wx:if="{{detailPic.length}}">
+    <view class='detailsTitle'>
+      <text>——</text>
+      <text>商品详情</text>
+      <text>——</text>
+    </view>
+    <view class='detailsImg' wx:for="{{detailPic}}" wx:key="{{index}}">
+      <image lazy-load='true' src='{{item}}' wx:if="{{item!==''}}" mode='widthFix'></image>
+    </view>
+  </view>
+
+  <view class='selectionInstructions' wx:if="{{chooseNoticImg==''?false:true}}">
+    <view class='selection'>
+      <text>——</text>
+      <text>选品说明</text>
+      <text>——</text>
+    </view>
+    <view class='selectionImg'>
+      <image lazy-load='true' src="{{chooseNoticImg}}" mode='widthFix'></image>
+    </view>
+  </view>
+
+  <view class='toShoppings' catchtap="rob" wx:if="{{commodity.dateStatus==1}}" style="{{commodity.stockQty<=0?'background:#D6D6D6':'background:#FF5A52'}}">
+    {{commodity.stockQty
+    <=0? "抢光了": "马上抢"}} </view>
+      <view class='toShoppings' wx:if="{{commodity.dateStatus==2}}" style="background:#FFA333;">
+        <form class="from" wx:if="{{commodity.remindMe}}" report-submit bindsubmit="remindMy">
+          <button form-type="submit" class="remindMy">提醒我</button>
+        </form>
+        <form class="from" wx:else report-submit bindsubmit="noremindMy">
+          <button form-type="submit" class="remindMy">取消提醒</button>
+        </form>
+      </view>
+      <view class='toShoppings' wx:if="{{commodity.dateStatus==0}}" style="background:#D6D6D6;">
+        已结束
+      </view>
+      <view class='toShoppings' wx:if="{{commodity.dateStatus==1 && commodity.limitedByUser==0}}" style="background:#D6D6D6;">
+        已达限购数
+      </view>
+      <view class='toShoppings' wx:if="{{commodity.dateStatus==1 && confine}}" style="background:#D6D6D6;">
+        已达限购数
+      </view>
+  </view>
+  <!-- 弹窗提醒 -->
+  <view class="page" wx:if="{{show}}" catchtouchmove="preventTouchMove">
+    <view class="window">
+      <view class="window-top">什么是会员返现</view>
+      <view class="window-text">关于会员返现说明</view>
+      <view class="window-content">
+        <text>1.返现金是我家用以回馈付费会员用户的代币 </text>
+        <text>2.返现金可与现金1:1抵扣使用</text>
+        <text>3.在购物时无门槛使用</text>
+        <text>4.可在个人中心-我的钱包查看返现金</text>
+        <text>5.使用返现金付款时，不能再参与返现</text>
+      </view>
+      <view class="window-bottom" catchtap="close">
+        <view class="window-button">
+          我知道了
+        </view>
+      </view>
+    </view>
+  </view>
+  <wxs module="we">
+    var toFixed = function(value) {
+      if (typeof value == "number") {
+        return value.toFixed(2);
+      }
+    }
+    module.exports = {
+      toFixed: toFixed
+    }
+  </wxs>

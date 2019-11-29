@@ -1,0 +1,13 @@
+<view class='faceset'>
+  <view class='faceset-top'>您已开通刷脸支付</view>
+  <view class='faceset-message'>可到门店体验刷脸支付</view>
+  <view class='face-image'>
+    <image class="backface" src='../../images/backface.svg' mode="widthFix"></image>
+    <image class="manface" src="../../images/manface.svg" mode="widthFix"></image>
+    <view class="halo"></view>
+  </view>
+</view>
+<view class='brush-face'>
+  <button class='faceset-button' bindtap='facesetBtn'>关闭刷脸支付</button>
+  <view class="faceset-text">关闭刷脸支付后，如需开通请重新拍照</view>
+</view>

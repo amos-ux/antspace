@@ -1,0 +1,306 @@
+<view class='goodsDetails' style="position:relative">
+  <shade show="{{show}}"></shade>
+  <!-- 供应说明 -->
+  <view class="outfood" wx:if="{{isShowOutFood}}" catchtouchmove="preventTouchMove">
+    <view class="content">
+      <view class="title">供应说明</view>
+      <view class="timelist" wx:for="{{commodity.stTimes}}" wx:key="index" wx:for-item="stTimes">
+        <view class="foodname">{{stTimes.stName}}</view>
+        <view class="foodtime">
+          <text>供应时间：{{we.sub(stTimes.activityTimeFrom)}}-{{we.sub(stTimes.activityTimeTo)}}</text>
+          <text>送达时间：{{we.sub(stTimes.deliveryTimeFrom)}}-{{we.sub(stTimes.deliveryTimeTo)}}</text>
+        </view>
+      </view>
+      <view class="outfood-btn" catchtap="isOutfood">我知道了</view>
+    </view>
+  </view>
+  <text class="fixed" wx:if='{{bigPic.length}}'>{{current+1}}/{{bigPic.length+videoLink.length}}</text>
+  <view class='titleImg'>
+    <swiper autoplay="{{videoLink.length?autoPlay:'true'}}" interval="3000" duration="500" circular="true" bindchange="bindchange" indicator-dots="{{indicatordots}}">
+      <block wx:for="{{videoLink}}" wx:key="index" wx:if="{{videoLink.length}}">
+        <swiper-item>
+          <video style="width:100%;height:100%" muted="true" show-mute-btn="true" enable-play-gesture="true" bindplay="bindplay" bindpause="bindpause" bindended="bindended" page-gesture="true" object-fit="contain" src="{{item}}"></video>
+        </swiper-item>
+      </block>
+      <block wx:if="{{bigPic.length}}">
+        <block wx:for="{{bigPic}}" wx:key="index">
+          <swiper-item>
+            <image src="{{item}}" class="slide-image" width="355" height="150" />
+          </swiper-item>
+        </block>
+      </block>
+      <block wx:else>
+        <block>
+          <swiper-item>
+            <image src="{{commodity.picAddr}}" class="slide-image" width="355" height="150" />
+          </swiper-item>
+        </block>
+      </block>
+    </swiper>
+  </view>
+
+  <view class="presell" wx:if="{{commodity.date=='TODAY' || commodity.date=='TOMORROW'}}">
+    <view class="presell-left">
+      <view class="presell-saleprice">
+        {{commodity.date=='TOMORROW'?we.replace(we.toFixed(commodity.activitySalePrice)==null?(we.toFixed(commodity.disPrice)?we.toFixed(commodity.disPrice):we.toFixed(commodity.salePrice)):we.toFixed(commodity.activitySalePrice)):(we.toFixed(commodity.activitySalePrice)==null?(we.toFixed(commodity.disPrice)?we.toFixed(commodity.disPrice):we.toFixed(commodity.salePrice)):we.toFixed(commodity.activitySalePrice))}}
+      </view>
+      <view class="presell-vipprice">¥{{commodity.date=='TOMORROW'?we.replace(we.toFixed(commodity.salePrice)):we.toFixed(commodity.disPrice)?we.toFixed(commodity.disPrice):we.toFixed(commodity.salePrice)}}</view>
+    </view>
+    <!-- <block wx:if="{{!unclosed}}"> -->
+    <view class="presell-right" wx:if="{{!finish}}">
+      <view class="box">
+        <view class="presell-text">
+          即将{{commodity.date=='TODAY'?"结束":"开始"}}，距{{commodity.date=='TODAY'?"结束":"开始"}}
+        </view>
+        <view class="presell-time">
+          <text>{{Today[0]}}</text>:
+          <text>{{Today[1]}}</text>:
+          <text>{{Today[2]}}</text>
+        </view>
+      </view>
+      <view class="big-box" wx:if="{{commodity.date=='TODAY' }}">
+        <text class="box-text">限售{{commodity.currentQuantity}}</text>
+        <text class="box-text1">已售{{percentage}}%</text>
+        <progress class="progress" border-radius="6rpx" stroke-width="6" backgroundColor="rgba(0, 0, 0, .5)" activeColor="#fff" percent="{{percentage}}" active-mode="backwards" active="true"></progress>
+
+      </view>
+
+    </view>
+    <!-- </block> -->
+  </view>
+  <view class='goodsMessage' catchtap="setCanvas">
+    <text>{{commodity.itemName}}</text>
+    <!-- 正在预售 -->
+    <view class="detail" wx:if="{{commodity.date=='TODAY'}}">
+      <view class="detail-time">
+        <view class="arrive-label">{{commodity.eta==1?"隔日达":commodity.eta==2?"两日达":commodity.eta==3?"三日达":commodity.eta+"日达"}}</view>
+        <!-- <view class="arrive" >现在下单，预计7月6号送达</view> -->
+      </view>
+      <view class="detail-quantity">
+        平台总销量
+        <view>{{commodity.salesQty}}</view>
+      </view>
+    </view>
+    <view class='goodsMoney' wx:if="{{commodity.date!=='TODAY' && commodity.date!=='TOMORROW'}}">
+      <text>¥{{we.toFixed(commodity.disPrice)==null?we.toFixed(commodity.salePrice):we.toFixed(commodity.disPrice)}}</text>
+      <text>¥{{we.toFixed(commodity.salePrice)}}</text>
+    </view>
+    <!-- 预售结束 -->
+    <view class="salesVolume" wx:if='{{commodity.date=="YESTERDAY"}}'>
+      平台总销量
+      <view class="salesVolume-view">{{commodity.salesQty}}</view>
+      <view class="salesVolume-view1">已售{{commodity.currentQuantity}}</view>
+    </view>
+  </view>
+  <view class='promotion' >
+    <view class='promotion-view' wx:if='{{commodity.satisfied.length!==0}}'>
+      <view class='promation-name'>促销</view>
+      <view class='cart-left'>
+        <view class='cart-img'>满减</view>
+        <view class='cart-text' wx:for="{{commodity.satisfied}}" wx:key="index">{{item}}</view>
+      </view>
+    </view>
+    <view class='returnMoney' wx:if="{{commodity.refundValue!==0 && commodity.refundValue!==null&& commodity.date!=='TOMORROW'}}" catchtap="shade">
+      <view class='return'>返现</view>
+      <view class='return-item'>本次返现
+        <text>{{commodity.refundValue}}元</text>
+      </view>
+    </view>
+    <view class='supply ' catchtap="isOutfood" wx:if="{{commodity.stTimes.length!==0}}">
+      <view class='supply-name'>供应</view>
+      <view class='cart-left' wx:for="{{commodity.stTimes}}" wx:key="index" wx:for-item="stTimes">
+        <view class='cart-text'>{{stTimes.stName}}供应：{{we.sub(stTimes.activityTimeFrom)}}-{{we.sub(stTimes.activityTimeTo)}}</view>
+      </view>
+    </view>
+    <view class='order-time ' wx:if="{{commodity.stTimes.length!==0}}">
+      <view class='supply-name'>下单时间</view>
+      <view class='cart-left' wx:for="{{commodity.stTimes}}" wx:key="index" wx:for-item="stTimes">
+        <view class='cart-text'>{{stTimes.stName}}截止{{we.sub(stTimes.activityTimeTo)}}下单</view>
+      </view>
+    </view>
+    <view class='explain' catchtap="closeExplain" data-type="open" wx:if="{{branchNo=='888888'}}">
+      <view class='supply-name'>说明</view>
+      <view class='cart-left' >
+        <view class='cart-text'>正品保证 七天无忧退款 全国包邮</view>
+      </view>
+    </view>
+  </view>
+  <view class='ShippingInstructions' wx:if="{{shoppingNoticImg==''?false:true}}">
+    <view class='instructions'>
+      <text>——</text>
+      <text>配送说明</text>
+      <text>——</text>
+    </view>
+    <view class='instructionsImg'>
+      <image lazy-load='true' src="{{shoppingNoticImg}}" mode='widthFix'></image>
+    </view>
+  </view>
+  <view class='details' wx:if="{{detailPic.length}}">
+    <view class='detailsTitle'>
+      <text>——</text>
+      <text>商品详情</text>
+      <text>——</text>
+    </view>
+    <view class='detailsImg' wx:for="{{detailPic}}" wx:key="{{index}}">
+      <image lazy-load='true' src='{{item}}' wx:if="{{item!==''}}" mode='widthFix'></image>
+    </view>
+  </view>
+
+  <view class='selectionInstructions' wx:if="{{chooseNoticImg==''?false:true}}">
+    <view class='selection'>
+      <text>——</text>
+      <text>选品说明</text>
+      <text>——</text>
+    </view>
+    <view class='selectionImg'>
+      <image lazy-load='true' src="{{chooseNoticImg}}" mode='widthFix'></image>
+    </view>
+  </view>
+  <!-- ===== -->
+  <view class="model" catch:tap="close" wx:if="{{close}}">
+    <view class="popup">
+      <image wx:if="{{!commodity.isVip}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/yhfghfhfghfg.jpg" />
+      <view class="number">
+        <text class="UnitPrice">￥{{we.toFixed(commodity.activitySalePrice?commodity.activitySalePrice:commodity.salePrice*commodity.quantity)}}</text>
+        <view class="add">
+          <text class="jian" catch:tap="plus" data-type="reduce">-</text>
+          <input type="number" value="{{commodity.quantity}}" disabled />
+          <text class="jia" catch:tap="plus" data-type="add">+</text>
+        </view>
+      </view>
+      <view class="benci">本次返现
+        <text>￥{{we.toFixed(commodity.refundValue?commodity.refundValue*commodity.quantity:0)}}</text>
+      </view>
+      <button class='btn' catch:tap="toVips" wx:if="{{!commodity.isVip}}">29.9元开通会员，立即返现{{we.toFixed(commodity.refundValue)}}元</button>
+      <!-- btn3 -->
+      <button class="{{isVip?'btn3':'btn2'}}" catch:tap="toVip">马上抢</button>
+    </view>
+  </view>
+  <!-- ==== 普通商品-->
+  <view class='toShopping' wx:if="{{!presell&&type!='gift'}}">
+    <view class='cart' catchtap='skipCart'>
+      <image src='../../images/shop.svg'></image>
+      <text class='quantity' wx:if="{{cartQuantity>0}}">{{cartQuantity}}</text>
+      <text class='cart-view'>购物车</text>
+    </view>
+    <button catchtap='shopping' disabled='{{stop}}' data-item = "{{commodity}}">{{btnText}}</button>
+  </view>
+  <view class='toShoppings' style="{{commodity.quantityLimitTotal==0 || commodity.limitedByUser==0 ?'background:#D6D6D6':'background:#FF5A52'}}" wx:if="{{commodity.date=='TODAY'&& !finish}}" catchtap="rob">
+    {{commodity.quantityLimitTotal==0?"抢光了":commodity.limitedByUser!==0?"马上抢":"你已达到购买上限咯"}}
+  </view>
+  <!-- //大礼包 -->
+   <view class='toShoppings' data-item="{{commodity}}" data-status="sendMember" style="background:#FF5A52" catchtap="freeBuy" wx:if="{{type=='gift'}}">
+   立即购买
+  </view>
+  <!-- //预售 -->
+  <view class='toShoppings' wx:if="{{commodity.date=='TOMORROW' || unclosed==true}}" style="background:#FFA333;">
+    <form class="from" report-submit bindsubmit="remindMy" wx:if="{{commodity.remindMe}}">
+      <button form-type="submit" class="remindMy">提醒我</button>
+    </form>
+    <form class="from" report-submit bindsubmit="noremindMy" wx:else>
+      <button form-type="submit" class="remindMy">取消提醒</button>
+    </form>
+  </view>
+  <view class='toShoppings' wx:if="{{commodity.date=='YESTERDAY'}}" style="background:#D6D6D6;">
+    已结束
+  </view>
+  <view class='toShoppings' wx:if="{{commodity.date=='TODAY' && finish}}" style="background:#D6D6D6;">
+    已结束
+  </view>
+  <!-- <view class='specification' wx:if="{{specification}}" catchtap='specification'>
+    <view class='specification-content' catchtap='specificationContent'>
+      <view class='specification-goods'>
+        <view class='specification-img'>
+          <image src='{{commodity.picAddr?commodity.picAddr:"../../images/null.svg"}}'></image>
+        </view>
+        <view class='specification-name'>
+          <view class='goods-item'>
+            <text class='itemText'>{{commodity.itemName}}</text>
+            <view class='itemView' catchtap='over'>
+              <image src='../../images/over.svg'></image>
+            </view>
+          </view>
+          <view class='itemPrice'>
+            <view>
+              <text class='reduction' wx:for="{{commodity.satisfied}}" wx:key="{{index}}">{{item}}</text>
+            </view>
+            <view class='reductionPrice'>
+              <text class='Pricetext'>¥{{we.toFixed(commodity.disPrice==0?commodity.salePrice:commodity.disPrice)}}</text>
+              <text class='Pricetext1' wx:if="{{commodity.disPrice==0?false:true}}">¥{{we.toFixed(commodity.salePrice)}}</text>
+            </view>
+          </view>
+        </view>
+      </view> -->
+      <!-- <view class='temperature'>
+        <block wx:for="{{extOptions}}" wx:for-index="i" wx:key="index">
+          <view class='temperatureView'>
+            <view class='temperatureKind'>{{item.dataName}}</view>
+            <view class='temperaturecontent'>
+              <text class='temperaturetext {{item.isShow&&items.isShow?"alter":""}}' catchtap='shut' data-index="{{index}}" data-i="{{i}}" wx:for="{{item.options}}" wx:key="indexs" wx:for-item="items">{{items.name}}</text>
+            </view>
+          </view>
+        </block>
+
+      </view>
+      <view class='temperatureCart' catchtap='joinCart'>
+        加入购物车
+      </view> -->
+    <!-- </view>
+  </view> -->
+</view>
+<view class="explains" wx:if="{{showExplain}}">
+      <view class="explains-view">
+              <view class="explain-title">服务说明</view>
+              <view class="explains-first">
+                    <view class="subtitle">正品保证</view>
+                    <view class="subtitle-text">所有商品由公司认证的供应商或者品牌商直供货源，保证100%安全。</view>
+              </view>
+              <view class="explains-second">
+                    <view class="subtitle">7天无忧退款</view>
+                    <view class="subtitle-text">本商品支持7天无理由退货</view>
+              </view>
+              <view class="explains-three">
+                    <view class="subtitle">全国包邮</view>
+                    <view class="subtitle-text">全国包邮（<text wx:for="{{remoteArea}}" wx:key="index">{{item}},</text>）</view>
+              </view>
+      </view>
+      <image src="../../images/close.svg" catchtap="closeExplain" data-type="close"></image>
+</view>
+<!-- 海报 -->
+<view class="canvas-view" catchtap="closeCanvas" wx:if="{{showCanvas}}">
+  <canvas canvas-id="mycanvas" class="canvas" catchtap="buttonCanvas" style="height:{{height}}px;width:{{width}}px" ></canvas>
+  <view class="canvas-button" catchtap="saveShareImg">保存至本地</view>
+</view>
+<!-- 分享弹窗 -->
+<view class="modals modals-bottom-dialog" hidden="{{hideModal}}">
+    <view class="modals-cancel" bindtap="hideModal"></view>
+    <view class="bottom-dialog-body bottom-pos" animation="{{animationData}}"></view>
+</view>
+<!-- <button bindtap="showModal">点我</button> -->
+<!-- 规格弹窗 -->
+<specification wx:if="{{option}}"  cartQuantity="{{cartQuantity}}" bind:myevent="toggleToast" bind:hide="hide" options="{{options}}" specification="{{specification}}" ></specification>
+<wxs module="we">
+  var toFixed = function(value) {
+    if(typeof value == "number"){
+      return value.toFixed(2)
+    }
+  }
+  var replace = function(value) {
+    value = value + ""
+    var arr = value.split("")
+    arr[0] = "x"
+    return arr.join("")
+  }
+  var sub = function(str) {
+    if(str.length==0||str==undefined){
+      return;
+    }
+    return str.substring(0, 5)
+  }
+
+  module.exports = {
+    toFixed: toFixed,
+    replace: replace,
+    sub: sub
+  }
+</wxs>

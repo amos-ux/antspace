@@ -1,0 +1,59 @@
+<view class="container" wx:if="{{isLoading}}">
+  <view class="banner">
+    <image class="banner-bg" src="{{bannerImg}}" />
+    <image class="show-banner" src="{{bannerImg}}" />
+  </view>
+  <view class="background-img">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/2bfbd0b09fca4c74b087460d3a8b5b6c.png"></image>
+  </view>
+</view>
+<view class="shoplist" wx:if="{{isLoading}}">
+  <view class="shop-content">
+    <view class="shop-banner">
+      <view class="shop-bigtitle" data-status="{{status}}" catchtap="toActivity">
+        <text class="big-title">{{status=='firstFree' ? '新会员超值购' : status=='greatPackage' ? '超值续费大礼包' : '新会员超值购'}}</text>
+        <view class="to-activity">
+          <text class="shop-desc">活动说明</text>
+          <image class="tosvg" src="../../images/myright.svg" />
+        </view>
+      </view>
+      <text class="shop-banner-tip">{{status=='firstFree' ? '任意选购一件超值商品，新用户专享' : status=='greatPackage' ? '购买礼包直接续费一个月会员，每月限购一次' : '任意选购一件超值商品，新用户专享'}}</text>
+    </view>
+    <view class="shop-main">
+      <view class="shop-value" wx:for="{{shop}}" catchtap="details" data-item="{{item}}" wx:key="index" wx:if="{{shop.length!=0}}">
+        <view class="value-top">
+          <image class="value-img" src="{{item.picAddr}}" />
+        </view>
+        <view class="value-bottom">
+          <view class="value-con">{{item.itemName}}</view>
+          <view class="value-price">
+            <text class="disPrice">¥{{we.toFixed(item.salePrice)}}</text>
+            <text class="salePrice">¥{{we.toFixed(item.disPrice)}}</text>
+          </view>
+          <view class="buy-btn" data-item="{{item}}" catchtap="freeBuy">立即购买</view>
+        </view>
+      </view>
+    </view>
+    <view class="noshop" wx:if="{{noshop}}">
+      <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/aadf1452e9654aa6bc00edac8939e401.png" />
+      <text>商品正在筹备中</text>
+    </view> 
+    <view class="toIndex">
+      <view class="index-btn" catchtap="toIndex">查看更多特惠商品</view>
+    </view>
+  </view>
+</view>
+<view class="back" wx:if="{{isHome}}">
+    <view class="back_home" catchtap='tohome'>
+      <image src="../../images/soul_home.svg" />
+    </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    value = Number(value)
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

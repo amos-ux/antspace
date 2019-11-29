@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "quit": "../../component/quit/quit"
+  },
+  "navigationBarTitleText": "购买会员",
+  "navigationBarBackgroundColor": "#262833",
+  "navigationBarTextStyle": "white",
+  "disableScroll": true
+}

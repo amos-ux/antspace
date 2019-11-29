@@ -1,0 +1,25 @@
+<view class='page'>
+  <view class='length' wx:if="{{noPlace}}">
+    <view class='view-location'>
+      <view class='location-img'>
+        <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/e0ed837cb4eb43ed9217e26ce02cee85.png'></image>
+      </view>
+      <view class='location'>你还没有收货地址</view>
+    </view>
+  </view>
+  <view class='manage' catchtap='goToaddress' data-id='{{index}}' data-index="{{index}}" wx:for="{{message}}" wx:if="{{message.length!==0}}" wx:key="{{index}}">
+    <view class='manage-view'> {{item.locDetail}}</view>
+    <view class='phone'>
+      <text class='phone-name'>{{item.userName}}</text>
+      <text class='phone-number'>{{item.userNumber}}</text>
+      <text class='phone-mange' wx:if="{{item.defaultAddress=='Y'}}">默认</text>
+      <text class='phone-homa' wx:if="{{item.memberAddressType=='company'}}">公司</text>
+      <text class='phone-home' wx:if="{{item.memberAddressType=='home'}}">住宅</text>
+    </view>
+    <image class="editor" src="../../images/editor.svg"></image>
+  </view>
+
+  <view class='toke' bindtap='take' style="{{noPlace?'bottom:340rpx':''}}">
+    <text>添加收货地址</text>
+  </view>
+</view>

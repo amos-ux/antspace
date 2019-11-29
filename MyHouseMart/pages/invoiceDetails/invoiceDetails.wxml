@@ -1,0 +1,34 @@
+<!--pages/invoiceDetails/invoiceDetails.wxml-->
+<view class='invoice'>
+  <view class='invoice_state'>
+    <text>{{invoiceState}}</text>
+    <text>{{invoiceStatus}}</text>
+  </view>
+  <view class='background'></view>
+  <view class='invoice_type'>
+    <text>发票类型</text>
+    <text>电子发票</text>
+  </view>
+  <view class='title_type'>
+    <text>抬头类型</text>
+    <text>{{titleType}}</text>
+  </view>
+  <view class='title_name'>
+    <text>抬头名称</text>
+    <text>{{message.invoiceTitle}}</text>
+  </view>
+  <view class='invoice_number' wx:if="{{invoiceNum}}">
+    <text>发票税号</text>
+    <text>{{message.taxNo}}</text>
+  </view> 
+  <view class='invoice_money'>
+    <text>发票金额</text>
+    <text>{{message.invoiceAmount}}元</text>
+  </view>
+  <view class='background'></view>
+  <view class='email'>
+    <text>电子邮箱</text>
+    <text>{{message.userMailbox}}</text>
+  </view>
+</view>
+

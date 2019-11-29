@@ -1,0 +1,72 @@
+<view class='shades' catchtap="close" wx:if="{{clickSwiper}}" catchtouchmove="preventTouchMove">
+  <scroll-view class='scroll-tops' catchtap="openSwiper" scroll-y="true">
+    <view class='branchNos'>
+      <view class='branchNo-view'>
+        <view>{{branchName}}</view>
+        <text></text>
+      </view>
+    </view>
+    <view class='kinds'>
+      <text class='text' wx:if="{{branchNo!='888888'}}">距您{{range>500?we.toFixed(range/1000)+"km":we.toFixed(range)+"m"}}</text>
+      <view class='text1' wx:if="{{pickupFrom!==null}}">
+        <image src='../../../images/afhalen.svg'></image>
+        到店自取
+      </view>
+      <view class='text2' wx:if="{{deliveryFrom!==null}}">
+        <image src='../../../images/dispatchings.svg'></image>
+        {{branchNo=='888888'?"配送上门":"外卖配送"}}
+      </view>
+    </view>
+    <view class='styleScroll' wx:if="{{!coupon}}">
+      <view class='first'>优惠</view>
+      <view class='subtract' wx:if="{{planName.length}}">
+        <image src='../../../images/subtractimage.svg'></image>
+        <block wx:for="{{planName}}" wx:key="index">
+          <text>{{item}}</text>
+        </block>
+      </view>
+      <view class='discount' wx:if="{{planNamec.length}}">
+        <image src='../../../images/ticket.svg'></image>
+        <block wx:for="{{planNamec}}" wx:key="index">
+          <text>{{item}}</text>
+        </block>
+      </view>
+      <view class='sale' wx:if="{{planNamef.length}}">
+        <image src='../../../images/sale.svg'></image>
+        <block wx:for="{{planNamef}}" wx:key="index">
+          <text>{{item}}</text>
+        </block>
+      </view>
+      <view class='sales' wx:if="{{planNamen.length}}">
+        <image src='../../../images/sales.svg'></image>
+        <block wx:for="{{planNamen}}" wx:key="index">
+          <text>{{item}}</text>
+        </block>
+      </view>
+      <view class='sales' wx:if="{{planNames.length}}">
+        <image src='../../../images/discount.svg'></image>
+        <block wx:for="{{planNames}}" wx:key="index">
+          <text>{{item}}</text>
+        </block>
+      </view>
+    </view>
+    <view class='server'>
+      <view class='first-server'>服务</view>
+      <view class='server-view'>
+        <image src='../../../images/speed.svg'></image>
+        <text>0.5公里内30分钟极速送达，只限于"我家闪送"商品</text>
+      </view>
+    </view>
+    <view class='close' catchtap='close'>
+      <image src='../../../images/closeS.svg'></image>
+    </view>
+  </scroll-view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

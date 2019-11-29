@@ -1,0 +1,163 @@
+<view class="AdvanceSale">
+  <view class="top_fixed">
+    <view  class="top_serch" catch:tap="toSearch">
+      <image src="../../images/search.svg" />
+      <text>搜索预售商品</text>
+    </view>
+  </view>
+  <swiper class="top_swiper_maxHeight" autoplay circular interval="3000" indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="rgba(255,255,255,1)" wx:if="{{banner.advers.length>1}}">
+    <swiper-item wx:for="{{banner.advers}}" wx:key="{{index}}">
+      <image src="{{item.adImg}}" catchtap="imgOclick" data-index="{{index}}" class="slide-image_maxHeight" />
+    </swiper-item>
+  </swiper>
+  <view class="top_swiper_maxHeight" wx:if="{{banner.advers.length==1}}">
+    <image class="slide-image_maxHeight" src="{{banner.advers[0].adImg}}" />
+  </view>
+
+  <view class="center">
+    <view class="center_top">
+      <view class="center_top_list" catch:tap="toFlashSale" wx:for="{{DiamondZone}}" wx:key="{{index}}" data-item="{{item}}">
+        <image src="{{item.kkImg==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.kkImg}}" />
+        <text>{{item.kkName}}</text>
+      </view>
+    </view>
+    <view class="center-bottom">
+      <view class="center-bottom-title">平台累计返现</view>
+      <view class="scroll-wrap">
+        <view class="scroll-data" wx:for="{{len}}" wx:key="{{item}}">
+          <view class="scroll-num" animation="{{animation[index]}}">
+            <text class="unit-num">0</text>
+            <text class="unit-num">1</text>
+            <text class="unit-num">2</text>
+            <text class="unit-num">3</text>
+            <text class="unit-num">4</text>
+            <text class="unit-num">5</text>
+            <text class="unit-num">6</text>
+            <text class="unit-num">7</text>
+            <text class="unit-num">8</text>
+            <text class="unit-num">9</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="hot" wx:for="{{SINGLE}}" data-index="{{index}}" catch:tap="toLink"  wx:key="{{item}}">
+    <image src="{{item.path}}" class="hot_img" style="background:#ededed" />
+    <view class="hot_left">
+      <text class="title1">{{item.title}}</text>
+      <view hidden="{{item.title.length==0}}"></view>
+      <text class="{{item.subTitle.length>9?'hot_left_title2':'title3'}}">{{item.subTitle}}</text>
+    </view>
+    <view class="hot_right">
+      <view class="hot_type" catchtap="toShop" data-item="{{item}}" wx:for="{{item.items}}" wx:key="{{item}}">
+        <image class="{{item.quantityLimitTotal!=0?'':'hot_type_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="{{item.quantityLimitTotal==0?'Price_end':'Price'}}">￥{{item.activitySalePrice!=null?we.toFixed(item.activitySalePrice):we.toFixed(item.salePrice)}}</view>
+        <text class="end" wx:if="{{item.quantityLimitTotal==0}}">已抢光</text>
+      </view>
+    </view>
+  </view>
+  <view class="center_logo" wx:if="{{ITEMRANK!=null}}">
+    <view class="hot">
+      <image src="{{ITEMRANK.path==''||ITEMRANK.path==null?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/ijk0190726143338.png':ITEMRANK.path}}" class="hot_img" />
+      <text class="title1s">{{ITEMRANK.subTitle}}</text>
+      <text class="title3">{{ITEMRANK.title}}</text>
+    </view>
+  </view>
+  <scroll-view class="list" scroll-y="{{true}}">
+    <view class="commodity" wx:for="{{ITEMRANK.items}}" wx:key="{{item}}" data-item="{{item}}"  catch:tap="toShop">
+      <view class="left">
+        <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="refundValue" hidden="{{item.refundValue==0||item.refundValue==null}}">返现￥{{we.toFixed(item.refundValue)}}</view>
+      </view>
+      <view class="rights">
+        <view class="title">{{item.itemName}}</view>
+        <view class="other">
+          <text class="volume">平台销售{{item.salesQty==null?0:item.salesQty}}</text>
+          <view class="nextday">
+            <text catch:tap="OpenExplain" data-item="{{item}}">{{item.eta==1?"隔日达":item.eta==2?'两日达':item.eta==3?'三日达':item.eta+'日达'}}</text>
+            <image src="/images/soul_wenhao.svg" />
+          </view>
+          <text class="maxNum" wx:if="{{item.limitedByUser||item.limitedByUser}}">限购{{item.limitedByUser}}件</text>
+        </view>
+        <text class="Limit" data-item="{{item}}" catch:tap="SeveralDays">限量{{item.vQuantityTotal}}</text>
+        <text class="sold">已售{{item.currentQuantity==0||item.currentQuantity==null?0:we.toFixed((item.currentQuantity/item.vQuantityTotal)*100)}}%</text>
+        <progress percent="{{(item.currentQuantity/item.vQuantityTotal)*100}}" background-color="#ffe0e0" border-radius="2" active-color="#ff5a52" stroke-width="2" />
+        <view class="price">
+          <view class="newPrice">￥{{item.activitySalePrice!=null?we.toFixed(item.activitySalePrice):we.toFixed(item.salePrice)}}</view>
+          <view class="endPrice" wx:if="{{item.activitySalePrice!=null}}">￥{{we.toFixed(item.salePrice)}}</view>
+        </view>
+        <view wx:if="{{item.limitedByUser!=0}}">
+            <form wx:if="{{status==1}}" report-submit  data-item="{{item}}" class="remind">
+              <button wx:if="{{item.quantityLimitTotal!=0}}" catch:tap="Snatch" data-item="{{item}}" form-type="submit">马上抢</button>
+              <view class="end" wx:else>
+                抢光了
+            </view>
+            </form>
+            <view catch:tap="noBulle" wx:elif="{{status==3}}">
+                <form wx:if="{{item.remindMe==true}}" report-submit bindsubmit="remindToday" data-item="{{item}}">
+                  <button form-type="submit" class="Remindme" data-remind="Y" data-index="{{index}}" data-item="{{item}}">提醒我</button>
+                </form>
+                <form wx:else report-submit bindsubmit="remindToday" data-item="{{item}}">
+                  <!-- wx:if="{{index==commodityIndex}}"  -->
+                  <button 
+                  form-type="submit" class="DeleteRemindme" data-index="{{index}}" data-item="{{item}}" data-remind="N">取消提醒</button>
+                </form>
+            </view>
+            <view class="end" wx:else>
+                已结束
+            </view>
+        </view>
+        <view wx:else>
+          <view class="end" >
+              购买上限
+          </view>
+        </view>
+      </view>
+      
+    </view>
+  </scroll-view>
+  <view class="model" catch:tap="close" wx:if="{{isMember}}">
+    <view class="popup" catch:tap="stopBublle">
+      <image wx:if="{{isVip==false}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/yhfghfhfghfg.jpg" />
+      <view class="number">
+        <text class="UnitPrice">￥{{we.toFixed(TotalPrice)}}</text>
+        <view class="add">
+          <text class="jian" catch:tap="reduce">-</text>
+          <input type="number" value="{{number}}" disabled />
+          <text class="jia" catch:tap="plus">+</text>
+        </view>
+      </view>
+      <view wx:if="{{isVip}}" class="benci">本次返现
+        <text>￥{{we.toFixed(refundValue)}}</text>
+      </view>
+        <button class='btn' wx:if="{{isVip==false}}" catch:tap="toVip" data-isStatus="true">29.9元开通会员，立即返现{{we.toFixed(refundValue)}}元</button>
+        <!-- btn3 -->
+        <button class="{{isVip?'btn3':'btn2'}}" catch:tap="toVip">马上抢</button>
+      <image src="/images/close.svg" catch:tap="close" class="model_close" />
+    </view>
+  </view>
+  <view class="model_explain" wx:if="{{explain}}" catch:tap="CloseExplain">
+    <view class="Explain">
+      <view class="service">
+        送达说明
+      </view>
+      <view class="Explain_list">
+        <view class="nextdays">
+         {{eta==1?"隔日达:":eta==2?'两日达:':eta==3?'三日达:':eta+'日达:'}}
+        </view>
+        <view class="introduce">
+          现在下单{{eta==1?"明天":eta==2?'两天':eta==3?'三天':eta+'天'}}后预计6:00前送达，请到门店自提
+        </view>
+      </view>
+      <view class="konw" catch:tap="CloseExplain">我知道了</view>
+    </view>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

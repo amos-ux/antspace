@@ -1,0 +1,379 @@
+<view class='confirmOrder'>
+  <!-- 过渡背景色 -->
+  <view class="bgcolor"></view>
+  <!-- 预售秒杀时间 -->
+  <view class="spike-time" wx:if="{{commoditStatus=='Presale'}}">
+    <text class="spike-text">今天还剩 </text>
+    <view class="spike-content">
+      <text class="second">{{Today[0]}}</text>
+      <text class="comma">:</text>
+      <text class="second">{{Today[1]}}</text>
+      <text class="comma">:</text>
+      <text class="second">{{Today[2]}}</text>
+    </view>
+    <text class="spike-text"> 结束活动</text>
+  </view>
+  <!-- Loading -->
+  <view class="loading" wx:if="{{isShowLoading}}" catchtouchmove="preventTouchMove">
+    <view class="loading-box">
+      <image class="loading-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/spinner.png"></image>
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
+  <view class='serve' style="{{commoditStatus=='Presale'?'margin-top: 20rpx;':''}}">
+    <text class='distribution {{num==1?"active bor1":""}}' data-num="1" catchtap='distribution'>{{branchNo=='888888'?'配送上门':'一元闪送'}}</text>
+    <text class='pick {{num==2?"active bor2":""}}' data-num="2" catchtap='distribution'>到店自提</text>
+    <image src="{{num==1?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/tab.png':'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/tab1.png'}}" class="{{num==1?'bgimg1':'bgimg2'}}"></image>
+    <view class="underLine" animation="{{animation}}"></view>
+  </view>
+  <!-- 一元闪送 -->
+  <view class='outside' wx:if="{{num==1}}">
+    <!-- 地址 -->
+    <view class='location' bindtap='location'>
+      <view class="locationCon">
+        <text class="{{location==''?'select':'locationText'}}">{{location.locDetail?location.locDetail:'请选择收货地址'}}</text>
+        <view class='locationPhone' wx:if="{{location.locDetail}}">
+          <text wx:if="{{location.userName}}">{{location.userName}}</text>
+          <text wx:if="{{location.userNumber}}">{{location.userNumber}}</text>
+        </view>
+      </view>
+      <!-- 送达时间 -->
+      <view class="locationTime">
+        <text>送达时间</text>
+        <text>30分钟可送达</text>
+        <text>不包括标注时间商品</text>
+      </view>
+    </view>
+    <!-- 邀请得返现提醒 -->
+    <view class="cashback-invite" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' && userInfo.memberStatus!='EXPIRED_MEMBERS' && !userInfo.firstOrderState && userInfo}}">
+      <text wx:if="{{aggregate < invitePrice}}">再买{{we.toFixed(invitePrice-aggregate)}}元，即可参与“邀请返现”的活动</text>
+      <text wx:else>已达到参加"邀请赚返现"的条件，快去结算吧！</text>
+    </view>
+  </view>
+
+  <!-- 到店自提 -->
+  <view class='outside' wx:if="{{num==2}}">
+    <!-- 门店地址 -->
+    <view class='shopLocation' catchtap="toRecent">
+      <view class="location-recent" wx:if="{{storeAddress.length != 0}}">
+        <text>{{storeAddress.branchName?storeAddress.branchName:'暂无自提点'}}</text>
+        <text>{{storeAddress.locDetail?storeAddress.locDetail:'你所在城市尚未开通到店自提服务'}}</text>
+      </view>
+      <view class="loaction-myhome" wx:if="{{branchNo == '888888' && storeAddress.length == 0}}">
+        <text>请选择自提门店</text>
+      </view>
+      <text wx:if="{{storeAddress.range}}">{{storeAddress.range < 500 ? we.toFixed(storeAddress.range) : we.toFixed(storeAddress.range/1000) + 'k'}}m</text>
+      <image wx:if="{{branchNo==888888}}" class="toPaysvg" src="../../images/right_gray.svg" />
+    </view>
+    <!-- 邀请得返现提醒 -->
+    <view class="cashback-invite" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' && userInfo.memberStatus!='EXPIRED_MEMBERS' && !userInfo.firstOrderState }}">
+      <text wx:if="{{aggregate<invitePrice}}">再买{{we.toFixed(invitePrice-aggregate)}}元，即可参与“邀请返现”的活动</text>
+      <text wx:else>已达到参加"邀请赚返现"的条件，快去结算吧！</text>
+    </view>
+    <!-- 手机号 -->
+    <view class='phone'>
+      <text>提货人手机号</text>
+      <input value='{{mobile}}' type='number' maxlength='11' min="0" placeholder='请输入手机号' placeholder-style='color:#63646B;' bindblur='onInput'></input>
+    </view>
+  </view>
+
+  <view class='commodityMessage'>
+    <view class='commodityMessage-text'>
+      <text>商品信息</text>
+      <text>共{{number}}件商品</text>
+    </view>
+    <!-- 满减送券 -->
+    <view class="fullTicket" catchtap="isShowNotify" wx:if="{{notifyText}}">
+      <text>满额送券</text>
+      <view class="ticketMess">{{notifyText}}</view>
+    </view>
+    <view>
+      <view class='commodityDetails' wx:for="{{commonCommodity}}" wx:key="{{index}}" wx:if="{{item.quantity!=0}}">
+        <view class="commodityCon">
+          <text class="returnAmt" wx:if="{{item.refundValue!=0}}">返现¥{{we.toFixed(item.refundValue)}}</text>
+          <image class='commodity-img' src='{{item.thumbPic==""||item.thumbPic==null?"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png":item.thumbPic}}'></image>
+        </view>
+        <view class='commodity'>
+          <view class='commodity-Name'>
+            <text class='commodityName'>{{item.itemName}}</text>
+            <view class='speci-cont'>
+              <!-- <text wx:if="{{we.toArray(item.extOptions)!=0}}">规格: </text> -->
+              <!-- <text wx:if="{{we.toArray(item.extOptions)!=0}}" class='specification' wx:for="{{item.extOptions}}" wx:key="index" wx:for-item="extOptions">{{extOptions.dataName}}</text> -->
+            </view>
+            <view class='commodity-arrive'>
+              <text class="commodity-time" wx:if="{{we.toArray(item.stTimes)!=0 && we.isNumber(item.stTimes[0].deliveryTimeFrom)!=0 && we.isNumber(item.stTimes[0].deliveryTimeTo)!=0 && item.stTimes[0].stType=='OUTFOOD'}}">{{we.subString(item.stTimes[0].deliveryTimeFrom)}}-{{we.subString(item.stTimes[0].deliveryTimeTo)}}送达</text>
+              <text class="commodity-discount" wx:if="{{we.toArray(item.satisfied)!=0}}" style="{{we.toArray(item.stTimes)==0?'margin-left:0':''}}">{{item.satisfied[0]}}</text>
+            </view>
+          </view>
+
+          <!-- 普通商品展示数据 -->
+          <view class='commodity-Money' wx:if="{{commoditStatus!='Presale'}}">
+            <text class='discountsMoney'>¥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+            <text class='salePrice' wx:if="{{item.disPrice==null?false:true}}">¥{{we.toFixed(item.salePrice)}}</text>            
+            <text class="commodityNum">x{{item.quantity}}</text>
+          </view>
+
+          <!-- 预售商品展示数据 -->
+          <view class='commodity-Money' wx:if="{{commoditStatus=='Presale'}}">
+            <text class='discountsMoney' wx:if="{{item.activitySalePrice!=null}}">¥{{item.activitySalePrice!=null?we.toFixed(item.activitySalePrice):we.toFixed(item.salePrice)}}</text>
+            <text class='salePrice' wx:if="{{item.activitySalePrice==null?false:true}}">¥{{we.toFixed(item.salePrice)}}</text>            
+            <text class="commodityNum">x{{item.quantity}}</text>
+          </view>
+
+        </view>
+      </view>
+      <!-- 套餐 -->
+      <view class='commodityDetails1' wx:for="{{packageGoods}}" wx:key="{{data}}" wx:for-item="data" wx:if="{{data.quantity!=0}}">
+        <image class='commodity-img' src='{{data.thumbPic==""?"../../images/null.svg":data.id.combPicture}}'></image>
+        <view class='commodity'>
+          <view class='commodity-Name'>
+            <text class='commodityName'>{{data.combName}}</text>
+            <text class='number'>x{{data.number}}</text>
+          </view>
+          <view class='commodity-Money'>
+            <view class='discountsMoney'>
+              <text>¥</text>
+              <text>{{we.toFixed(data.combPrice)}}</text>
+            </view>
+          </view>
+          <view wx:for='{{data.id.goodsList}}' wx:key="{{index}}" wx:for-item="items" class='childItems'>
+            <text>{{items.itemName}}</text>
+            <text>*{{items.quantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="remark">
+    <text>订单备注</text>
+    <input bindinput='instructions' maxlength='30' min="0" placeholder-style='color:#A3A5AD;' placeholder='订单备注(非必填)'></input>
+  </view>
+
+  <!-- 会员卡 -->
+  <block wx:if="{{userInfo.memberStatus!='MEMBERS'}}">
+    <navigator class="vipCrd" url="/my_member/JoinMember/JoinMember">
+      <view class="vImg">
+        <image src="../../images/vip.svg"></image>
+      </view>
+      
+      <view class="vipCrdMain">
+        <view>我家会员月卡
+          <text class='vipCrd-name'>(29.9元/月)</text>
+        </view>
+        <view>
+          <text class='vipCrd-text'>开通后，本单</text>
+          <text class='vipCrd-warn'>立返现{{we.toFixed(reAllMnt)}}元</text>
+        </view>
+      </view>
+      <view class="vImg rightImg">
+        <image src="../../images/right_gray.svg"></image>
+      </view>
+    </navigator>
+  </block>
+
+  <view class='priceMessage' style="{{commoditStatus=='Presale'?'':'margin-bottom:120rpx;'}}">
+    <view class='priceItem'>
+      <!-- 余额 -->
+      <block>
+        <view class="aMNt" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' || userInfo.balanceAmount!=0}}">
+          <view class="amtView" wx:if="{{status!='greatPackage'}}">
+            <view class='leftPay'>
+              <view class='discountCouponImg'>
+                <text id="{{ifCanAmt?'noPay':''}}">返现钱包支付（余额¥{{we.toFixed(userInfo.balanceAmount?userInfo.balanceAmount:0)}}）</text>
+              </view>
+            </view>
+            <view wx:if="{{!ifCanAmt}}" class='discountCouponText'>使用返现钱包支付不能参与返现</view>
+            <view wx:if="{{ifCanAmt}}" class='discountCouponText'>余额不足</view>
+          </view>
+          <view>
+            <checkbox-group bindchange="checkboxChange" wx:if="{{!ifCanAmt}}">
+              <checkbox value="{{ifPayAmt}}" checked="{{ifPayAmt}}" disabled="{{ifCanAmt}}" />
+            </checkbox-group>
+          </view>
+        </view>
+      </block>
+      <!-- 优惠券 -->
+      <view class='discountCoupon' catchtap='discountCoupon'>
+        <view class="discountCoupon-top">
+          <view class='discountCouponImg'>
+            <text>优惠券</text>
+          </view>
+          <text class='discountCouponText'>{{usable}}</text>
+        </view>
+        <view class="discountCoupon-tips">不能同时享受会员返现</view>
+      </view>
+      <!-- 我家商城 包邮 -->
+      <view class="shipping-fee" wx:if="{{branchNo=='888888'}}">
+        <text>运费</text>
+        <text>包邮</text>
+      </view>
+      <!-- 包装费 外卖 -->
+      <view class="shipPackFee" wx:if="{{outFoodNum!=0 && branchNo != '888888'}}">
+        <view class="packaging-fee {{num==2?'packag-padding':''}}">
+          <text class="packaging-text">包装费</text>
+          <text class="packaging-price">¥{{we.toFixed1(outFoodNum)}}</text>
+        </view>
+        <view class="packaging-fee" wx:if="{{num==1?true:false}}">
+          <text class="packaging-text">1元闪送</text>
+          <text class="shippingFee">¥{{we.toFixed1(shippingFee)}}</text>
+        </view>
+      </view>
+      <!-- 普通商品 -->
+      <view class="ship-common" wx:if="{{outFoodNum==0 && num==1 && branchNo!='888888'}}">
+        <view class='shippingFee1'>
+          <view class='shippingFeeImg'>
+            <text>1元闪送</text>
+          </view>
+          <text class='shippingFeeText'>¥{{we.toFixed(shippingFee)}}</text>
+        </view>
+      </view>
+    </view>
+    <view class='summation'>
+      <view class='summationPrice'>
+        <block wx:if="{{!ifPayAmt && (userInfo.memberStatus=='MEMBERS'||userInfo.memberStatus=='EXPERIENCE'||userInfo.memberStatus=='ENTERPRISE')}}">
+          <view class="reBack">本次返现 <text class="reBack-price">￥{{we.toFixed(reAllMnt)}}</text></view>
+        </block>
+        <text class="count">合计</text>
+        <text class="count-price">￥{{num==1?we.toSum(aggregate,shippingFee):we.toFixed(aggregate)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 售后服务条款 -->
+  <view class="after-service" catchtouchmove="preventTouchMove" wx:if="{{commoditStatus=='Presale' && branchNo=='888888'}}">
+    <checkbox-group bindchange="isReadChange">
+      <checkbox checked="{{isRead}}" />
+    </checkbox-group>
+    <view class="after-text">我已阅读并同意<text class="terms" catchtap="afterDes">《售后服务条款》</text></view>
+  </view>
+
+  <!-- 去结算 -->
+  <view class='payIng'>
+    <view class="refund-text" catchtouchmove="preventTouchMove" catchtap="refundDes">退款说明<image src="../../images/ques.svg" /></view>
+    <view class="payingMain">
+      <!-- 售价 -->
+      <view class="sumPrice">合计：<text>￥{{num==1?we.toSum(aggregate,shippingFee):we.toFixed(aggregate)}}</text></view>
+      <view class="payPrice">
+        <text wx:if="{{preferentialCombined>=0}}" class="payPrice-pre">优惠¥{{we.toFixed(preferentialCombined)}}</text>
+        <text class="{{preferentialCombined>=0?'payPrice-combs':'payPrice-comb'}}">原价¥{{we.toFixed(originaPrice)}}</text>
+      </view>
+    </view>
+    <button class='payBtn' bindtap='startPay' disabled="{{payment}}">
+      <image class="pay-load" wx:if="{{isPaying && num == 1 && payment}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/4df8146e2ae44b0ab174760c3ef34ace.png"></image>
+      <image class="pay-load" wx:if="{{payment && num == 2}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/4df8146e2ae44b0ab174760c3ef34ace.png"></image>
+      <text>{{immediate}}</text>
+    </button>
+  </view>
+
+  <!-- 钱包优惠券不兼容 提醒 -->
+  <view class="confirm-tips" catchtouchmove="preventTouchMove" wx:if="{{isShowTips}}">
+    <view class="tips-box">
+      <view class="tips-text1">返现钱包和优惠券不能同时使用哦!</view>
+      <view catchtap="walletTips" class="tips-btn">我知道了</view>
+    </view>
+  </view>
+
+  <!-- 满减券提醒 -->
+  <view class="confirm-tips" catchtouchmove="preventTouchMove" wx:if="{{isShowNotify}}">
+    <view class="fullprice-tips">
+      <view class="refund-title">满减送券说明</view>
+      <view class="full-text">{{notifyText}}</view>
+      <view catchtap="isShowNotify" class="fullprice-btn">我知道了</view>
+    </view>
+  </view>
+
+  <!-- 超过时间 提示 -->
+  <view class="confirm-tips" wx:if="{{isShowtipsText}}" catchtouchmove="preventTouchMove">
+    <!-- 无外卖商品提示 -->
+    <view class="tips-box" wx:if="{{!notAllOutFood}}">
+      <view class="tips-text" style="{{isAllOutFood?'display: flex;justify-content: center;align-items: center;':''}}">{{tipsText}}</view>
+      <view class="tips-btn" bindtap="tipBtn">我知道了</view>
+    </view>
+
+    <!-- 外卖便利兼有商品提示 -->
+    <view class="tip-box" wx:if="{{notAllOutFood}}">
+      <view class="text-box">
+        <view class="tipText">{{tipText1}}</view>
+        <view class="tipText">{{tipText2}}</view>
+      </view>
+      <view class="tips-btn" bindtap="tipBtn">我知道了</view>
+    </view>
+  </view>
+
+  <!-- 退款说明 -->
+  <view class="refund-desc" catchtouchmove="preventTouchMove" wx:if="{{refundDesc}}">
+    <view class="tips-box">
+      <view class="refund-title">退款说明</view>
+      <view class="refund-depict">
+        <text>1.便利商品在配货中，待自提状态可申请退款，已完成状态可申请售后。</text>
+        <text>2.外卖商品在商家接单后不可退款，如有缺货，少货，质量等问题请申请售后。</text>
+        <text>3.外卖商品在商家接单后在配货中，待自提，配送中不支持退款，完成订单后如有菜品质量问题可申请售后。</text>
+      </view>
+      <view class="refund-btn" bindtap="refundDes">我知道了</view>
+    </view>
+  </view>
+
+  <!-- 售后服务 -->
+  <view class="refund-desc" catchtouchmove="preventTouchMove" wx:if="{{afterDesc}}">
+    <view class="tips-box">
+      <view class="refund-title">售后服务</view>
+      <view class="refund-depict">
+        <text>1.便利商品在配货中，待自提状态可申请退款，已完成状态可申请售后。</text>
+        <text>2.外卖商品在商家接单后不可退款，如有缺货，少货，质量等问题请申请售后。</text>
+        <text>3.外卖商品在商家接单后在配货中，待自提，配送中不支持退款，完成订单后如有菜品质量问题可申请售后。</text>
+      </view>
+      <view class="refund-btn" bindtap="afterDes">我知道了</view>
+    </view>
+  </view>
+</view>
+
+<wxs module="we">
+  var toFixed = function(num) {
+    num = Number(num);
+    return num.toFixed(2);
+  }
+
+  var toSum = function(num1,num2){
+    num1 = Number(num1);
+    num2 = Number(num2);
+    sum = (num1+num2).toFixed(2);
+    return sum;
+  }
+
+  var toArray = function(arr){
+    if(arr == null){
+      return 0;
+    }else{
+      return arr.length
+    }
+  }
+
+  var toFixed1 = function(num) {
+    num = Number(num);
+    return num.toFixed(1);
+  }
+
+  var isNumber = function(num){
+    num = Number(num);
+    return num
+  }
+
+  var subString = function(str){
+    str = str.substring(0,5)
+    return str
+  }
+
+  var isIndexOf = function(str){
+    return str.substr(-1,1)=='送' ? false : true
+  }
+
+  module.exports = {
+    toFixed: toFixed,
+    toSum:toSum,
+    toFixed1:toFixed1,
+    toArray:toArray,
+    isNumber:isNumber,
+    subString:subString,
+    isIndexOf:isIndexOf
+  }
+</wxs>

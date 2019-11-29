@@ -1,0 +1,101 @@
+page{
+  height: 100%;
+  border-top: 0.5rpx solid #E6E6E6;
+  box-sizing: border-box;
+  overflow:hidden;
+}
+.face{
+  width: 100%;
+  height: 65%;
+  display: flex;
+  flex-direction:  column;
+  justify-content: center;
+  align-items: center;
+}
+.face-top{
+  font-size: 44rpx;
+  color: #2B2D33;
+  
+}
+.face-message{
+  font-size: 44rpx;
+  color: #2B2D33;
+}
+.photograph{
+  background: #FFF;
+  width: 100%;
+  height: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.face-button{
+  width: 640rpx;
+  height: 92rpx;
+  background: #FFEB0D;
+  color: #2B2D33;
+  font-size: 32rpx;
+  font-family:PingFangSC-Medium,PingFangSC;
+  font-weight: bold;
+  margin-top: 230rpx;
+  line-height: 92rpx;
+  border-radius: 46rpx;
+}
+.face-messages{
+  color: #5C5B5A;
+  font-size: 14px;
+  margin: 32rpx 0;
+}
+.face-image{
+  display: flex;
+  position: relative;
+}
+.draw_canvas{
+  position: fixed;
+  right: 0px;
+  top: 0px;
+}
+.backface{
+  width: 436rpx;
+  height: 436rpx;
+  margin-top:48rpx; 
+  animation: rotation 3s linear infinite;
+}
+
+.manface{
+  width: 380rpx;
+  height: 380rpx;
+  position: absolute;
+  top: 76rpx;
+  left: 28rpx;
+}
+
+.halo{
+  width: 194rpx;
+  height: 50rpx;
+  background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.55) 51%,rgba(255,255,255,0) 100%);
+  position: absolute;
+  left: 118rpx;
+  top: 160rpx;
+  animation: around 4s linear infinite;
+}
+
+@keyframes rotation{
+  from{
+    transform: rotate(0)
+  }
+  to{
+    transform: rotate(360deg)
+  }
+}
+@keyframes around{
+  0%{
+    top: 160rpx;
+  }
+  50%{
+    top: 306rpx;
+  }
+  100%{
+    top: 160rpx;
+  }
+}

@@ -1,0 +1,88 @@
+page {
+  background: #f7f7f7;
+}
+
+.view-order {
+  width: 100%;
+  height: 38px;
+  display: block;
+  line-height: 38px;
+  font-size: 13px;
+  background: #f7f7f7;
+  font-weight: bold;
+  padding-left: 24rpx;
+  box-sizing: border-box;
+}
+
+.scrollView {
+  width: 95%;
+  margin: 0 20rpx;
+  border-radius: 12rpx
+
+}
+
+.scroll-view {
+  width: 100%;
+ border-radius: 12rpx;
+  display: flex;
+  flex-flow: column;
+  background: #fff;
+  margin-bottom: 10px;
+  position: relative;
+  padding: 32rpx 0;
+}
+
+.scroll-top {
+  padding: 0 24rpx;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.scroll-bottom {
+  padding: 0 26rpx;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.scroll-bottom-right {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 24rpx;
+  bottom: -12rpx;
+}
+
+.scroll-top-left {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  color: #2b2d33;
+}
+
+.scroll-top-right {
+  font-size: 13px;
+  color: #5c5b5a;
+  display: flex;
+  margin-top: 6rpx;
+  align-items: center;
+}
+
+.scroll-bottom-left {
+  width: 70%;
+  font-size: 13px;
+  color: #5c5b5a;
+  margin-top: 12rpx;
+}
+.scroll-bottom-right image{
+   width: 56rpx;
+   height: 56rpx
+}

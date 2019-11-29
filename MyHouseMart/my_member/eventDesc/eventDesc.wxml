@@ -1,0 +1,59 @@
+<view class="container" wx:if="{{status=='greatPackage'}}">
+  <view class="title">超值续费大礼包活动说明</view>
+  <view class="content">
+    <text class="content-title">活动时间</text>
+    <text class="content-text">长期有效</text>
+  </view>
+  <view class="content">
+    <text class="content-title">参与条件</text>
+    <text class="content-text">所有注册用户都可以参与。</text>
+  </view>
+  <view class="content">
+    <text class="content-title">购买规则</text>
+    <text class="content-text">1. 每一个用户每一个月仅限购买某一件商品且只能购买一件；</text>
+    <text class="content-text">2. 如果当月没有使用购买次数，到月底本月购买次数自动失效，不进行累计；</text>
+    <text class="content-text">3. 购买礼包商品，不仅可以享受超值价购买，还可以自动充值一个月我家会员，享受所有的会员权益。</text>
+  </view>
+  <view class="content">
+    <text class="content-title">补充说明</text>
+    <text class="content-text">1. 礼包商品会不定期的进行更新。</text>
+    <text class="content-text">2. 平台承诺礼包商品不进行虚标价格行为。</text>
+    <text class="content-text">3. 由于该礼包商品会附带赠送一个月会员，因此非商品本身存在严重的质量问题，不接受退换货处理。</text>
+    <text class="content-text content-tip">此活动最终解释权归我家平台所有</text>
+  </view>
+</view>
+<view class="container" wx:if="{{status=='firstFree'}}">
+  <view class="title">会员首单免费购</view>
+  <view class="content">
+    <text class="content-title">活动时间</text>
+    <text class="content-text">长期有效</text>
+  </view>
+  <view class="content">
+    <text class="content-title">参与条件</text>
+    <text class="content-text">1. 必须是会员身份；</text>
+  </view>
+  <view class="content">
+    <text class="content-title">购买规则</text>
+    <text class="content-text">1. 每个参与用户，仅限参与一次首单免费活动；</text>
+    <text class="content-text">2. 每个参与用户，仅限购买一件首单商品且只能购买一件；</text>
+    <text class="content-text">3. 每位会员终身仅可参与一次。</text>
+    <text class="content-text content-tip">此活动最终解释权归我家平台所有</text>
+  </view>
+</view>
+<view class="container" wx:if="{{status=='sendMember'}}">
+  <view class="title">新会员超值购活动说明</view>
+  <view class="content">
+    <text class="content-title">活动时间</text>
+    <text class="content-text">长期有效</text>
+  </view>
+  <view class="content">
+    <text class="content-title">参与条件</text>
+    <text class="content-text">只有有效会员才可以参与。</text>
+  </view>
+  <view class="content">
+    <text class="content-title">购买规则</text>
+    <text class="content-text">1. 每位会员仅限参与一次活动；</text>
+    <text class="content-text">2. 每位会员仅限购买一件商品；</text>
+    <text class="content-text content-tip">此活动最终解释权归我家平台所有</text>
+  </view>
+</view>

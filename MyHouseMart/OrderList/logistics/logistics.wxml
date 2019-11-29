@@ -1,0 +1,35 @@
+<view class="logistics">
+    <view class="top">
+        <view class="first">
+            <text class="logistics-name">{{ShipperName}}</text>
+        </view>
+        
+        <view class="second">
+            <text class="logistics-number">快递单号</text>
+            <text class="number">{{list.logisticCode}}</text>
+        </view>
+        <!-- <view class="three">
+            <text class="logistics-Odd">快递单号</text>
+            <text class="number">12345678</text>
+        </view> -->
+    </view>
+    <view class="content">
+        <view class="content-title">物流跟踪</view>
+        <view class="other"></view>
+        <view class="content-list" wx:for="{{list.traces}}" wx:key="{{index}}">
+            <view class="left">
+                <view class="list-date"><text >{{item.AcceptTime}}</text></view>
+            </view>
+            <view class="list-right">
+                <view class="list-right-top">
+                     <view class="{{index==0?'radiu':'radiu1'}}"></view>
+                     <view class="list-right-top-status">
+                        <text class="ok" wx:if="{{index==0}}" style="display:{{list.state==3?'inline-block':'none'}}">{{list.state==3?'已签收':''}}</text>    
+                        <text class="address" selectable decode>{{item.AcceptStation}}</text>
+                     </view>
+                </view>
+                <view class="line" wx:if="{{index+1!=traces.length&&traces.length!=1}}"></view>
+            </view> 
+        </view>
+    </view>
+</view>

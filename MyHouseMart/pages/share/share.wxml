@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="page-img">
+    <image mode="widthFix" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/4a6f1e7e522ec6af93b087df6dc02ed.png"></image>
+  </view>
+  <image class="logo" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/friend.png" />
+  <image class="logos" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/me.png" />
+  <view class="list">
+    <view class="list-title">
+      <view class="list-invite">邀请好友榜</view>
+      <view class="boxsha"></view>
+    </view>
+    <view class="list-content">
+      <view class="list-user" wx:for="{{listValue}}" wx:key="index">
+        <view class="list-quantity">{{index+1}}</view>
+        <view class="list-cion">
+          <view class="list-img">
+            <image src="{{item.avatarUrl}}"></image>
+          </view>
+          <view class="list-name">{{item.userName}}</view>
+        </view>
+        <view class="list-lift">
+          获得{{item.value}}
+        </view>
+      </view>
+      <view class="list-image" wx:if="{{listValue.length==0}}">
+        <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/lackshare.png"></image>
+        <text>暂无记录</text>
+      </view>
+    </view>
+
+  </view>
+  <view class="writing">
+    <view class="writing-title">活动规则</view>
+    <view class="boxshas"></view>
+    <view class="writing-text" wx:for="{{ruleDesc}}" wx:key="index">
+      {{item}}
+    </view>
+  </view>
+</view>
+<button open-type="share" class="shareButton">
+  邀请好友得奖励
+</button>

@@ -1,0 +1,42 @@
+<view class="contanier" wx:if="{{order.length!=0}}">
+  <view class="discount" wx:for="{{order}}" wx:key="index" catchtap='details' data-item="{{item}}">
+    <view class="shopimg">
+      <view class="return-price" wx:if="{{item.refundValue}}">返现¥{{we.toFixed(item.refundValue)}}</view>
+      <image class="show-img" lazy-load="true" src="{{item.picAddr?item.picAddr:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'}}" />
+    </view>
+    <view class="content">
+      <view class="title">{{item.itemName}}</view>
+      <view class="desc">
+        <text class="satisfied" wx:if="{{item.satisfied}}" wx:for-item="data" wx:for="{{item.satisfied}}" wx:key="index">{{data}}</text>
+        <text class="stTimes" wx:if="{{item.stTimes}}" wx:for-item="stTimes" wx:for="{{item.stTimes}}" wx:key="index">{{stTimes.stName}}</text>
+      </view>
+      <view class="price">
+        <text class="disPrice">¥{{we.toFixed(item.disPrice?item.disPrice:item.salePrice)}}</text>
+        <text class="salePrice" wx:if="{{item.disPrice}}">¥{{we.toFixed(item.salePrice)}}</text>
+      </view>
+      <view class="add-icon" catchtap='touchOnGoods' data-item="{{item}}">
+        <image src="../../images/add.svg" />
+      </view>
+    </view>
+  </view>
+</view>
+<view class='shops' wx:if="{{cartQuantity>0}}" catchtap="skipSearch">
+  <view class='shops-view'>
+    <image src='../../images/shop.svg'></image>
+    <text>{{cartQuantity}}</text>
+  </view>
+</view>
+<view class="noshop" wx:if="{{noshop}}">
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/65252c0d5e7d4ebcbc1cba2d8817a746.svg" />
+  <text>暂无商品</text>
+</view>
+<view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+<wxs module="we">
+  var toFixed = function(num) {
+    num = Number(num);
+    return num.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "quit":"../../component/quit/quit"
+  },
+  "navigationBarTitleText": "登录注册",
+  "navigationBarBackgroundColor": "#FFEB0D",
+  "navigationBarTextStyle": "black"
+}

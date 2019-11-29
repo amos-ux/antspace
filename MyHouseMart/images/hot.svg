@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>热卖</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="v1.0_首页" transform="translate(-305.000000, -559.000000)">
+            <g id="编组-9" transform="translate(12.000000, 547.000000)">
+                <g id="编组-8">
+                    <g id="热卖" transform="translate(293.000000, 12.000000)">
+                        <path d="M20,0 L40,0 L40,20 C40,31.045695 31.045695,40 20,40 C8.954305,40 1.3527075e-15,31.045695 0,20 C-1.3527075e-15,8.954305 8.954305,2.02906125e-15 20,0 Z" id="矩形" fill="#FF5042"></path>
+                        <text id="热卖-推荐" font-family="PingFangSC-Semibold, PingFang SC" font-size="14" font-weight="500" line-spacing="16" fill="#FFFFFF">
+                            <tspan x="7" y="19">热卖</tspan>
+                            <tspan x="36.008" y="19.328" font-family="HiraKakuProN-W6, Hiragino Kaku Gothic ProN"></tspan>
+                            <tspan x="8.008" y="35.328" font-family="HiraKakuProN-W6, Hiragino Kaku Gothic ProN">推荐</tspan>
+                        </text>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "specification": "../../component/specification/specification"
+  },
+  "navigationBarBackgroundColor": "#FFEC14",
+  "navigationBarTextStyle": "black"
+}

@@ -1,0 +1,371 @@
+.page{
+  width: 100%;
+  height: 100%;
+
+}
+.scroll{
+  width: 100%;
+  height: 100%;
+
+}
+.page-img{
+  width: 100%;
+  height: 324rpx
+}
+.swiperPage{
+  width: 100%;
+  height: 100%;
+
+}
+.slide-image{
+  width: 100%;
+  height: 100%;
+}
+.page-view{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end
+}
+.pageView{
+  width: 152rpx;
+  /* height: 882rpx; */
+  display: flex;
+  flex-direction: column;
+  background: #F8F8F8;
+
+}
+.pageViews{
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+}
+.page-left{
+  width: 152rpx;
+  /* height: 134rpx; */
+  padding: 24rpx 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative
+  
+}
+.color{
+  width: 8rpx;
+  height: 80rpx;
+  background: #FFEB0D;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -40rpx;
+
+}
+.page-left image{
+  width: 40rpx;
+  height: 40rpx;
+
+}
+.page-left text{
+  color: #a3a5ad;
+  font-size: 24rpx;
+  font-weight: 500;
+  width: 120rpx
+}
+.page-goods{
+  width: 574rpx;
+  height: 100rpx;
+}
+.pageGoods{
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  background: #fff
+}
+.kindList{
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    overflow-x: scroll;
+    white-space: nowrap;
+    margin-left: -16rpx
+}
+.kind{
+  width: 130rpx;
+  height: 56rpx;
+  display: inline-block;
+  line-height: 56rpx;
+  text-align: center;
+  color: #63646B;
+  font-size: 26rpx;
+  border-radius: 2rpx;
+  background: #F7F7F8;
+  margin-left: 16rpx;
+
+}
+.goodList{
+  width: 100%;
+  height: 184rpx;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48rpx
+}
+.goodsView{
+  width: 184rpx;
+  height: 184rpx;
+  position: relative
+}
+.over{
+    position: absolute;
+    right: 6rpx;
+    bottom: -6rpx;
+    color: #FFFFFF;
+    font-size: 22rpx;
+    background: rgba(0, 0, 0, .4);
+    padding: 4rpx 8rpx;
+    border-radius:  4rpx;
+}
+.goodsView image{
+  width: 100%;
+  height: 100%;
+}
+.goodsName{
+  width: 390rpx;
+  height: 184rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.itemName{
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #2B2D33;
+  font-size: 30rpx;
+  margin-left: 24rpx;
+  font-weight: 500
+
+
+}
+.itemPrice{
+  color: #63646B;
+  font-size: 26rpx;
+  text-decoration: line-through;
+  margin-left: 24rpx
+}
+.itemNumber{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+}
+.itemNumber image{
+  width: 52rpx;
+  height: 52rpx;
+    margin-right: 24rpx
+}
+.itemNumber text{
+  color: #2B2D33;
+  font-size:  32rpx;
+   margin-right: 24rpx
+}
+.cloumn{
+  width: 574rpx;
+  display: flex;
+  flex-direction: column;
+  
+}
+.white{
+  width: 24rpx;
+  height: auto;
+  background: #fff
+}
+.commeal{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 104rpx;
+  display: flex;
+  justify-content: space-between
+}
+.commeal-content{
+  width: 530rpx;
+  height: 100%;
+  display: flex;
+  background: #2B2D33;
+  justify-content: flex-start
+}
+.commeal-img{
+  width: 80rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 32rpx;
+  position: relative
+
+}
+.hr{
+  position: absolute;
+  width: 2rpx;
+  height: 64rpx;
+  right: -38rpx;
+  background: #fff
+}
+.commeal-img image{
+  width: 52rpx;
+  height: 52rpx;
+
+}
+.commeal-img text{
+  color: #FFFFFF;
+  font-size: 20rpx;
+  white-space: nowrap
+}
+.commeal-left{
+  width: 220rpx;
+  height: 100%;
+  background: #FFEB0D;
+  color: #2B2D33;
+  font-size: 32rpx;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.big{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 100;
+  background: rgba(0, 0, 0, .4)
+}
+.bigView{
+  background: #fff;
+  width: 100%;
+  height: auto;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+}
+.bigGoods{
+  width: 100%;
+  max-height: 368rpx;
+  overflow-y: scroll;
+}
+.bigName{
+  width: 100%;
+  height: 88rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+}
+.text1{
+  color: #2B2D33;
+  font-size: 32rpx;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 60%;
+  
+
+}
+.text2{
+  color: #2B2D33;
+  font-size: 32rpx;margin-left: 64rpx;
+}
+.bigName image{
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 24rpx
+}
+.comGoods{
+  height: 76rpx;
+  width: 100%;
+  display: flex;
+  margin-top: 24rpx;
+  justify-content: space-between
+}
+.comGoods-view{
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 48rpx;
+}
+.comGoods-view image{
+  width: 76rpx;
+  height: 76rpx;
+
+}
+.comGoods-view text{
+  color: #2B2D33;
+  width: 194px;
+  font-size: 30rpx;
+  margin-left: 36rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
+.comGoods-text{
+  color: #2B2D33;
+  font-size: 30rpx;
+  margin-right: 48rpx;
+  height: 76rpx;
+  line-height: 76rpx;
+}
+.skip{
+  width: 100%;
+  color: #2B2D33;
+  font-size: 30rpx;
+  padding-left: 124rpx;
+  margin-top: 70rpx;
+}
+.skip text{
+  color: #FFA333;
+}
+.money{
+  margin-top: 8rpx;
+  margin-bottom: 36rpx;
+  width: 100%;
+  height: 92rpx;
+  display: flex;
+  justify-content: space-between;
+  
+}
+.money-goods{
+  width: 320rpx;
+  height: 92rpx;
+  line-height: 92rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 32rpx;
+  background: #FFA333;
+  margin-left: 48rpx;
+}
+.money-pay{
+  width: 320rpx;
+  height: 92rpx;
+  line-height: 92rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 32rpx;
+  background: #FF7459;
+   margin-right: 48rpx;
+}

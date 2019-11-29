@@ -1,0 +1,9 @@
+<view class="page" wx:if="{{propsShow}}">
+  <view class="content">
+    <view class="title">使用规则</view>
+    <view class="page-content">{{rule}}</view>
+    <view class="icon" catchtap="close">
+      <image src="../../../images/close.svg"></image>
+    </view>
+  </view>
+</view>

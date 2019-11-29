@@ -1,0 +1,68 @@
+<view class="page">
+  <view class="text">
+    支持自购机买单、收银台付款使用
+  </view>
+  <view class="advertising">
+    <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/02c178d810293dd192cf13d4de7ddb8.png"></image>
+  </view>
+  <view class="yard">
+    <view class="yard-view">
+      <view class="yard-text">我家会员付款码</view>
+      <view class="yardPay">
+        <view class="yardView">
+          <canvas class="canvas-code" hidden="{{showCanvas}}" canvas-id="myQrcode" style="background:#fff;width: 200px;height: 200px;" />
+        </view>
+      </view>
+      <view class="pay">
+        <view class="paySwtice" bindtap="powerDrawer" data-statu="open">
+          <view class="pay-img">
+            <image src="{{show?'../../images/wximg.svg':'../../images/paySwtich.svg'}}"></image>
+            <view class="payment">{{show?"微信支付":"返现钱包付款(¥"+money+")"}}</view>
+          </view>
+
+
+          <view class="drawer_screen" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}"></view>
+          <view animation="{{animationData}}" class="drawer_attr_box" wx:if="{{showModalStatus}}">
+            <view class="drawer_content" catchtap="close">
+              <view class="choose">
+                <view class="choose-view">
+                  <view>选择支付方式</view>
+                  <image catchtap="shut" src="../../images/close1.svg"></image>
+                </view>
+                <view class="choose-hint">如付款失败请尝试使用其他方式完成付款。</view>
+              </view>
+              <view class="walletPay" catchtap="walletPay">
+                <view class="wallet-text">
+                  <image src="../../images/paySwtich.svg"></image>
+                  <view>返现钱包支付 (¥{{money}})</view>
+                </view>
+                <view class="purse">
+                  <view class="purse-view" wx:if="{{!show}}">不能参与返现</view>
+                  <view class="purse-view1">
+                    <image wx:if="{{!show}}" src="../../images/select.svg"></image>
+                  </view>
+                </view>
+              </view>
+              <view class="walletPay" catchtap="wxPay">
+                <view class="wallet-text">
+                  <image style="width:52rpx;height:52rpx" src="../../images/wximg.svg"></image>
+                  <view>微信支付</view>
+                </view>
+                <view class="purse">
+                  <view class="purse-view1">
+                    <image wx:if="{{show}}" src="../../images/select.svg"></image>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+
+
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="hint">
+    每分钟自动更新，请勿重复使用
+  </view>
+</view>

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "wux-qrcode": "../../component/qrcode/index"
+  },
+  "navigationBarBackgroundColor": "#FFF",
+  "navigationBarTitleText": "订单详情",
+  "navigationBarTextStyle": "black"
+}

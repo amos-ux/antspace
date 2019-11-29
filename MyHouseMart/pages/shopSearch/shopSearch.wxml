@@ -1,0 +1,182 @@
+<!-- pages/shopSearch/shopSearch.wxml -->
+<view class="search-bar">
+  <view class='shops' wx:if="{{cartQuantity>0}}" catchtap="skipSearch">
+    <view class='shops-view'>
+      <image src='../../images/shop.svg'></image>
+      <text>{{cartQuantity}}</text>
+    </view>
+  </view>
+  <view class="search-input">
+    <view class="search-view">
+      <input class="search-tab" max-length="30" value="{{wxSearchData}}" placeholder="搜索喜欢的商品" placeholder-class="input-placeholder" bindinput="wxSearchInput" bindfocus="" bindblur="" bindconfirm="wxSearchConfirm">
+        <image src='../../images/search.svg' class="search-icon" />
+      </input>
+      <view class='empty-icon' wx:if="{{wxSearchData}}">
+        <image src='../../images/emptys.svg' catchtap='empty' />
+      </view>
+    </view>
+    <view catchtap="wxSearchConfirm" class="input-text">{{wxSearchData.length>=2?'搜索':'取消'}}</view>
+  </view>
+  
+  <!-- 搜索结果列表 -->
+  <scroll-view scroll-y="true" class="search-list" wx:if="{{isShowList && wxSearchData.length>=2}}">
+    <block wx:for="{{order}}" wx:key="index">
+      <view catchtap="confirmView" class="order-name" data-item="{{item}}" data-index="{{index}}">
+        {{item.itemName}}
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 历史搜索 -->
+  <view class="history" wx:if="{{wxSearchData.length<2 && historyList.length>0}}">
+    <view class="history-top">
+      <text>历史搜索</text>
+      <image src="../../images/del.svg" catchtap="delHistory" class="del-icon" alt="" />
+    </view>
+    <view class="history-bottom">
+      <text wx:for="{{historyList}}" class="toResult" wx:key="index" max-length="10" data-index="{{item}}" catchtap="toResult">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 没有搜索商品 -->
+  <view class="noshop" wx:if="{{wxSearchData.length>=2 && isHasShop}}">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/65252c0d5e7d4ebcbc1cba2d8817a746.svg" />
+    <text>暂无找到符合的商品</text>
+  </view> 
+  <!-- 有搜索商品 非预售商品 -->
+  <view class="has-shop" wx:if="{{isShow}}">
+
+    <!-- 非预售商品 -->
+    <view class="shop-con" wx:if="{{bizLine!='PRESALE'}}" catchtap='details' data-item="{{item}}" wx:for="{{order}}" wx:key="index">
+      <view class="refundValue" wx:if="{{we.isNumber(item.refundValue)}}">
+        返现¥{{we.toFixed(item.refundValue)}}
+      </view>
+      <image class="normal-img" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+      <view class="shop-main">
+        <text class="shop-name">{{item.itemName}}</text>
+        <view class="discount">
+          <view class="satisfied" wx:key="index" wx:if="{{item.satisfied.length!==0}}">{{item.satisfied[0]}}</view>
+          <view class="stName" wx:if="{{item.stTimes.length!==0}}">{{item.stTimes[0].stName}}</view>
+        </view>
+        <view class="shop-price">
+          <text>¥{{we.toFixed(item.salePrice)}}</text>
+          <text wx:if="{{item.disPrice!=null}}">¥{{we.toFixed(item.disPrice)}}</text>
+          <image catchtap='touchOnGoods' data-item="{{item}}" class="" src="../../images/add.svg" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 预售商品 -->
+    <view class="shop-con" wx:if="{{bizLine=='PRESALE'}}" catchtap='details' data-item="{{item}}" wx:for="{{order}}" wx:key="index">
+      <view class="refundValue" wx:if="{{we.isNumber(item.refundValue)}}">
+        返现¥{{we.toFixed(item.refundValue)}}
+      </view>
+      <view class="shop-img">
+        <view class="shop-message" wx:if="{{we.isShowMessage(item.quantityLimitTotal,item.dateTo)}}">
+          <text wx:if="{{we.isNumber(item.quantityLimitTotal)}}">限购{{item.quantityLimitTotal}}件</text>
+        </view>
+        <image src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+      </view>
+      <view class="shop-main">
+        <text class="shop-name">{{item.itemName}}</text>
+        <view class="reachPrice">
+          <view wx:if="{{we.toNumber(item.eta)!=0}}" class="reach-icon">
+            {{we.numberToChinese(item.eta)}}
+            <image class="resale" src="../../images/resale.svg"></image>
+          </view>
+          <view wx:if="{{we.toNumber(item.limitedByUser)!=0}}" class="purchase">限购{{we.toNumber(item.limitedByUser)}}件</view>
+        </view>
+        <view class="shop-price">
+          <text wx:if="{{we.isNumber(item.activitySalePrice)}}">¥{{we.toFixed(item.activitySalePrice)}}</text>
+          <text>¥{{we.toFixed(item.salePrice)}}</text>
+          <button catch:tap="Snatch" data-item="{{item}}" class="immediately">马上抢</button>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- 弹窗 -->
+  <view class="model" catch:tap="close" wx:if="{{isMember}}">
+    <view class="popup" catch:tap="stopBublle">
+      <image wx:if="{{isVip==false}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/yhfghfhfghfg.jpg" />
+      <view class="number">
+        <text class="UnitPrice">￥{{we.toFixed(TotalPrice)}}</text>
+        <view class="add">
+          <text class="jian" catch:tap="reduce">-</text>
+          <input type="number" value="{{number}}" disabled />
+          <text class="jia" catch:tap="plus">+</text>
+        </view>
+      </view>
+      <view wx:if="{{isVip}}" class="benci">本次返现
+        <text>￥{{we.toFixed(refundValue)}}</text>
+      </view>
+      <button class='btn' wx:if="{{isVip==false}}" catch:tap="toVip" data-isStatus="true">29.9元开通会员，立即返现{{we.toFixed(refundValue)}}元</button>
+      <!-- btn3 -->
+      <button class="{{isVip?'btn3':'btn2'}}" catch:tap="toVip">马上抢</button>
+      <image src="/images/close.svg" catch:tap="close" class="model_close" />
+    </view>
+  </view>
+
+  <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+</view>
+<specification wx:if="{{option}}"  cartQuantity="{{cartQuantity}}" bind:myevent="toggleToast" bind:hide="hide" options="{{options}}" specification="{{specification}}" ></specification>
+<wxs module="we">
+  var isNumber = function(num) {
+    num=Number(num)
+    if(num==0){
+      return false
+    }else{
+      return true
+    }
+  }
+
+  var toFixed = function(num) {
+    num = Number(num);
+    return num.toFixed(2);
+  }
+
+  var isShowMessage = function(num1,num2){
+    num1 = Number(num1)
+    if(num1!=0||num2!=null){
+      return true
+    }else{
+      return false
+    }
+  }
+
+  var isPresale = function(str){
+    if(str=='PRESALE'){
+      return true
+    }else{
+      return false
+    }
+  }
+
+  var numberToChinese = function(eta){
+    eta = Number(eta)
+    if(eta==1){
+      return '隔日达'
+    }else if(eta==2){
+      return '两日达'
+    }else if(eta==3){
+      return '三日达'
+    }else{
+      return eta+'日达'
+    }
+  }
+
+  var toNumber = function(num){
+    num = Number(num)
+    return num
+  }
+
+  module.exports = {
+    isNumber: isNumber,
+    toFixed:toFixed,
+    isShowMessage:isShowMessage,
+    isPresale:isPresale,
+    numberToChinese:numberToChinese,
+    toNumber:toNumber
+  }
+</wxs>

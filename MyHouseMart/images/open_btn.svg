@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="93px" height="93px" viewBox="0 0 93 93" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59 (86127) - https://sketch.com -->
+    <title>编组 5</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="117.152522%" id="linearGradient-1">
+            <stop stop-color="#FFEEB9" offset="0%"></stop>
+            <stop stop-color="#CF863E" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-2" cx="39.6" cy="39.6" r="39.6"></circle>
+        <filter x="-14.5%" y="-12.0%" width="129.0%" height="129.0%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.658372962   0 0 0 0 0.0620737312   0 0 0 0 0.116996029  0 0 0 0.6 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-4" cx="39.6" cy="39.6" r="30.6"></circle>
+        <filter x="-16.3%" y="-16.3%" width="132.7%" height="132.7%" filterUnits="objectBoundingBox" id="filter-5">
+            <feGaussianBlur stdDeviation="6.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="7" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.749830163   0 0 0 0 0.48689379   0 0 0 0 0.11656087  0 0 0 0.702933785 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="?弹窗红包20191012-1" transform="translate(-141.000000, -350.000000)">
+            <g id="编组-5" transform="translate(148.000000, 355.000000)">
+                <g id="椭圆形">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                    <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
+                </g>
+                <g id="椭圆形备份">
+                    <use fill="#F2BA68" fill-rule="evenodd" xlink:href="#path-4"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
+                </g>
+                <text id="開备份" font-family="PingFangSC-Medium, PingFang SC" font-size="34.2" font-weight="400" letter-spacing="4.275" fill="#8F4D09">
+                    <tspan x="22.5" y="52.2">開</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

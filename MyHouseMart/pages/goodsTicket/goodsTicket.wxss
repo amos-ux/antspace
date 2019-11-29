@@ -1,0 +1,289 @@
+page {
+  background-color: #f7f7f7;
+}
+
+.discount {
+  width: 100%;
+  background: #f7f7f7;
+}
+
+.discountState {
+  width: 100%;
+  height: 48px;
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 80rpx;
+  box-sizing: border-box;
+  color: #a3a5ad;
+  font-size: 15px;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  font-weight: 500;
+}
+
+.slidingBlock {
+  width: 64rpx;
+  height: 8rpx;
+  background: #ffa333;
+  border-radius: 4rpx;
+  position: absolute;
+  bottom: 0;
+  left: 94rpx;
+}
+
+.unused {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.noUse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lose {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.active {
+  color: #2b2d33;
+}
+
+.unused-message {
+  width: 100%;
+  padding: 100rpx 32rpx 56rpx 32rpx;
+  box-sizing: border-box;
+}
+
+.goodsTicket {
+  width: 686rpx;
+  border-radius: 4px;
+  margin-top: 12px;
+  background: #fff;
+  padding: 24rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.goodsMessage {
+  display: flex;
+}
+
+.goods-content {
+  display: flex;
+  flex-direction: column;
+  padding: 40rpx 32rpx 24rpx 32rpx;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+  background: linear-gradient(to right, #FFEE2E , #FFD814);
+}
+
+.goods-Invalid {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+  padding: 40rpx 32rpx 24rpx 32rpx;
+  background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+}
+
+.goods-used {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+  padding: 40rpx 32rpx 24rpx 32rpx;
+  background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+}
+
+.goods-img {
+  width: 104rpx;
+  height: 52px;
+}
+
+.goods-img>image {
+  width: 104rpx;
+  height: 52px;
+}
+
+.goods-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.goods-name text:nth-child(1) {
+  width: 480rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #292928;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+
+.goods-name text:nth-child(2) {
+  color: #f28100;
+  font-size: 12px;
+}
+
+.goodsDate {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #5c5b5a;
+  font-size: 12px;
+}
+
+.goodsTicket-img {
+  width: 116rpx;
+  height: 58px;
+  position: absolute;
+  top: 17px;
+  bottom: 29px;
+  right: 32rpx;
+}
+
+.lose-efficacy {
+  width: 686rpx;
+  border-radius: 4px;
+  margin-top: 12px;
+  background: #fff;
+  padding: 24rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.lose-efficacy-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.lose-efficacy-name text:nth-child(1) {
+  color: #adadaa;
+  font-size: 18px;
+  font-weight: 500;
+  width: 480rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 20rpx;
+}
+
+.lose-efficacy-name text:nth-child(2) {
+  color: #adadaa;
+  font-size: 12px;
+}
+
+.lose-efficacy-date {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #adadaa;
+  font-size: 12px;
+}
+
+.lose-efficacy-img {
+  width: 104rpx;
+  height: 52px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.lose-efficacy-img>image {
+  width: 104rpx;
+  height: 52px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.pop {
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pop-up {
+  width: 580rpx;
+  height: 405px;
+  background: #fff;
+  border-radius: 5px 5px;
+}
+
+.pop-up>view {
+  width: 100%;
+  height: 70px;
+  text-align: center;
+  line-height: 70px;
+  color: #292928;
+  font-size: 18px;
+}
+
+.scroll {
+  width: 100%;
+  height: 335px;
+  padding: 0 46rpx 0 36rpx;
+  box-sizing: border-box;
+}
+
+.pop-img {
+  width: 80rpx;
+  height: 40px;
+  position: fixed;
+  bottom: 40px;
+  left: 336rpx;
+}
+
+.pop-img>image {
+  width: 80rpx;
+  height: 40px;
+}
+
+.scrollText {
+  color: #5c5b5a;
+  font-size: 15px;
+}
+
+.unusedImg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.unused-Img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 90px;
+}
+
+.unused-Img>image {
+  width: 366rpx;
+  height: 150px;
+}
+
+.unused-Img>text {
+  color: #63646b;
+  font-size: 16px;
+}
+
+/*隐藏滚动条*/
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

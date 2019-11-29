@@ -1,0 +1,326 @@
+<scroll-view class="cardFood">
+  <view class="top clearfix">
+    <view class="top_fixed">
+      <view bindtap="toSearch" class="top_serch" hidden="{{itemLIst.bizLineCode=='COFFEE'}}">
+        <image src="../../images/search.svg" />
+        <text>搜索商品</text>
+      </view>
+    </view>
+    <swiper class="{{itemLIst.bizLineCode=='COFFEE'?'top_swiper_maxHeight':'top_swiper'}}" autoplay circular interval="{{banner.spaceTime*1000}}" indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="rgba(255,255,255,1)" wx:if="{{banner.advers.length>1}}">
+      <swiper-item wx:for="{{banner.advers}}" wx:key="{{index}}">
+        <image src="{{item.adImg}}" catchtap="imgOclick" data-index="{{index}}" class="{{itemLIst.bizLineCode=='COFFEE'?'slide-image_maxHeight':'slide-image'}}" />
+      </swiper-item>
+    </swiper>
+    <view class="{{itemLIst.bizLineCode=='COFFEE'?'top_swiper_maxHeight':'top_swiper'}}" wx:if="{{banner.advers.length==1}}">
+      <image src="{{banner.advers[0].adImg}}" class="{{itemLIst.bizLineCode=='COFFEE'?'slide-image_maxHeight':'slide-image'}}" />
+      <view class="top_date" wx:if="{{itemLIst.bizLineCode=='COFFEE'}}">
+        <view style="font-size:68px;line-height: 50px;color:white;text-align:left;">{{dateTime[0]}}</view>
+        <text style="font-size:32rpx;color:white;line-height: 36px;">{{dateTime[1]}}月</text>
+        <text style="font-size:32rpx;color:white;margin-left:10rpx;">{{dateTime[2]}}</text>
+      </view>
+      <view class="top_date-right" wx:if="{{itemLIst.bizLineCode=='COFFEE'}}">
+        <text>{{wendu}}</text>
+        <view></view>
+        <image src="{{weather}}" />
+      </view>
+    </view>
+    <view class="{{itemLIst.bizLineCode=='COFFEE'?'top_swiper_bg':banner.advers.length==0?'top_swiper':'top_swiper'}}" wx:if="{{banner.advers.length==0}}">
+      <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/wj0190726111516.png" class="slide-image" />
+    </view>
+    <view class="top_bottom">
+      <view class="top__bottom_icon" wx:for="{{DiamondZone}}" wx:key="item" data-item="{{item}}" catchtap='toChoose'>
+        <image src="{{item.kkImg}}" />
+        <view class="title">{{item.kkName}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="hot" wx:for="{{SINGLE}}" data-item="item" catchtap="Router" wx:key="{{item}}">
+    <image src="{{item.path}}" class="hot_img" style="background:#ededed" />
+    <view class="hot_left">
+      <text class="title1">{{item.title}}</text>
+      <view hidden="{{item.title.length==0}}"></view>
+      <text class="{{item.subTitle.length>9?'hot_left_title2':'title3'}}">{{item.subTitle}}</text>
+    </view>
+    <view class="hot_right">
+      <view class="hot_type" catchtap="toShop" data-item="{{item}}" wx:for="{{item.items}}" wx:key="{{item}}">
+        <image class="{{item.stockQty!=0?'':'hot_type_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="{{item.stockQty==0?'Price_end':'Price'}}">￥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+        <text class="end" wx:if="{{item.stockQty==0}}">已售罄</text>
+        <view class="seckill" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+      </view>
+    </view>
+  </view>
+  <view class="business_item" wx:for="{{ITEMCLS}}" wx:key="item">
+    <view class="business_item_top">
+      <image class="bg" src="{{item.path==''||item.path==null?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/yyyy20190726131920.jpg':item.path}}" />
+      <image class="logo" src="{{item.bizPicAddr}}" />
+      <view class="describe">{{item.title}}</view>
+    </view>
+    <view class="business_item_bottom">
+      <view class="business_item_list" wx:for="{{item.items}}" wx:if="{{item.stockQty!=0}}" catchtap="toShop" data-item="{{item}}" wx:key="{{item}}">
+        <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="seckill-business" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+        <text class="{{item.stockQty!=0?'text':'text_end'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <view>{{item.itemName}}</view>
+        <view class="zk" style="min-height:48rpx;">
+          <view class="{{item.stockQty!=0?'_Discount':'_Discount_end'}}" style="display:{{item.satisfied.length==0?'none':''}}">{{item.satisfied[0]}}</view>
+        </view>
+        <text>￥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+        <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" src="../../images/add.svg" class="add" />
+        <view style="display:inline-block" wx:if="{{item.itemStatus=='FORSALE'}}">
+          <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
+          <image class="chen" catchtap='check' data-item="{{item}}" src="../../images/Question.svg" />
+        </view>
+      </view>
+      <!-- 已售罄 -->
+      <view wx:for="{{item.items}}" wx:if="{{item.stockQty==0}}" wx:key="{{item}}" catchtap="toShop" data-item="{{item}}" class="business_item_list_end">
+        <text class="text_end" hidden="{{item.refundValue==0||item.refundValue==null}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <image src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="seckill-business" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+        <view>{{item.itemName}}</view>
+        <view class="zk" style="{{item.satisfied.length==0?'margin-top:22rpx':''}}">
+          <view class="{{item.stockQty!=0?'_Discount':'_Discount_end'}}" style="border:{{item.satisfied.length==0?'none':''}}">{{item.satisfied[0]}}</view>
+        </view>
+        <text>￥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+        <view class="end">已售罄</view>
+      </view>
+    </view>
+  </view>
+  <view class="center" wx:if="{{ITEMRANK.length!=0}}">
+    <view class="hot">
+      <image src="{{ITEMRANK.path==''||ITEMRANK.path==null?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/ijk0190726143338.png':ITEMRANK.path}}" class="hot_img" />
+      <text class="title1s">{{ITEMRANK.title}}</text>
+      <text class="title3">{{ITEMRANK.subTitle}}</text>
+    </view>
+  </view>
+  <view class="{{ITEMRANK.bizShowType=='THREE'?'content':'contents'}}">
+    <!--一列布局-->
+    <view class="content_item_first" wx:if="{{ITEMRANK.bizShowType=='ONE'}}" wx:for="{{ITEMRANK.items}}" data-item="{{item}}" catchtap="toShop" wx:key="item">
+      <view class="item_first_left" wx:if="{{item.stockQty!=0}}">
+        <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <text class="text" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+      </view>
+      <view class="item_first_left_end" wx:else>
+        <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <text class="end">已售罄</text>
+        <text class="text_end" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+      </view>
+      <view class="item_first_right" wx:if="{{item.stockQty!=0}}">
+        <view class="right_title">{{item.itemName}}</view>
+        <view class="item_first_Discount" hidden="{{item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+        <!-- <view class="item_first_Discount" >满额送卷</view> -->
+        <view class="item_bottom">
+          <view class="item_first_start_money">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+          <text class="item_first_end_money" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+        </view>
+        <!-- <view class="item_first_end_money">￥{{item.disPrice}}</view> -->
+        <image style="z-index:10;" catchtap='shoppingcart' data-item="{{item}}" src="../../images/add.svg" class="add" />
+        <view class="{{ITEMRANK.bizShowType=='ONE'?'first':''}}" wx:if="{{item.itemStatu=='FORSALE'}}" style="display:inline-block">
+          <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
+          <image class="chen" src="../../images/Question.svg" catchtap='check' data-index="{{item}}" />
+        </view>
+      </view>
+      <view class="item_first_right" wx:else>
+        <view class="right_title_maxLength_end">{{item.itemName}}</view>
+        <view class="item_first_Discount_maxLength_end" hidden="{{item.item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+        <!-- <view class="item_first_Discount_maxLength_end" >满额送卷</view> -->
+        <view class="item_bottom">
+          <view class="item_first_start_money_maxLength_end">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+          <text class="item_first_end_money_maxLength_end" style="display:{{item.disPrice==0||item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+        </view>
+      </view>
+    </view>
+    <!-- 两列布局 -->
+    <view class="content_item_second" wx:if="{{ITEMRANK.bizShowType=='TWO'}}" wx:for="{{ITEMRANK.items}}" data-item="{{item}}" catchtap="toShop" wx:key="item">
+      <view class="top">
+        <image lazy-load class="{{item.stockQty!=0?'':'item_second_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="img_bottom" wx:if="{{item.itemStatus!='OUTOFSTOCK'}}"></view>
+        <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+      </view>
+      <text class="content_item_second_end" wx:if="{{item.stockQty==0}}">已售罄</text>
+      <text class="{{item.stockQty!=0?'text':'text_end'}}" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+      <view class="{{item.stockQty!=0?'item_second_title':'item_second_title_end'}}">{{item.itemName}}</view>
+
+      <view class="{{item.stockQty!=0?'item_second_Discount':'item_second_Discount_end'}}" hidden="{{item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+      <!-- <view class="{{item.stockQty!=0?'item_second_Discount':'item_second_Discount_end'}}" >满额送卷</view>  -->
+
+      <view class="item_bottom_second">
+        <text class="{{item.stockQty!=0?'item_second_start_money':'item_second_start_money_end'}}">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+        <text class="{{item.disPrice==null||0?'bug':'item_second_end_money'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+      </view>
+      <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" class="add" catchtap='shoppingcart' data-item="{{item}}" src="../../images/add.svg" class="add" />
+      <view class="{{ITEMRANK.bizShowType=='TWO'?'second':''}}" style="display:inline-block" wx:if="{{item.itemStatus=='FORSALE'}}">
+        <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
+        <image class="chen" src="../../images/Question.svg" catchtap='check' data-index="{{item}}" />
+      </view>
+    </view>
+    <view class="content_item" wx:if="{{ITEMRANK.bizShowType=='THREE'}}" wx:for="{{ITEMRANK.items}}" data-item="{{item}}" catchtap="toShop" wx:key="item">
+      <view class="content_item_top">
+        <image lazy-load class="{{item.stockQty!=0?'':'item_second_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <text class="end" wx:if="{{item.stockQty==0}}">已售罄</text>
+        <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+        <text class="{{item.stockQty!=0?'text':'text_end'}}" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <view class="three_bottom" wx:if="{{item.stockQty==0}}"></view>
+      </view>
+      <view class="{{item.stockQty!=0?'item_title':'item_title_end'}}">{{item.itemName}}</view>
+      <view class="Discount" style="{{item.satisfied.length==0?'opacity:0':'opacity:1'}}" class="{{item.stockQty==0||item.itemStatus=='FORSALE'?'Discount_end':'Discount'}}">{{item.satisfied.length==0?'敬请期待':item.satisfied[0]}}</view>
+
+      <view class="{{item.stockQty!=0?'Afterdiscount':'Afterdiscount_end'}}">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+      <text class="{{item.stockQty==0?'Beforediscount_bug':'Beforediscount'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+      <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" wx:if="{{item.stockQty!=0}}" src="../../images/add.svg" class="add" />
+      <view style="display:inline-block" class="{{ITEMRANK.bizShowType=='THREE'?'three':''}}" wx:if="{{item.itemStatus=='FORSALE'}}">
+        <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
+        <image class="chen" src="../../images/Question.svg" catchtap='check' data-index="{{item}}" />
+      </view>
+      <!-- <text class="anmiantion"  style="display:{{hide}}"></text> -->
+    </view>
+
+  </view>
+  <!-- -->
+  <view class="date" wx:if="{{Advancesale}}" catchtap='close'>
+    <view class="model">
+      <view class="date_title">供应说明</view>
+      <view class="model_list" wx:for="{{dateAdvancesale}}" wx:key="{{item}}">
+        <view class="date_center">{{item.stName}}</view>
+        <view class="start_date">供应时间:{{item.activityTimeFrom}}-{{item.activityTimeTo}}、送达时间:{{item.deliveryTimeFrom}}-{{item.deliveryTimeTo}}</view>
+      </view>
+      <view class="date_btn" catchtap='close'>我知道了</view>
+    </view>
+  </view>
+<!-- <view class='specification' wx:if="{{specification}}" catchtap='specification'>
+    <view class='specification-content' catchtap='specificationContent'>
+      <view class='specification-goods'>
+        <view class='specification-img'>
+          <image src='{{extOptions.picAddr?extOptions.picAddr:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+        </view>
+        <view class='specification-name'>
+          <view class='goods-item'>
+            <text class='itemText'>{{extOptions.itemName}}</text>
+            <view class='itemView' catchtap='over'>
+              <image src='../../images/over.svg'></image>
+            </view>
+          </view>
+          <view class='itemPrice'>
+            <view>
+              <text class='reduction' hidden="{{extOptions.satisfied.length==0}}">{{extOptions.satisfied[0]}}</text>
+            </view>
+            <view class="{{item.stockQty!=0?'item_title':'item_title_end'}}">{{item.itemName}}</view>
+            <view class="Discount" style="{{item.satisfied.length==0?'opacity:0':'opacity:1'}}" class="{{item.stockQty==0?'Discount_end':'Discount'}}" >{{item.satisfied.length==0?'敬请期待':item.satisfied[0]}}</view> -->
+            <!-- <view class="Discount"  class="{{item.stockQty==0?'Discount_end':'Discount'}}" >满额送卷</view> -->
+            <!-- <view class="Beforediscount">$31.70</view> -->
+            <!-- <view class="{{item.stockQty!=0?'Afterdiscount':'Afterdiscount_end'}}" >￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+            <text class="{{item.stockQty==0?'Beforediscount_bug':'Beforediscount'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+            <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" wx:if="{{item.stockQty!=0}}" src="../../images/add.svg" class="add" />
+            <view style="display:inline-block" class="{{ITEMRANK.bizShowType=='THREE'?'three':''}}" wx:if="{{item.itemStatus=='FORSALE'}}">
+                        <text class="ForSale"  catchtap='check' data-item="{{item}}">待售</text>
+                        <image  class="chen" src="../../images/Question.svg"  catchtap='check' data-index="{{item}}"/>
+            </view>
+          </view>
+        </view>
+      </view>  -->
+      <!-- <view class='temperature'>
+        <block wx:for="{{extOptions.extOptions}}" wx:key="indexs">
+          <view class='temperatureView'>
+            <view class='temperatureKind'>{{item.dataName}}</view>
+            <view class='temperaturecontent'>
+              <text class='temperaturetext {{items.isShow&&items.isShow?"alter":""}}' catchtap='shut' data-item="{{item}}" wx:for="{{item.options}}" data-index="{{index}}" wx:key="indexs" wx:for-item="items">{{items.name}}</text>
+            </view>
+          </view>
+        </block>
+
+      </view> -->
+      <!-- <view class='temperatureCart' catchtap='joinCart'>
+        加入购物车
+      </view>
+    </view>
+  </view> -->
+  <view class="back" wx:if="{{shopLength>0}}">
+    <view class="back_shop" catchtap="RouterShop">
+      <text class="length">{{shopLength}}</text>
+      <image src="../../images/shop.svg" />
+    </view>
+  </view>
+  <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+</scroll-view>
+<specification wx:if="{{option}}"  cartQuantity="{{shopLength}}" bind:myevent="toggleToast" bind:hide="hide" options="{{options}}" specification="{{specification}}" ></specification>
+<wxs module="we">
+  var toFixed = function(value) {
+    if (typeof value == "number") {
+      return value.toFixed(2);
+
+    }
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>
+<wxs module="isDate">
+  var status = function(list) {
+    var timestamp = getDate().getTime(),
+      length = list.length,
+      NowTime = getDate().toLocaleDateString(), //年月日
+      Stamp = [], //存放现在时间小于活动时间的数据
+      MaxStamp = list //存放现在时间大于活动时间的数据
+    end = [], num = length
+    for (var i = 0; i < length; i++) {
+      var activityTimeFrom = getDate(NowTime + " " + list[i].activityTimeFrom).getTime() //活动开始时间
+      var activityTimeTo = getDate(NowTime + " " + list[i].activityTimeTo).getTime() //活动结束时间
+      MaxStamp[i].time = activityTimeFrom //活动开始时间搓
+      if (timestamp < activityTimeFrom) {
+        var arr = list[i]
+        arr.time = activityTimeFrom
+        Stamp.push(arr)
+        Stamp.sort(function(a, b) {
+          return a.time - b.time
+        })
+        var timeStart = Stamp[0].activityTimeFrom.split(":") //开售时间
+        end.push(timeStart[0] + ":" + timeStart[1] + "开售")
+      } else if (timestamp < activityTimeTo && timestamp > activityTimeFrom) { //正在活动内
+        var timeEnd = list[i].activityTimeTo.split(":") //停售时间
+        var timeStart = list[i].deliveryTimeFrom.split(":") //送达开始时间
+        var timeStartOk = list[i].deliveryTimeTo.split(":") //送达结束时间
+        end.push(timeEnd[0] + ":" + timeEnd[1] + "停售")
+        end.push("约" + timeStart[0] + ":" + timeStart[1] + "-" + timeStartOk[0] + ":" + timeStartOk[1] + "送达")
+      } else { //在活动时间外
+        num -= 1 //解决现在时间大于所有活动时间
+        if (num == 0) {
+          MaxStamp.sort(function(a, b) {
+            return a.time - b.time
+          })
+          var timeStart = MaxStamp[0].activityTimeFrom.split(":") //开售时间
+          console.log(MaxStamp[0].activityTimeFrom)
+          end.push(timeStart[0] + ":" + timeStart[1] + "开售")
+        }
+      }
+    }
+    return end
+  }
+  module.exports = {
+    status: status
+  }
+</wxs>
+<wxs module="isExistence">
+  var Existence = function(arr) {
+    console.log(arr.length)
+    var length = arr.length,
+      isOK = 0
+    for (var i = 0; i < length; i++) {
+      for (var j = 0; j < arr[i].items.length; j++) {
+        console.log(arr[i].items.length)
+        if (arr[i].items[j].satisfied.length == 0) {
+          return isOk = 1
+          break;
+        } else {
+          return isOk = 0
+
+        }
+      }
+
+    }
+  }
+  module.exports = {
+    Existence: Existence
+  }
+</wxs>

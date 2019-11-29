@@ -1,0 +1,77 @@
+<view class="page">
+  <view class="buy">
+    <view class="message">
+      <view class="message-img">
+        <image src="{{src}}"></image>
+      </view>
+      <view class="personage">
+        <view class="name">{{name}}</view>
+        <view class="vipmessage">
+          <view class="vipicon" wx:if="{{memberStatus}}">
+            <image src="{{memberImg}}"></image>
+            <view class="vip">{{memberName}}</view>
+          </view>
+          <view class="date" wx:if="{{effectiveTo}}">
+            {{effectiveTo}}{{isExpired?'已':''}}过期
+          </view>
+        </view>
+      </view>
+
+    </view>
+    <quit wx:if="{{quit}}"></quit>
+    <view class="buyText">
+      <view class="text">会员权益</view>
+      <view class="textImg">
+        <view class="icon-img">
+          <image src="../../images/shopp.svg"></image>
+        </view>
+        <view class="icon-text">购买返现</view>
+      </view>
+      <view class="textImg">
+        <view class="icon-img">
+          <image src="../../images/quickness.svg"></image>
+        </view>
+        <view class="icon-text">30分钟送达</view>
+      </view>
+      <view class="textImg">
+        <view class="icon-img">
+          <image src="../../images/soybean.svg"></image>
+        </view>
+        <view class="icon-text">会员付款码</view>
+      </view>
+    </view>
+  </view>
+  <view class="setMeal">
+    <view class="setMeal-top">选择会员套餐</view>
+    <view class="card-meal">
+
+      <view class="card" wx:for="{{cardImage}}" wx:key="index" catchtap='payselect' data-index='{{index}}' data-chose="{{item}}">
+        <image class="cardImg" src="{{item.cardImage}}">
+          <image class="cardImg1" wx:if="{{indexs==index}}" src="../../images/cardSelect.svg"></image>
+        </image>
+        <view>
+          <text class="text1">{{item.monthName}}</text>
+          <text class="text2">¥{{item.price}}</text>
+        </view>
+      </view>
+      
+    </view>
+  </view>
+  <view class="experience" catchtap="gets">
+    <view class="card-experience">
+      <view class="experience-left">
+        <view class="experience-text">会员体验卡免费送</view>
+        <view class="experience-text1">体验期：{{timeDay}}天</view>
+      </view>
+      <view class="experience-right">
+        <view class="experience-text2" style="{{experienceCardUsed?'background:#B2925D;color:#FFF':''}}">{{gets}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="pay">
+    <view class="pay-view">¥{{price}}</view>
+    <view class="pay-bottom" catchtap="pay">
+      立即支付
+    </view>
+  </view>
+</view>

@@ -1,0 +1,157 @@
+/* pages/details/details.wxss */
+.details{
+  background: #F7F7F7;
+  width: 100%;
+  height: 100%;
+}
+.background{
+  background: #F7F7F7;
+  width: 100%;
+  height: 7px;
+}
+.state{
+  width: 100%;
+  height: 160rpx;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 32rpx;
+  box-sizing: border-box;
+}
+.state text:nth-child(1){
+  color: #292928;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.state text:nth-child(2){
+  color: #5C5B5A;
+  font-size: 26rpx;
+}
+.addList{
+  width: 100%;
+  height: auto;
+  padding: 0 32rpx ;
+  box-sizing: border-box;
+  background: #fff;
+}
+.order{
+  border-bottom: 1px solid #E8E8E8;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 26rpx;
+}
+.order text:nth-child(1){
+  color: #292928;
+  font-weight: bold;
+}
+.order text:nth-child(2){
+  color: #5C5B5A;
+}
+.goodsList{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.goodsList text:nth-child(1){
+  color: #292928;
+  font-size: 13px;
+}
+.goodAdd{
+  width: 100%;
+  height: 168rpx;
+  border-bottom: 1px solid #E8E8E8;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+.addImage{
+  width: 104rpx;
+  height: 104rpx;
+}
+.addName{
+  color: #292928;
+  font-size: 30rpx;
+  margin-bottom:70rpx;
+  margin-left:30rpx;
+}
+.addNum{
+  color: #292928;
+  font-size: 30rpx;
+  position: absolute;
+  top: 28rpx;
+  right: 20rpx;
+}
+.addMoney{
+  color: #292928;
+  font-size: 32rpx;
+  font-weight: bold;
+  position:absolute;
+  bottom:25rpx;
+  left:130rpx;
+}
+.refundMoney{
+  width: 100%;
+  height: 50px;
+  color: #292928;
+  font-size: 15px;
+  line-height: 50px;
+  padding-left: 32rpx;
+  box-sizing: border-box; 
+  background: #fff;
+}
+.refundMoney text:nth-child(2){
+  margin-left: 19px; 
+}
+.explain{
+  width: 100%;
+  height: 50px;
+  box-sizing: border-box;
+  padding-left: 32rpx;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.explain>text{
+  color: #292928;
+  font-size: 15px;
+}
+.explain text:nth-child(2){
+  margin-right: 32rpx;
+  white-space : nowrap;
+}
+.voucher{
+  width: 100%;
+  height: 310rpx;
+  background: #fff;
+}
+.box{
+  width: 100%;
+  height: 90rpx;
+  color: #292928;
+  font-size: 30rpx;
+  line-height: 90rpx;
+  padding-left: 32rpx;
+  box-sizing: border-box;
+}
+.voucherImg{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.imgbox{
+   width: 164rpx;
+  height: 164rpx;
+  margin-left: 65rpx;
+}
+.imgurl{
+  width: 164rpx;
+  height: 164rpx;
+}

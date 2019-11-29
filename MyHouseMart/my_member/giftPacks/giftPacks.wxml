@@ -1,0 +1,90 @@
+<view class="pages">
+  <view class="pages-swiper">
+    <image class="pages-bg" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8d715ffac0a34fd89e64cbc6eaca75dd.png"></image>
+  </view>
+  <view class="content">
+    <image class="pages-banner" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/caf7ded08d40458c80fdf0894573ebb9.png"></image>
+    <view class="radian">
+      <view class="radian-bottom">
+        <view class="radian-top" catchtap="openVip">
+          <view class="radian-title">会员权益</view>
+          <view class="radian-tips">了解权益</view>
+        </view>
+        <view class="equity">
+          <view class="first-equity">
+            <view class="icon">
+              <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/c5bc7eaa7bfc4753a2d3a5338296263c.svg"></image>
+            </view>
+            <view class="equity-text">会员返现权</view>
+          </view>
+          <view class="first-equity">
+            <view class="icon">
+              <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/0f487a9e1ae3475ba5003d33d9a56c65.svg"></image>
+            </view>
+            <view class="equity-text">内邀特权</view>
+          </view>
+          <view class="first-equity">
+            <view class="icon">
+              <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/857b87ecef944c749f1ce586b817ce94.svg"></image>
+            </view>
+            <view class="equity-text">专享特价</view>
+          </view>
+          <view class="first-equity">
+            <view class="icon">
+              <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/381aa6f3e4104499a29492b80bc069a1.svg"></image>
+            </view>
+            <view class="equity-text">敬请期待</view>
+          </view>
+        </view>
+        <view class="join" catchtap="toJoinMenber">
+          <view class="join-view">加入会员</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="invite-friend" catchtap="toInvite">
+    <text class="invite-title">会员专属活动</text>
+    <image class="invite-bg" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/f5bf31f53afb4dacb16a2fac56d8c8cf.png" />
+  </view>
+  <view class="package" wx:if="{{giftPackage.length!=0}}">
+    <view class="package-top" data-status="greatPackage" catchtap="toActivity">
+      <view class="package-name">
+        <view class="package-hasbuy" wx:if="{{userInfo.isChargeTime}}">(当月已购买)</view>
+        <text class="package-title">超值续费大礼包</text>
+        <text class="package-text">购买礼包直接续费一个月会员，每月限购一次</text>
+      </view>
+      <view class="to-activity" catchtap="">
+        <image class="tosvg" src="../../images/myright.svg" />
+        <text class="act-title">活动说明</text>
+      </view>
+    </view>
+    <view class="package-cont">
+      <view class="package-member" wx:for="{{giftPackage}}" wx:key="index">
+        <view class="package-img">
+          <image src="{{item.picAddr?item.picAddr:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/0bf7b526ca824304a693ec08ea910f96.jpg'}}" />
+          <view class="member-title">赠送会员</view>
+        </view>
+        <view class="package-main">
+          <view class="package-name">{{item.itemName}}</view>
+          <view class="package-price">
+            <text class="disprice" style='{{item.stockQty==0 || item.itemtatus=="FORSALE"?"color:#A0A1A3;":""}}' wx:if="{{item.disPrice!==null}}">¥{{we.toFixed(item.disPrice)}}</text>
+            <text class="saleprice" style='{{item.disPrice==null && (item.stockQty==0 ||item.itemtatus=="FORSALE")?"color:#A0A1A3;font-size:30rpx;font-weight:500;margin-left:24rpx":item.disPrice==null ?"color:#FF5A52;font-size:30rpx;":"text-decoration: line-through"}}'>¥{{we.toFixed(item.salePrice)}}</text>
+          </view>
+          <view class="buy-btn {{userInfo.isChargeTime?'noclick-btn':''}}" data-status='greatPackage' catchtap="freeBuy" data-iscanbuy="{{!userInfo.isChargeTime}}" data-item="{{item}}">{{userInfo.isChargeTime?'下个月可购买':'立即购买'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    if (value) {
+      if (typeof value == "number") {
+        return value.toFixed(2);
+      }
+    }
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

@@ -1,0 +1,37 @@
+<!-- 常用店铺 -->
+<view class="common-shop" wx:if="{{commonBranchs.length!=0}}">
+  <view class="shop-title">常用店铺</view>
+  <view class="shop-content" wx:for="{{commonBranchs}}" catchtap="getDetail" wx:key="index" data-item="{{item}}">
+    <view class="shop-name">{{item.branchName}}</view>
+    <view class="shop-place">
+      <text class="place-name">{{item.locDetail}}</text>
+      <text class="place-distance">{{item.range < 500 ? we.toFixed(item.range) : we.toFixed(item.range/1000) + 'k'}}m</text>
+    </view>
+  </view>
+</view>
+
+<!-- 最近排行 -->
+<view class="common-shop" wx:if="{{userBranchs.length!=0}}">
+  <view class="shop-title">最近排行</view>
+  <view class="shop-content" wx:for="{{userBranchs}}" catchtap="getDetail" wx:key="index" data-item="{{item}}">
+    <view class="shop-name">{{item.branchName}}</view>
+    <view class="shop-place">
+      <text class="place-name">{{item.locDetail}}</text>
+      <text class="place-distance">{{item.range < 500 ? we.toFixed(item.range) : we.toFixed(item.range/1000) + 'k'}}m</text>
+    </view>
+  </view>
+</view>
+
+<!-- 无地址 -->
+<view class="noplace" wx:if="{{noPlace}}">
+  <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/e0ed837cb4eb43ed9217e26ce02cee85.png'></image>
+  <text class="noplace-text">暂无自提地址</text>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

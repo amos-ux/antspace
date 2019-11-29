@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "wux-qrcode": "../../component/qrcode/index"
+  },
+    "navigationBarTitleText": "会员付款码",
+    "navigationBarBackgroundColor": "#FFEB0D",
+    "navigationBarTextStyle": "black",
+    "disableScroll": true
+}

@@ -1,0 +1,9 @@
+{
+ "usingComponents": {
+  "specification": "../../component/specification/specification"
+},
+  "navigationBarBackgroundColor": "#FFF",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "搜索",
+  "onReachBottomDistance": 50
+}

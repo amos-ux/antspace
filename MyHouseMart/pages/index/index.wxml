@@ -1,0 +1,185 @@
+<view class="page">
+  <view class='shops' wx:if="{{cartQuantity>0}}" catchtap="cartDetail">
+    <view class='shops-view'>
+      <image src='../../images/shop.svg'></image>
+      <text>{{cartQuantity}}</text>
+    </view>
+  </view>
+
+  <view class="share" catchtap="share" wx:if="{{!showShare}}">
+    <view class="share-img">
+      <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/share.svg"></image>
+    </view>
+  </view>
+  <view class='nav-top'>
+    <image class="nav-bgimg" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/zcxkjklh.png" />
+    <!-- 搜索框 -->
+    <view class='nav'>
+      <view class='search' catchtap='skipSearch'>
+        <image src='../../images/search.svg'></image>
+        <input type='text' placeholder='搜索喜欢的商品' disabled='true' bindinput='emptyInput'></input>
+      </view>
+      <view class='roll' catchtap='rollSkip' animation="{{animation}}">
+        <image class="card-img" src="../../images/package.svg" />
+        <text class="card-package">卡券包</text>
+        <!-- 券提醒 -->
+        <view class="card-remind" wx:if="{{cardremind && ticketNum!=0}}">
+          <view class="triangle"></view>
+          <text class="card-num">你有{{ticketNum}}张券即将过期</text>
+          <view class="card-del" catchtap="cardDel">
+            <image class="del-img" src="../../images/triangle.svg" />
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='branchView'>
+      <view class='branch'>
+        <view class='branchNo'>
+          <view class='branch-top'>
+            <view class='shop' catchtap='branch'>
+              <text class='shop-text1'>{{branchName}}</text>
+              <text class='shop-text2'></text>
+            </view>
+            <!-- 区别 -->
+            <view class='bigBox'>
+              <view class='range' wx:if="{{branchNo!='888888'}}">
+                <image src='../../images/range.svg'></image>
+                <text class='range-text'>距您{{range>500?we.toFixed(range/1000)+"km":we.toFixed(range)+"m"}}</text>
+              </view>
+              <view class='pick' wx:if="{{pickupFrom!==null || branchNo=='888888'}}">
+                <image src='../../images/afhalen.svg'></image>
+                <text class='pick-text'>到店自提</text>
+              </view>
+              <view class='send' wx:if="{{deliveryFrom!==null || branchNo=='888888'}}">
+                <image src='../../images/dispatchings.svg'></image>
+                <text class='send-text'>{{branchNo=='888888'?"配送上门":"外卖配送"}}</text>
+              </view>
+            </view>
+          </view>
+          <view class='branch-bottom'>
+            <scroll-view scroll-x="true" class='discounts' wx:if="{{!coupon}}">
+              <block wx:for="{{planName.length!==0?planName:planNamec.length!==0?planNamec:planNamef.length!==0?planNamef:planNamen.length!==0?planNamen:planNames}}" wx:key="index">
+                <text>{{item}}</text>
+              </block>
+            </scroll-view>
+            <view class='discounts-number' wx:if="{{!coupon}}" catchtap='click'>{{promotionSize}}个优惠</view>
+            <view wx:if="{{coupon}}" class='empty'>
+              <image src='../../images/speed.svg'></image>0.5公里内30分钟极速送达，只限于"我家闪送"商品</view>
+          </view>
+        </view>
+      </view>
+      <view class='goodskind'>
+        <view class='goodskind-image' wx:for="{{string}}" wx:key="index" data-item="{{item}}" catchtap="BusinessLine">
+          <view class='image'>
+            <image src='{{item.bizLineImg}}'></image>
+          </view>
+          <view class='goodskind-text'>{{item.bizLineName}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <invite show="{{show}}" listValue="{{listValue}}"></invite>
+  <!-- 轮播 -->
+  <view class='swiper'>
+    <view class='swiperView'>
+      <swiper class='swiper-box' indicator-dots="true" autoplay="true" circular="true" interval="{{interval}}" duration="{{duration}}">
+        <block wx:for="{{advers}}" wx:key="index">
+          <swiper-item>
+            <image src="{{item.adImg}}" class="slide-image" catchtap='skipImage' data-item="{{item}}" />
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+  </view>
+  <!-- 超值所想 -->
+  <view class='overflow'>
+    <view class='shopping'>
+      <view class='return' style="background:url({{item.backgroundPic}}) no-repeat;background-size:cover" catchtap='toCash' wx:for="{{activity}}" wx:key="index" data-item="{{item}}">
+        <view class='overflow-view1' wx:if="{{!userInfo.firstOrderStatus&&(userInfo.memberStatus!='NON_MEMBERS'||userInfo.memberStatus!='EXPIRED_MEMBERS')&&activity.blLink=='/my_member/orderDetails/orderDetails?status=firstFree'}}">
+          <text class="overflow-text1">{{item.isDisplay=='Y'?item.title:''}}</text>
+          <view class="overflow-sckill" wx:if="{{!finish && item.code=='SECKILL' && item.activityTimeFrom!==null}}">
+            {{nobegin?'距下场':"距结束"}}
+            <text class="time">{{Today[0]}}</text>
+            <text class="colon">:</text>
+            <text class="time">{{Today[1]}}</text>
+            <text class="colon">:</text>
+            <text class="time">{{Today[2]}}</text>
+          </view>
+        </view>
+        <view class='overflow-view2'>{{item.subtitle}}</view>
+        <view class='overflow-view3' wx:if="{{item.isRecommended=='Y'}}">
+          <view class='goods-image' wx:for="{{item.items}}" wx:for-item="items" wx:key="index">
+            <image src='{{items.picAddr?items.picAddr:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <temponent threeList="{{threeList}}" userAuthorization="{{userAuthorization}}" cartQuantity="{{cartQuantity}}" bind:myevent="toggleToast"></temponent>
+  <temponentsecond twoList="{{twoList}}" userAuthorization="{{userAuthorization}}" cartQuantity="{{cartQuantity}}" bind:myevent="toggleToast"></temponentsecond>
+  <temponentfirst oneList="{{oneList}}" userAuthorization="{{userAuthorization}}" cartQuantity="{{cartQuantity}}" bind:myevent="toggleToast"></temponentfirst>
+  <!-- 优惠弹窗 -->
+  <shade clickSwiper="{{clickSwiper}}" branchName="{{branchName}}" range="{{range}}" pickupFrom="{{pickupFrom}}" deliveryFrom="{{deliveryFrom}}" coupon="{{coupon}}" planName="{{planName}}" branchNo="{{branchNo}}" planNamen="{{planNamen}}" planNamec="{{planNamec}}"
+    planNamef="{{planNamef}}" planNames="{{planNames}}"></shade>
+  <!-- 最近店铺 -->
+  <view class='select' wx:if="{{select}}" catchtap="closeImg" catchtouchmove="preventTouchMove">
+    <view class='select-view' catchtap="toSelect">
+      <view class='nearby'>你附近的门店～
+        <image catchtap='closeImg' src='../../images/close1.svg'></image>
+      </view>
+      <view class='selectBranch' wx:for="{{selectBranch}}" wx:key='index' catchtap='clickSelect' data-item="{{item}}">
+        <text class='select-text1'>{{item.branchName}}</text>
+        <text class='select-text2'>{{item.range>500?we.toFixed(item.range/1000)+"km":we.toFixed(item.range)+"m"}}</text>
+      </view>
+      <view class='selectbranch' catchtap='branchs'>
+        选择其他门店
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="background_image" wx:if="{{!defaults}}">
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/f61440c57b88463aa5af59722304c910.jpg"></image>
+</view>
+<quit wx:if="{{quit}}"></quit>
+<redPacket wx:if="{{order.first}}" userAuthorization="{{userAuthorization}}" bind:myevent="event" bind:event="closeEvent"></redPacket>
+
+<view class="reminder" wx:if="{{(!userAuthorization || order.three) && !judegPopup}}">
+  <view class="reminder-view">
+    <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/d613cbfe387e4f78b166cdf4da20f72e.png" class="reminder-view">
+
+      <image class="goods-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/66fe3fbc45f04d02b6c32ff15692364a.png"></image>
+      <image class="good-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/8c3cebb5b6a84087ab1c74757fcd4977.png"></image>
+    </image>
+    <image class="good-button ballon" catchtap="giftSkip" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/a94b92acb3444c2f917c0123280ed22d.png"></image>
+    <image class="close" catchtap="closeGiftSkip" src="../../images/close.svg"></image>
+  </view>
+
+
+</view>
+
+<view class="explains" wx:if="{{showRemoteArea && branchNo=='888888'}}">
+  <view class="explains-view">
+    <view class="explain-title">超出配送范围</view>
+    <view class="explains-first">
+      <view class="subtitle-text">
+
+        <text wx:for="{{remoteArea}}" wx:key="index">{{item}},</text> 等地区,暂不支持配送。
+      </view>
+    </view>
+    <view class="buttonConfirm" catchtap="buttonConfirm">我知道了</view>
+  </view>
+
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    if (value) {
+      if (typeof value == "number") {
+        return value.toFixed(2);
+      }
+    }
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

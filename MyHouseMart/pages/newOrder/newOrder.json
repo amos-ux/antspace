@@ -1,0 +1,11 @@
+{
+    "usingComponents": {
+      "wux-qrcode": "../../component/qrcode/index",
+      "quit":"../../component/quit/quit"
+    },
+  "navigationBarBackgroundColor": "#FFF",
+  "navigationBarTitleText": "订单列表",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle":"dark"
+}

@@ -1,0 +1,113 @@
+<view>
+  <swiper class="top_swiper" autoplay circular interval="{{img.spaceTime*1000}}" indicator-dots indicator-color="rgba(255,255,255,0.5)" indicator-active-color="rgba(255,255,255,1)" wx:if="{{img.advers.length>1}}">
+    <swiper-item wx:for="{{img.advers}}" wx:key="{{index}}">
+      <image src="{{item.adImg}}" data-item="{{item}}" catchtap="imgOclick" data-index="{{index}}" class="slide-image" />
+    </swiper-item>
+  </swiper>
+  <view class="top_swiper" wx:if="{{img.advers.length==1}}">
+    <image src="{{img.advers[0].adImg}}" class="slide-image" />
+  </view>
+  <scroll-view class="content">
+    <view class="list" wx:for="{{list}}" wx:key="item" data-item="{{item}}" catchtap="toShop">
+      <view class="left">
+        <image lazy-load style="opacity:{{item.stockQty==0?'0.6':1}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view wx:if="{{item.stockQty==0}}" class="end">已售罄</view>
+        <view class="{{item.stockQty==0?'text_end':'text'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返现￥{{item.refundValue}}</view>
+        <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+      </view>
+      <view class="right">
+        <view class='title'>{{item.itemName}}</view>
+        <!-- <view class="length">销售量:{{item.stockQty}}</view> -->
+        <view class="{{item.stockQty!=0?'item_first_Discount':'item_first_Discount_end'}}" hidden="{{item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+        <view class="chen">
+          <view class="{{item.stockQty==0?'start_money_end':'start_money'}}">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+          <view class="end_money" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</view>
+        </view>
+        <image style="display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" src="../../images/add.svg" />
+        <!--   -->
+        <view class="right_bottom" style="display:inline-block" wx:if="{{item.itemStatus=='FORSALE'}}">
+          <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
+          <image class="chen" src="../../images/Question.svg" catchtap='check' data-index="{{item}}" />
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  <view wx:if='{{isRefreshing}}' class="weui-loadmore">
+    <view wx:if='{{isLoadingMoreData}}'>
+      <view class="weui-loading"></view>
+      <view class="weui-loadmore-tips">正在加载更多...</view>
+    </view>
+    <view wx:else>
+      <view class="weui-loadmore-tips">我是有底线的</view>
+    </view>
+  </view>
+  <view class="date" wx:if="{{Advancesale}}" catchtap='close'>
+    <view class="model">
+      <view class="date_title">供应说明</view>
+      <view class="model_list" wx:for="{{dateAdvancesale}}" wx:key="{{item}}">
+        <view class="date_center">{{item.stName}}</view>
+        <view class="start_date">供应时间:{{item.activityTimeFrom}}-{{item.activityTimeTo}}、送达时间:{{item.deliveryTimeFrom}}-{{item.deliveryTimeTo}}</view>
+      </view>
+      <!-- <view class="date_center">供应时段</view>
+                <view class="start_date">{{dateAdvancesale.stName}}供应: {{dateAdvancesale.stTimeJson.range[0].supplyForm}}-{{dateAdvancesale.stTimeJson.range[0].supplyTo}}</view>
+                <view class="date_bottom">约定送达时间</view>
+                <view class="end_date">{{dateAdvancesale.stName}}: {{dateAdvancesale.stTimeJson.range[0].sendForm}}-{{dateAdvancesale.stTimeJson.range[0].sendTo}}</view>-->
+      <view class="date_btn" catchtap='close'>我知道了</view>
+    </view>
+  </view>
+  <view class="back" wx:if="{{shopLength>0}}">
+    <view class="back_shop" catchtap="RouterShop">
+      <text class="length">{{shopLength}}</text>
+      <image src="../../images/shop.svg" />
+    </view>
+  </view>
+  <view class='specification' wx:if="{{specification}}" catchtap='specification'>
+    <view class='specification-content' catchtap='specificationContent'>
+      <view class='specification-goods'>
+        <view class='specification-img'>
+          <image src='{{extOptions.picAddr?extOptions.picAddr:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+        </view>
+        <view class='specification-name'>
+          <view class='goods-item'>
+            <text class='itemText'>{{extOptions.itemName}}</text>
+            <view class='itemView' catchtap='over'>
+              <image src='../../images/over.svg'></image>
+            </view>
+          </view>
+          <view class='itemPrice'>
+            <view>
+              <text class='reduction' hidden="{{extOptions.satisfied.length==0}}">{{extOptions.satisfied[0]}}</text>
+            </view>
+            <view class='reductionPrice'>
+              <text class='Pricetext'>￥{{extOptions.salePrice}} </text>
+              <text class='Pricetext1' hidden="{{item.disPrice==null||0}}" style="text-decoration:line-through">¥{{extOptions.disPrice}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class='temperature'>
+        <block wx:for="{{extOptions.extOptions}}" wx:key="indexs">
+          <view class='temperatureView'>
+            <view class='temperatureKind'>{{item.dataName}}</view>
+            <view class='temperaturecontent'>
+              <text class='temperaturetext {{items.isShow&&items.isShow?"alter":""}}' catchtap='shut' data-item="{{item}}" wx:for="{{item.options}}" data-index="{{index}}" wx:key="indexs" wx:for-item="items">{{items.name}}</text>
+            </view>
+          </view>
+        </block>
+
+      </view>
+      <view class='temperatureCart' catchtap='joinCart'>
+        加入购物车
+      </view>
+    </view>
+  </view>
+  <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;"></view>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

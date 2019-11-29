@@ -1,0 +1,31 @@
+<view class="page" wx:if="{{show}}">
+  <view class="window">
+    <view class="window-top">
+      本次活动成功邀请了
+      <text class="window-fixed"></text>
+    </view>
+    <view class="window-content">
+      <view class="window-list" wx:for="{{listValue}}" wx:key="index">
+        <view class="box">
+
+          <view class="window-user">
+            <view class="window-icon">
+              <image src="{{item.avatarUrl}}"></image>
+            </view>
+            <view class="window-name">{{item.userName}}</view>
+          </view>
+          <view class="window-text">
+            获得
+            <text>{{item.value}}</text>
+          </view>
+
+        </view>
+      </view>
+    </view>
+    <view class="window-bottom">
+      <view class="window-button" catchtap="close">
+        我知道了
+      </view>
+    </view>
+  </view>
+</view>

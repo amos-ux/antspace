@@ -1,0 +1,248 @@
+page{
+  height: 100%;
+}
+.page{
+  width: 100%;
+  height: 100%;
+  background: url("https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/74a8d1112d5ece32c973c5dbd858e6e.png") no-repeat;
+  background-size: cover
+}
+/* .qr{
+  width: 100%;
+  height: 100%
+} */
+/* .wux-class{
+  width: 100%;
+  height: 100%
+} */
+.text{
+  width: 100%;
+  height: 126rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  color: #63646B;
+  font-size: 32rpx;
+  font-weight: 500;
+  padding-bottom: 40rpx;
+}
+.advertising{
+  width: 100%;
+  height: 128rpx;
+  display: flex;
+  justify-content: center
+}
+.advertising image{
+  width: 670rpx;
+  height: 100%;
+}
+.yard{
+  width: 100%;
+  height: 742rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.yard-view{
+  width: 670rpx;
+  height: 710rpx;
+  border-radius: 16rpx;
+  background: #fff
+}
+.yard-text{
+  width: 100%;
+  height: 86rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  color: #2B2D33;
+  font-size: 36rpx;
+  font-weight: 500
+}
+.yardPay{
+  width: 100%;
+  height: 524rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.yardView{
+  width: 420rpx;
+  height: 420rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center
+  /* background: #fff */
+}
+.pay{
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom-left-radius: 16rpx;
+  border-bottom-right-radius: 16rpx;
+
+}
+.paySwtice{
+  width: 100%;
+  height: 80rpx;
+   border-bottom-left-radius: 16rpx;
+  border-bottom-right-radius: 16rpx;
+  background: #F5F6F7;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+.pay-img{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative
+}
+.pay-img image{
+  width: 36rpx;
+  height: 36rpx;
+}
+.payment{
+  margin-left: 12rpx;
+  color: #2B2D33;
+  font-size: 28rpx
+}
+.pay-img::after{
+  content: " ";
+  display: inline-block;
+  height: 12rpx;
+  width: 12rpx;
+  border-width: 2rpx 2rpx 0 0;
+  border-color: #B8B8B8;
+  border-style: solid;
+  transform: matrix(0.71,0.71,-.71,0.71,0,0);
+  top: -2;
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  right: -28rpx;
+}
+.hint{
+  width: 100%;
+  height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  color: #A67411;
+  font-size: 28rpx
+}
+
+
+.drawer_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  
+  z-index: 999;
+  background: #000;
+  opacity: 0.2;
+  overflow: hidden;
+}
+/*content*/
+.drawer_attr_box {
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1001;
+  background: #fff;
+}
+.drawer_content {
+width: 100%;
+height: 720rpx;
+}
+.choose{
+  width: 100%;
+  height: 158rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2rpx solid #E8E8E8;
+}
+.choose-view{
+  width: 100%;
+ 
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative
+}
+.choose-view image{
+  width: 40rpx;
+  height: 40rpx;
+  position: absolute;
+  right: 32rpx;
+}
+.choose-view view{
+  color: #2B2D33;
+  font-weight: 500;
+  font-size: 32rpx;
+
+}
+.choose-hint{
+  color: #63646B;
+  font-size: 26rpx
+}
+.walletPay{
+  width: 100%;
+  height: 116rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2rpx solid #E0E0E0
+}
+.wallet-text{
+  margin-left: 32rpx;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center
+}
+.wallet-text image{
+        width: 48rpx;
+        height: 46rpx;
+}
+.wallet-text view{
+  color: #2B2D33;
+  font-size: 30rpx;
+  margin-left:16rpx; 
+}
+.purse{
+  margin-right: 32rpx;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.purse-view{
+  margin-right: 16rpx;
+  color: #FF7459;
+  font-size: 28rpx;
+}
+.purse-view1{
+  width: 36rpx;
+  height: 36rpx;
+  border: 2rpx solid #C3C4C7;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+.purse-view1 image{
+  width: 36rpx;
+  height: 36rpx;
+}

@@ -1,0 +1,36 @@
+<!--pages/invoice/invoice.wxml-->
+<view class='invoice'>
+  <view class='background'></view>
+  <view class='invoice_type'>
+    <text>发票类型</text>
+    <text>电子发票</text>
+  </view>
+  <view class='title_type'>
+    <text>抬头类型</text>
+    <radio-group class="radio-group" bindchange="radioChange">
+      <radio class="radio" wx:for-items="{{items}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
+          <text>{{item.value}}</text>
+      </radio>
+     </radio-group>
+  </view>
+  <view class='title_name'>
+    <text>抬头名称</text>
+    <input placeholder='填写抬头名称' placeholder-style="color: #ADADAA;" bindinput="titleName"></input>
+  </view>
+  <view class='invoice_number' wx:if="{{typestate}}">
+    <text>发票税号</text>
+    <input placeholder='填写纳税人识别号' placeholder-style="color: #ADADAA;" bindinput="invoiceNumber"></input>
+  </view> 
+  <view class='invoice_money'>
+    <text>发票金额</text>
+    <text>{{message.totalPayAmount}}</text>
+  </view>
+  <view class='background'></view>
+  <view class='email'>
+    <text>电子邮箱</text>
+    <input placeholder='邮箱用来接收电子发票' placeholder-style="color: #ADADAA;" bindinput="email" bindblur="eMail"></input>
+  </view>
+  <view class='invoice_commit'>
+    <button class='commit' bindtap='commit'>提交</button>
+  </view>
+</view>

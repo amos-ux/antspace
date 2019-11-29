@@ -1,0 +1,179 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"enhance": false,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"uglifyFileName": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": false,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		},
+		"bundle": false
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.9.4",
+	"appid": "wx959b6f560664682c",
+	"projectname": "MyHouseMartTEST",
+	"cloudfunctionTemplateRoot": "",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"scripts": {
+		"beforeCompile": "",
+		"beforePreview": "",
+		"beforeUpload": ""
+	},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 2,
+			"list": [
+				{
+					"id": 0,
+					"name": "pages/face/face",
+					"pathName": "pages/face/face",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "pages/myPage/myPage",
+					"pathName": "pages/myPage/myPage",
+					"query": "status=openVip",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "pages/paySuc/paySuc",
+					"pathName": "pages/paySuc/paySuc",
+					"query": "payType=wechat",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "my_member/orderDetails/orderDetails",
+					"pathName": "my_member/orderDetails/orderDetails",
+					"query": "status=greatPackage",
+					"scene": 1014
+				},
+				{
+					"id": 4,
+					"name": "首页",
+					"pathName": "pages/index/index",
+					"query": "status= vipInterests",
+					"scene": null
+				},
+				{
+					"id": 5,
+					"name": "my",
+					"pathName": "my_member/JoinMember/JoinMember",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 6,
+					"name": "my_member/inviteFriends/inviteFriends",
+					"pathName": "my_member/inviteFriends/inviteFriends",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 7,
+					"name": "pages",
+					"pathName": "pages/paySuc/paySuc",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/myPage/myPage",
+					"pathName": "pages/myPage/myPage",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 9,
+					"name": "my_member/militaryExploits/militaryExploits",
+					"pathName": "my_member/militaryExploits/militaryExploits",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "my_member/wallet/wallet",
+					"pathName": "my_member/wallet/wallet",
+					"query": "date=2019-04-03",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "my_member/JoinMember/JoinMember",
+					"pathName": "my_member/JoinMember/JoinMember",
+					"query": "date=2019-04-03",
+					"scene": null
+				},
+				{
+					"id": 12,
+					"name": "登录注册",
+					"pathName": "pages/register/register",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 13,
+					"name": "商品详情",
+					"pathName": "pages/goodsDetails/goodsDetails",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "OrderList/logistics/logistics",
+					"pathName": "OrderList/logistics/logistics",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/after/after",
+					"pathName": "pages/after/after",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

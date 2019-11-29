@@ -1,0 +1,9 @@
+<view class="select-red" catchtouchmove="preventTouchMove">
+  <view class="new_block">
+    <view class="open_btn" >
+      <image class="open_btn_bg" src="../../images/open_btn.svg" catchtap="skipButton" style="animation: {{animationData}}" />
+    </view>
+    <image class="new_user" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/e29d3b63c2d44fd084812be9360d6cc4.png"  />
+    <image class="user_close" catchtap="close" src="../../images/close.svg" />
+  </view>
+</view>

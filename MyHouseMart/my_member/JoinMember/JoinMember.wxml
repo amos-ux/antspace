@@ -1,0 +1,142 @@
+<view class="member">
+  <view class="top">
+    <view class="userinfo">
+      <image src="{{img}}" />
+      <view class="member-right">
+        <view class="name">{{name}}</view>
+        <view class="member-date">{{chose.memberStatus=='NON_MEMBERS'?'':vipText?vipText:''}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="member-content">
+    <view class="content-top">
+      <view class="title">会员权益</view>
+      <image class="content-img" src="../../images/right-wallet.svg" />
+      <text class="content-xq" catch:tap="toOpenVip">了解权益</text>
+    </view>
+    <view class="equity">
+      <view class="item">
+        <image class="equity-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/c5bc7eaa7bfc4753a2d3a5338296263c.svg" />
+        <view class="equity-title">会员返现权</view>
+      </view>
+      <view class="item">
+        <image class="equity-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/0f487a9e1ae3475ba5003d33d9a56c65.svg" />
+        <view class="equity-title">内邀特权</view>
+      </view>
+      <view class="item">
+        <image class="equity-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/857b87ecef944c749f1ce586b817ce94.svg" />
+        <view class="equity-title">专享特价</view>
+      </view>
+      <view class="item">
+        <image class="equity-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/381aa6f3e4104499a29492b80bc069a1.svg" />
+        <view class="equity-title">敬请期待</view>
+      </view>
+    </view>
+    <view class="content-center" wx:if="{{show==true}}">
+      <view class="{{Tabindex==1?'experience':'experience-hover'}}" wx:if="{{experienceCardUsed==false}}" catch:tap="tabbar" data-index='1'>
+        <view class="experience-top">推荐</view>
+        <view class="experience-tilte">首月体验会员</view>
+        <view class="experience-content">需要老会员邀请才可获得体验</view>
+        <view class="experience-moneny">
+          <text class="bs">￥</text>
+          <text class="moneny-ty">0.0</text>
+          <text class="moneny">￥{{price}}</text>
+        </view>
+        <image wx:if="{{Tabindex==1}}" class="checked" src="../../images/checked.svg" />
+      </view>
+      <view class="{{Tabindex==2?'month-hover':'month'}}" style="margin-left:{{experienceCardUsed==true?'0rpx':'22rpx'}}" catch:tap="tabbar" data-index='2'>
+        <view class="month-title">1个月会员</view>
+        <view class="month-content">专属返现权、内邀权</view>
+        <view class="month-moneny">
+          <text class="bs">￥</text>
+          <text class="month-moneny-child">{{price}}</text>
+        </view>
+        <image wx:if="{{Tabindex==2}}" class="checked" src="../../images/checked.svg" />
+      </view>
+      <view wx:if="{{Tabindex==2}}" style="display:{{experienceCardUsed==false?'block':''}};float:{{experienceCardUsed==false?'right':'none'}}" catch:tap="renew" class="renew-father">
+        <label class="checkbox">
+          <radio-group>
+            <!-- checked="{{renewal}}" -->
+            <radio class="automatic" disabled >
+            </radio>
+          </radio-group>
+          <text class="renew">开启自动续费，可随时取消</text>
+          <!-- <navigator target="miniProgram" extra-data="{{extradata}}" app-id="wxbd687630cd02ce1d" class="renew">开启自动续费，可随时取消</navigator > -->
+        </label>
+      </view>
+    </view>
+  </view>
+  <view class="pay" wx:if="{{payShow==true&&Tabindex!=2}}">
+    <view class="weixin">
+      <text class="type">内邀码兑换</text>
+      <view class="weixin-right">
+          <view wx:if="{{referenceCode}}" class="OkCode">{{referenceCode}}</view>
+          <input wx:else bindinput="onChange" class="NoCode" value="{{value}}" placeholder="请输入5位邀请码" maxlength="5" />
+      </view>
+    </view>
+  </view>
+  <view class="buttom">
+    <button disabled="{{disabled}}" wx:if="{{Tabindex==1?value.length==5||referenceCode!=''?true:false:true}}"  class="btn" catch:tap="pay">{{Tabindex==1?'支付0元成为会员':'支付'+price+'元成为会员'}}</button>
+    <button wx:else class="btnNull">立即加入</button>
+  </view>
+  <view class="model" wx:if="{{model}}">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/a9e0339adbd244e0b91abbf26283032c.png" class="Luminescence" />
+    <view class="tc">
+      <view class="tc-child">
+        <image src="/images/jmTc02.svg" class="model-vip" />
+        <view class="model-title">恭喜，你成为我家会员</view>
+        <view class="model-title2">只差一步激活内邀权</view>
+        <view class="model-title3">需要一笔{{firstValue}}元的订单，才能获得该权益</view>
+        <view class="btn1" catch:tap="toOrderDetails">会员权益激活</view>
+        <view style="margin-top: 36rpx;">
+          <view class="btn2" catch:tap="toMyPage">门店激活</view><view class="btn2" catch:tap="toInviteFriends">了解内邀权</view>
+        </view>
+        
+        <image class="close" catch:tap="close" src="/images/close.svg" />
+      </view>
+    </view>
+  </view>
+</view>
+<view class="model" wx:if="{{automaticModel==true}}">
+      <view class="AutomaticRenewal">
+        <view class="AutomaticRenewal-title">自动续费好处</view>
+        <swiper class="swiper" indicator-dots
+          autoplay interval="6000" circular
+          >
+          <swiper-item>
+            <view class="swiper-title">续费返现不损</view>
+            <view class="swiper-content">会员期间，才能持续获得继续奖励；会员过期，将损失当月的续费奖励</view>
+          </swiper-item>
+          <swiper-item>
+            <view class="swiper-title">内邀返现不断线</view>
+            <view class="swiper-content">会员期间，才能持续跟进内邀者一旦过期，将损失当月“在路上”的邀请奖励</view>
+          </swiper-item>
+      </swiper>
+      <view class="AutomaticRenewal-bottom">
+        <text class='AutomaticRenewal-bottom-left' catch:tap="closeAuto">去意已决</text>
+        <text class='AutomaticRenewal-bottom-right' catch:tap="AutoRenew">自动续费</text>
+      </view>
+      </view>
+</view>
+  <view class="model" wx:if="{{isVip}}">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/a9e0339adbd244e0b91abbf26283032c.png" class="Luminescence" />
+    <view class="tc">
+      <view class="tc-child-vipOk">
+        <image src="/images/jmTc02.svg" class="model-vipOk" />
+        <view class="model-title">恭喜，内邀权已激活</view>
+        <view class="model-title2-vipOk">邀好友赚返现</view>
+        <view class="model-title3-vipOk">邀请1人得10元</view>
+        <view class="btn1-vipOk" catch:tap="toInviteFriends">立即邀请好友</view>
+        <image class="close-vipOk" catch:tap="closeVip" src="/images/close.svg" />
+      </view>
+    </view>
+  </view>
+<wxs module="we">
+  var toFixed = function(value) {
+    value = Number(value ? value : 0)
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

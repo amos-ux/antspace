@@ -1,0 +1,88 @@
+<view class='page'>
+  <scroll-view scroll-y="true" class='scroll' bindscroll="event">
+    <view class='page-img'>
+            <image src="{{setImg}}" class="slide-image" />
+    </view>
+    <view class='page-view'>
+      <view class='pageView {{scrollPosition?"pageViews":""}}'>
+     
+        <view class='page-left' style='{{e==index?"background:#fff;color:#2B2D33;font-weight:500":""}}' catchtap="second" wx:for="{{setMeal}}" wx:key='index' data-combItemNo="{{item.combItemNo}}" data-index='{{index}}' >
+          <image lazy-load='true' src='{{item.thumbPicture}}'></image>
+          <text >{{item.combName}}</text>
+          <view class='color' wx:if="{{e==index}}"></view>
+        </view>
+     
+      </view>
+      <view class='white'>
+
+      </view>
+      <view class='cloumn'>
+        <view class='page-goods {{scrollPosition?"pageGoods":""}}' >
+
+          <view class='kindList'>
+            <view class='kind'   style='background:{{i==index?setMeal[e].goods[i].groupColor:""}}'  wx:for="{{setMeal[e].goods}}" catchtap='secondList' data-index="{{index}}" wx:key="index" wx:for-item="items">{{items.groupName}}</view>
+          </view>
+        </view>
+        <view style='margin-top:-48rpx'>
+          <view class='goodList' wx:for="{{setMeal[e].goods[i].combinationGroupGoods}}" wx:key="index" >
+            <view class='goodsView'>
+              <image style='{{item.stockQty==0?"opacity:.6":"opacity:1"}}' lazy-load='true' src='{{item.itemImg?item.itemImg:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+                <view class='over' wx:if='{{item.stockQty==0}}'>已售罄</view>
+            </view>
+            <view class='goodsName'>
+              <view class='itemName'>{{item.itemName}}</view>
+              <view class='itemPrice'>¥{{item.salePrice}}</view>
+              <view class='itemNumber'>
+                <image src='../../images/subtract.svg' lazy-load='true' catchtap='numChange' data-itemno="{{item.itemNo}}" data-type="subtract" 
+                wx:if="{{item.quantity>0}}"></image>
+                <text wx:if="{{item.quantity>0}}">{{item.quantity}}</text>
+                <image src='{{setMeal[e].goods[i].addColor?"../../images/addColor.svg":"../../images/adds.svg"}}' catchtap='numChange'  
+                data-itemno="{{item.itemNo}}" data-type="add" wx:if='{{item.stockQty!==0}}'></image>
+              </view>
+            </view>
+          </view>
+        </view>
+
+      </view>
+    </view>
+  </scroll-view>
+    <view class='commeal' wx:if="{{cartShow}}">
+          <view class='commeal-content'>
+              <view class='commeal-img' catchtap='shopping'>
+                  <image src='../../images/shoppingimg.svg'></image>
+                  <text>已选商品</text>
+                  <hr  class="hr"/>
+              </view>
+          </view>
+          <view class='commeal-left' catchtap='show'>选好了</view>
+    </view>
+    <view class='big' catchtap='bigShow' wx:if="{{show}}">
+        <view class='bigView' catchtap='bigView' >
+              <view class='bigGoods'  wx:for="{{setMealIndex}}" wx:key="index" wx:if="{{item.goodsList.length!==0}}">
+              
+                  <view class='bigName'>
+                  <view style='display:flex;justify-content:flex-start;margin-left:48rpx'>
+                    <text class='text1'>{{item.combName}}</text>
+                      <text class='text2'>¥{{item.combPrice}}</text>
+                  </view>
+                        <!-- <image catchtap='imgShow'  src='../../images/close1.svg'></image> -->
+                  </view>
+                   <!-- //渲染 -->
+                  <view style='margin-top:-24rpx;' wx:for="{{item.goodsList}}" wx:key="index" wx:for-item="goods">
+                  <view class='comGoods'>
+                        <view class='comGoods-view'>
+                            <image src='{{goods.itemImg}}'></image>
+                            <text>{{goods.itemName}}</text>
+                        </view>
+                        <text class='comGoods-text'>{{goods.quantity}}份</text>
+                  </view>
+                  </view>
+              </view>
+              <view class='skip' wx:if="{{!difference}}">还差<text>{{money}}</text>元起送</view>
+                 <view class='money'>
+                      <view class='money-goods' catchtap='contInue'>继续选购</view>
+                      <view class='money-pay' catchtap='pay'>立即结算</view>
+                 </view>
+        </view>
+    </view>
+</view>

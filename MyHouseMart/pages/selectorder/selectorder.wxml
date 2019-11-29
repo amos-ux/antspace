@@ -1,0 +1,67 @@
+<view>
+ <block wx:for="{{mallBranchs}}" wx:key="index">
+    <view class='scrollView' style="margin-top:22rpx"  >
+      <view class='scroll-view' bindtap='selectMall' data-branch="{{item}}">
+        <view class='scroll-top'>
+          <view class='scroll-top-left'>{{item.branchName}}</view>
+         
+        </view>
+        <view class='scroll-bottom'>
+          <view class='scroll-bottom-left'>{{item.locDetail}}</view>
+          <view class='scroll-bottom-right'>
+             <!-- <view class='scroll-top-right' wx:if="{{item.range < 500}}">距您{{we.toFixed(item.range)}}m</view>
+          <view class='scroll-top-right' wx:if="{{item.range > 500}}">距您{{we.toFixed(item.range/1000)}}km</view> -->
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <text class='view-order' wx:if="{{commonBranchs.length!==0}}">常用店铺</text>
+
+  <block wx:for="{{commonBranchs}}" wx:key="index">
+    <view class='scrollView' scroll-y="true">
+      <view class='scroll-view' bindtap='selectBranch' data-branch="{{item}}">
+        <view class='scroll-top'>
+          <view class='scroll-top-left'>{{item.branchName}}</view>
+         
+        </view>
+        <view class='scroll-bottom'>
+          <view class='scroll-bottom-left'>{{item.locDetail}}</view>
+          <view class='scroll-bottom-right' catchtap="openMap" data-map="{{item.locDetail}}" data-branchName="{{item.branchName}}">
+            <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8ae7751dc57c4c4bb46ecb8a181d44f8.svg"></image>
+            <view class='scroll-top-right' wx:if="{{item.range < 500}}">距{{we.toFixed(item.range)}}m</view>
+          <view class='scroll-top-right' wx:if="{{item.range > 500}}">距{{we.toFixed(item.range/1000)}}km</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <text class='view-order'>最近店铺</text>
+
+  <block wx:for="{{userBranchs}}" wx:key="indexs">
+    <view class='scrollView' >
+      <view class='scroll-view' bindtap='selectBranchs' data-branch="{{item}}">
+        <view class='scroll-top'>
+          <view class='scroll-top-left'>{{item.branchName}}</view>
+          
+        </view>
+        <view class='scroll-bottom'>
+          <view class='scroll-bottom-left'>{{item.locDetail}}</view>
+          <view class='scroll-bottom-right' catchtap="openMap" data-map="{{item.locDetail}}" data-branchName="{{item.branchName}}">
+              <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8ae7751dc57c4c4bb46ecb8a181d44f8.svg"></image>
+            <view class='scroll-top-right' wx:if="{{item.range < 500}}">{{we.toFixed(item.range)}}m</view>
+          <view class='scroll-top-right' wx:if="{{item.range > 500}}">{{we.toFixed(item.range/1000)}}km</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
+<wxs module="we">
+  var toFixed = function(value) {
+    return value.toFixed(2);
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>

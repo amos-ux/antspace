@@ -1,0 +1,47 @@
+<view class='shippingAddress' wx:if="{{location.length == 0?false:true}}">
+  <view class='addressItem' catchtap='select' data-index="{{index}}" wx:for="{{usable}}" wx:key="index">
+    <view class='addressMessage'>
+      <text class='addressDetail'>{{item.locDetail}}</text>
+      <view class='addressName'>
+        <text class='adduserName'>{{item.userName}}</text>
+        <text class='adduserNumber'>{{item.userNumber}}</text>
+        <view class='adddefault' wx:if="{{item.defaultAddress=='Y'}}">默认</view>
+        <view class='addresidence' wx:if="{{item.memberAddressType=='home'}}">住宅</view>
+        <view class='addcompany' wx:if="{{item.memberAddressType=='company'}}">公司</view>
+      </view>
+    </view>
+    <image class='addressImg' src='../../images/editor.svg' catchtap='modification' data-id='{{index}}'></image>
+  </view>
+</view>
+<!-- 超出范围的地址 -->
+<view class='unusable' wx:if="{{unusable.length}}">
+  <view class='BeyondDistribution'>
+    <text>以下地址超出配送范围</text>
+    <text>港澳台、新疆、西藏、内蒙古、青海、海南、宁夏等地区，暂不支持配送。</text>
+  </view>
+  <!-- 不可用地址 -->
+  <view class='notApplicable' wx:for="{{unusable}}" wx:key="index">
+    <view class='locationItem'>
+      <text class='locationDetail'>{{item.locDetail}}</text>
+      <view class='locationName'>
+        <text class='userName'>{{item.userName}}</text>
+        <text class='userNumber'>{{item.userNumber}}</text>
+        <view class='default' wx:if="{{item.defaultAddress=='Y'}}">默认</view>
+        <view class='residence' wx:if="{{item.memberAddressType=='home'}}">住宅</view>
+        <view class='company' wx:if="{{item.memberAddressType=='company'}}">公司</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class='locationImg' mode="widthFix" wx:if="{{hint}}">
+  <image src='https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/e0ed837cb4eb43ed9217e26ce02cee85.png'></image>
+  <text>你还没有收货地址</text>
+  <view class='addLocation'>
+    <button bindtap='take'>添加收货地址</button>
+  </view>
+</view>
+
+<view class='exist-address' wx:if="{{!hint}}">
+  <button bindtap='take'>添加收货地址</button>
+</view>

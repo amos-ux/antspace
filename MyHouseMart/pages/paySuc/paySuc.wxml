@@ -1,0 +1,92 @@
+<view class="container" wx:if="{{payType=='wallet'}}">
+  <image class="payment" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/0c6ca58d79144f6da515e28722890fd5.png"/>
+  <view class="orderSuc">
+    <view class="orderTop">
+      <view class="redFlag">
+        <image class="red-flag" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/19eda67d85cc43308975898aec20e190.svg" />
+        <text class="flag-text">成为会员 攒钱来买单</text>
+      </view>
+      <view class="rebate">
+        <image class="left-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/d5ce11a0ec054373a10552e01e3f3f09.svg" />
+        <view class="discount">
+          <view class="distext" wx:if="{{payType!='renewal'}}">本单抵扣<text wx:if="{{userInfo}}">({{seconds}})</text></view>
+          <view class="distext" wx:if="{{payType=='renewal'}}">本单抵扣<text>({{seconds}})</text></view>
+          <view class="price">
+            <text class="price-mark">￥</text>
+            <text class="price-num">{{we.toFixed(payprice)}}</text>
+          </view>
+        </view>
+        <image class="right-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/4c7d91fbdb96401da09873fe9034b25e.svg" />
+      </view>
+    </view>
+    <view class="orderTicket" wx:if="{{ticketNum.length!=0}}">
+      <view class="ticket-mes">
+        <view class="discountNum">
+          <text class="general-text">本次消费获得</text>
+          <text class="discount-name">{{ticketNum}}</text>
+          <text class="general-text">已放入您的卡包</text>
+        </view>
+      </view>
+    </view>
+    <view class="wallet-invite" style="border-bottom:none;" wx:if="{{isVip}}">
+      <text class="invite-text">恭喜你，内邀权已激活</text>
+      <view class="invite-friend">
+        <text>邀好友赚返现，邀请1人得</text>
+        <text class="invite-num">10</text>
+        <text>元</text>
+      </view>
+      <view class="invite-btn" catchtap="toMember">邀请好友</view>
+    </view>
+    <view class="orderButton">
+      <view class="order-btn" catchtap="conTinue">返回首页</view>
+      <view class="order-btn" catchtap="order">查看详情</view>
+    </view>
+  </view>
+</view>
+<view class="wallet" wx:if="{{payType=='wechat' || payType=='renewal'}}">
+  <view class="wallet-top">
+    <image class="paysucc" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/6ddd6a2e1ccc4e1aaa989b31d5dfeedc.svg" />
+    <text class="wallet-text">支付成功({{seconds}})</text>
+    <view class="wallet-num">
+      <text class="wallet-sign">¥</text>
+      <text class="wallet-money">{{we.toFixed(payprice)}}</text>
+    </view>
+  </view>
+  <view class="wallet-discount" wx:if="{{userInfo || reAllMnt || ticketList}}">
+    <view class="discount" wx:if="{{payType=='renewal' && userInfo}}">
+      <text>会员有效期至</text>
+      <text>{{userInfo.effectiveTo}}</text>
+    </view>
+    <view class="discount" wx:if="{{payType=='wechat'}}">
+      <text>本次返现</text>
+      <text>¥ {{we.toFixed(reAllMnt)}}</text>
+    </view>
+    <view class="discount" wx:for="{{ticketList}}" wx:key="index" wx:if="{{ticketList.length!=0 && payType=='wechat'}}">
+      <text>本次消费获得</text>
+      <text>{{item.desc}}</text>
+    </view>
+  </view>
+  <view class="wallet-invite" wx:if="{{isVip}}">
+    <text class="invite-text">恭喜你，内邀权已激活</text>
+    <view class="invite-friend">
+      <text>邀好友赚返现，邀请1人得</text>
+      <text class="invite-num">10</text>
+      <text>元</text>
+    </view>
+    <view class="invite-btn" catchtap="toMember">邀请好友</view>
+  </view>
+  <view class="wallet-btns">
+    <view class="wallet-detail" catchtap="order" wx:if="{{payType != 'renewal'}}">查看订单详情</view>
+    <view class="wallet-detail" catchtap="toPerson" wx:if="{{payType == 'renewal'}}">查看会员详情</view>
+    <view class="wallet-index" catchtap="conTinue">回到首页</view>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(num) {
+    num = Number(num);
+    return num.toFixed(2);
+  }
+  module.exports = {
+    toFixed:toFixed
+  }
+</wxs>

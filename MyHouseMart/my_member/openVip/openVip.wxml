@@ -1,0 +1,12 @@
+<srcoll-view class="page" style="{{status=='openVip'?'padding-bottom: 170rpx;':''}}" scroll-y="true" wx:if="{{status=='openVip'}}">
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8d340a6619f246b0959d99aa3e29eadb.png"></image>
+</srcoll-view>
+<view class="big-box" catchtap="skipVip" wx:if="{{status=='openVip'}}">
+  <view>加入会员</view>
+</view>
+<view class="vipInterests" wx:if="{{status=='vipInterests'}}">
+  <image class="img1" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/3a52992cc95a44d7b3873d2d3b7180ec.png" />
+  <view class="join">
+    <view class="join_btn" catchtap="skipVip">加入会员</view>
+  </view>
+</view>

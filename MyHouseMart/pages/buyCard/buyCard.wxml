@@ -1,0 +1,58 @@
+<view class='buyCard'>
+  <view class='member'>
+    <text class='momberText'>开通会员 享受88折</text>
+    <image class='memberImg'  src='{{memberStuck}}'></image>
+    <text class='momberState'>{{member}}</text>
+    <text class='stuckType'>{{stuckType}}</text>
+    <view class='stuckMoney'>￥<text>{{stuckMoney}}</text></view>
+    <text class='validityPeriod'>会员有效时间{{validityPeriod}}天</text>
+  </view>
+  <view class='experience'>
+    <view class='free'>
+      <text>会员体验卡免费送</text>
+      <text>体验期：7天</text>
+    </view>
+    <view class='draw' catchtap='buyCard'>
+      <text class='_draw'wx:if="{{getType}}">点击领取</text>
+      <text class='draw_' wx:if="{{drawType}}">已领取</text>
+    </view>
+
+  </view>
+  <button class='btn' catchtap='purchase' disabled="{{dredge}}">立即开通会员</button>
+</view>
+<!-- 
+<view style='padding-left:{{headPaddingLeft}}px;padding-top:{{headPaddingTop}}px;overflow:hidden;padding-bottom:10px'>
+     <view class='share-fit ' >
+      <view class='warrap-box'>
+          <view class='user_icon-box'>
+              <image class='my_icon' mode='aspectFit' style='height:{{myhoustIconHeight}}px' src='../../images/my_house_icon.png'></image>
+          </view>
+          <!-- <button class='warrap-start btn-share'  bindtap='shareBtn'>
+              <image class='img' mode='aspectFit' src='../../images/zhuangf.png'></image>
+            </button> -->
+          <!-- <view>
+          </view>
+      </view>
+    </view> 
+  </view>
+<view class="container" wx:if="{{resultCode == 'ok'}}" style='height:{{scrollCardListHeight}}px;'>
+  <scroll-view scroll-y="true" class='card_list' style='height:100%;'>
+    <view class="card-view" wx:for="{{cardInfo}}" wx:key="items" wx:for-item="items" style="margin:0 auto;background-image: url({{items.cardImage}});width:{{windowsWidth*(550/750)}}px;height:{{windowsWidth*(650/750)*(364/650)}}px;">
+      <view style='color:#FFFFFF;font-size:40rpx;padding-top:{{windowsHeight * (70/1334)}}px;text-align: center;'>
+        <view wx:if="{{items.cardType=='experience'}}">
+          会员体验卡免费送
+        </view>
+        <view wx:else>
+          会员{{items.cardName}}{{items.price}}元
+        </view>
+      </view>
+      <view style='text-align: center;color:#F2F2F2'>会员有效期{{items.validityPeriod/86400}}天</view>
+      <view wx:if="{{items.cardType=='experience'}}">
+          <button class="buy-button" style='border-radius: 81px 100px 100px 81px;color:#FFFFFF;border-color:#FFFFFF;font-size:25rpx;width:{{windowsWidth*(220/750)}}px;margin-top:{{windowsHeight * (60/1334)}}px' catchtap="buyCard" data-cardType='{{items.cardType}}' data-cardNo="{{items.cardNo}}" loading="{{loadingable == items.cardNo}}" disabled='{{disableButton}}' plain='true' type='default'>立即领取</button>
+        </view>
+        <view wx:else>
+          <button class="buy-button" style='border-radius: 81px 100px 100px 81px;color:#FFFFFF;border-color:#FFFFFF;font-size:25rpx;width:{{windowsWidth*(200/750)}}px;margin-top:{{windowsHeight * (80/1334)}}px' catchtap="buyCard" data-cardType='{{items.cardType}}' data-cardNo="{{items.cardNo}}" loading="{{loadingable == items.cardNo}}" disabled='{{disableButton}}' plain='true' type='default'>购买</button>
+        </view>
+    </view>
+  </scroll-view>
+</view>  -->

@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="page-img">
+    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/59486ecfd39740eeb021dcc1d44a831a.png"></image>
+  </view>
+  <view class="page-text">获取地址位置失败</view>
+  <button class="page-location" open-type="openSetting">开启定位</button>
+</view>

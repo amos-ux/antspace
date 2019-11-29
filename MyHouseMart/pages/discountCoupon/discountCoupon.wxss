@@ -1,0 +1,253 @@
+page {
+  height: 100%;
+}
+
+.discount {
+  width: 100%;
+  height: 100%;
+  background: #f7f7f7;
+}
+
+.discountState {
+  width: 100%;
+  height: 48px;
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 80rpx;
+  box-sizing: border-box;
+  color: #a3a5ad;
+  font-size: 15px;
+  font-weight: 500;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+}
+
+.slidingBlock {
+  width: 64rpx;
+  height: 8rpx;
+  background: #ffa333;
+  border-radius: 4rpx;
+  position: absolute;
+  bottom: 0;
+  left: 90rpx;
+}
+
+.unused {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.noUse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lose {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.active {
+  color: #2b2d33;
+}
+
+.unused-message {
+  width: 100%;
+  padding: 100rpx 32rpx 24rpx 32rpx;
+  box-sizing: border-box;
+  background: #f7f7f7;
+}
+
+.outer {
+  width: 686rpx;
+  height: 260rpx;
+  border-radius: 12rpx;
+  background: #fff;
+  margin-top: 24rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.core {
+  width: 638rpx;
+  height: 212rpx;
+  border-radius: 12rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+
+/* 未使用 */
+
+.core-nouse {
+  background: linear-gradient(to right, #ffee2e, #ffd814);
+}
+
+/* 已使用 */
+
+.core-hasuse {
+  background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+}
+
+.discount-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.discount-name>text {
+  color: #63646b;
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.discount-money {
+  color: #63646b;
+}
+
+.discount-money-full {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.discountMoney {
+  font-size: 48rpx;
+  font-weight: 500;
+}
+
+.discount-money-break {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.discount-rule {
+  color: #856225;
+  font-size: 12px;
+}
+
+.discount-date {
+  color: #5c5b5a;
+  font-size: 24rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.discount-img {
+  width: 116rpx;
+  height: 116rpx;
+  position: absolute;
+  right: 32rpx;
+  top: 32rpx;
+  bottom: 72rpx;
+}
+
+.lose-message {
+  width: 638rpx;
+  height: 212rpx;
+  border-radius: 12rpx;
+  background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+
+.pop {
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pop-up {
+  width: 580rpx;
+  height: 810rpx;
+  background: #fff;
+  border-radius: 10rpx 10rpx;
+}
+
+.pop-up>view {
+  width: 100%;
+  height: 140rpx;
+  text-align: center;
+  line-height: 140rpx;
+  color: #63646b;
+  font-size: 36rpx;
+}
+
+.scroll {
+  width: 100%;
+  height: 670rpx;
+  padding: 0 46rpx 0 36rpx;
+  box-sizing: border-box;
+}
+
+.pop-img {
+  width: 80rpx;
+  height: 80rpx;
+  position: fixed;
+  bottom: 80rpx;
+  left: 336rpx;
+}
+
+.pop-img>image {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.scrollText {
+  color: #5c5b5a;
+  font-size: 30rpx;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+.unusedImg {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.unused-Img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 180rpx;
+  font-size: 12rpx;
+}
+
+.unused-Img>image {
+  width: 366rpx;
+  height: 300rpx;
+}
+
+.unused-Img>text {
+  color: #63646b;
+  font-size: 32rpx;
+}
+
+/*隐藏滚动条*/
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

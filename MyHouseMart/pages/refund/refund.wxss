@@ -1,0 +1,214 @@
+/* pages/refund/refund.wxss */
+page{
+background: #F5F6F7;
+}
+.refund{
+  width: 100%;
+  padding-top: 12px;
+  /* box-sizing: border-box;  */
+}
+.background{
+  background: #F5F6F7;
+  width: 100%;
+  height: 32rpx;
+  position: fixed;
+  top: 0;
+  border-top: 1px solid #D8D8D8;
+}
+.addList{
+  width: 100%;
+  /* padding-left: 32rpx; */
+  box-sizing: border-box;
+  background: #fff;
+  margin-bottom: 16rpx;
+}
+.order{
+  border-bottom: 1px solid #E6E6E6;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 32rpx;
+  box-sizing: border-box;
+}
+.order text:nth-child(1){
+  /* color: #63646B; */
+  font-size:28rpx;
+  font-family:PingFangSC-Regular,PingFangSC;
+  font-weight:400;
+  color:rgba(103,104,107,1);
+  margin-left: 32rpx;
+}
+/* .order text:nth-child(2){
+  color: #63646B;
+  font-size: 13px;
+} */
+.goodsItem{
+  padding-top: 4px;
+  /* padding-right: 32rpx; */
+  padding-bottom:12px;
+  box-sizing: border-box;
+}
+.goodsList{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.goodsList text:nth-child(1){
+  color: #292928;
+  font-size: 13px;
+}
+.refundMoney{
+  width: 100%;
+  height: 50px;
+  color: #63646B;
+  font-size: 15px;
+  line-height: 50px;
+  padding-left: 40rpx;
+  box-sizing: border-box; 
+  background: #fff;
+  margin-bottom: 16rpx;
+}
+.refundMoney text:nth-child(2){
+  margin-left: 19px; 
+  color: #2B2D33;
+  font-size: 15px;
+}
+.explain{
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  box-sizing: border-box;
+  padding-left: 40rpx;
+  position: relative;
+  background: #fff;
+}
+.explain>text{
+  color: #63646B;
+  font-size: 15px;
+}
+.explain>input{
+  color: #2B2D33;
+  font-size: 15px;
+  position: absolute;
+  top: 13px;
+  left: 100px;
+  width: 255px;
+}
+.commit{
+  width: 100%;
+  height: 56px;
+  position: fixed;
+  bottom: 0;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+.commit>button{
+  background: #FFEB0D;
+  color: #2B2D33;
+  font-size: 16px;
+  font-weight: 500;
+  width:704rpx;
+  height:44px;
+  padding:0;
+  margin:0;
+  text-align:center;
+  line-height:44px;
+}
+.mark{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65px;
+}
+.mark>image{
+  width: 18px;
+  height: 18px;
+}
+.mark>text{
+  color: #292928;
+  font-size: 15px;
+}
+.goodAdd{
+  width: 100%;
+  height: 160rpx;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  align-items: center;
+  /* background: red; */
+  /* border-radius: 8px; */
+  /* padding: 14px 24rpx 14px 24rpx; */
+  box-sizing: border-box;
+  margin-top: 8px;
+  position: relative;
+}
+.goodAdd::after{
+     content: '';
+     position: absolute;  /* 把父视图设置为relative，方便定位*/
+     top: 0;
+     left: 0;
+     width: 200%;
+     height: 200%;
+     /* content: ''; */
+     transform: scale(0.5);
+     transform-origin: 0 0;
+     /* box-sizing: border-box; */
+     border-bottom: 1rpx solid #E6E6E6;
+}
+.goodAdd:last-child::after{
+  content: '';
+  border: 0;
+}
+.addImage{
+  width: 100rpx;
+  height: 100rpx;
+  margin-left: 32rpx;
+  margin-right: 24rpx;
+}
+.addmessage{
+  width:79%;
+  
+  /* height:52px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* margin-left: 24rpx; */
+}
+.Name-money{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.addName{
+  width: 500rpx;
+  white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+  color: #2B2D33;
+  font-size: 15px;
+}
+.addNum{
+  color: #63646B;
+  font-size: 13px;
+}
+.addMoney{
+  color: #2B2D33;
+  font-size: 15px;
+  font-weight: 500;
+  margin-right: 32rpx;
+}
+.paddbottom{
+  width: 100%;
+  height: 56px;
+  background: #F5F6F7;
+}

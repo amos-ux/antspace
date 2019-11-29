@@ -1,0 +1,7 @@
+{
+  "disableScroll": true,
+  "enablePullDownRefresh": false,
+  "navigationBarBackgroundColor": "#FFF",
+  "navigationBarTitleText": "新增地址",
+  "navigationBarTextStyle": "black"
+}

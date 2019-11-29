@@ -1,0 +1,14 @@
+<view class="select-red" catchtouchmove="preventTouchMove">
+  <view class="new_block">
+    <view class="background">
+      <view class="view-text">恭喜您</view>
+      <view class="view-gift">你有个现金红包待领取</view>
+      <view class="view-price">
+        <view class="view-number">10</view>
+        <view class="view-unit">元</view>
+      </view>
+    </view>
+    <view class="get" catchtap="openGift">立即领取</view>
+    <image class="user_close" catchtap="close" src="../../images/close.svg" />
+  </view>
+</view>

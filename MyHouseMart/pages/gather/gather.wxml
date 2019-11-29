@@ -1,0 +1,15 @@
+<view class='face'>
+  <view class='face-top'>开通刷脸服务</view>
+  <view class='face-message'>获得更便捷的支付体验</view>
+  <view class='face-image'>
+    <image class="backface" src='../../images/backface.svg' mode="widthFix"></image>
+    <image class="manface" src="../../images/manface.svg" mode="widthFix"></image>
+    <view class="halo"></view>
+  </view>
+</view>
+<view class='photograph'>
+  <button class='face-button' bindtap='faceButton'>开始拍照</button>
+  <view class='face-messages'>您提交的资料仅用于人脸识别支付认证</view>
+</view>
+<canvas canvas-id="photo_canvas" style="left: 10000rpx" class='draw_canvas'></canvas>
+<image src='{{src}}'></image>
