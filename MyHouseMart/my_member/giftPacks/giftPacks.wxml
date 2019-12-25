@@ -59,7 +59,7 @@
       </view>
     </view>
     <view class="package-cont">
-      <view class="package-member" wx:for="{{giftPackage}}" wx:key="index">
+      <view class="package-member" data-status='greatPackage' data-item="{{item}}" data-iscanbuy="true" catchtap="details"  wx:for="{{giftPackage}}" wx:key="index">
         <view class="package-img">
           <image src="{{item.picAddr?item.picAddr:'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/0bf7b526ca824304a693ec08ea910f96.jpg'}}" />
           <view class="member-title">赠送会员</view>

@@ -1,3 +1,4 @@
+@import '/myfont.wxss';
 page {
   background: #f7f8f9;
   height: 100%;
@@ -288,6 +289,10 @@ page {
   height: 120rpx;
   line-height: 40rpx;
   font-weight: 500;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .package-main .package-price {

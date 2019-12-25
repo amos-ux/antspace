@@ -318,6 +318,8 @@ page {
   font-weight: 400;
   display: flex;
   justify-content: space-between;
+  padding: 0 48rpx;
+  box-sizing: border-box;
 }
 
 .wallet-btns .wallet-detail{

@@ -7,6 +7,7 @@ let show = true, defaultImg = 'https://antspace-prod-img-1.oss-cn-shenzhen.aliyu
 Page({
   data: {
     showCanvas: true,
+    renewal: false,//自动续费弹窗
     imageCode: '',
     quit: false,
     couponNum: 0, //优惠券个数
@@ -31,10 +32,10 @@ Page({
   },
   //跳转商品详情页
   details(e) {
-    let { status, item: details, iscanbuy} = e.currentTarget.dataset
+    let { status, item: details, iscanbuy } = e.currentTarget.dataset
     details.remarksName = details.remarksName.replace("'", "").replace("&", "").replace("=", "");
     details.itemName = details.itemName.replace("'", "").replace("&", "").replace("=", "");
-    if(iscanbuy){
+    if (iscanbuy) {
       wx.navigateTo({
         url: `/pages/goodsDetails/goodsDetails?details=${JSON.stringify(details)}&type=gift&status=${status}`
       })
@@ -141,11 +142,69 @@ Page({
       that.toLogin();
     }
   }, 1000),
+  // 关闭自动续费弹窗
+  cancelSkip: function () {
+    let that = this
+    that.setData({
+      renewal: false
+    })
+  },
+  // 开通自动续费
+  autoRenew: function () {
+    wx.showLoading({ title: '加载中...' })
+    wx.request({
+      url: `${app.baseUrl}service-member/public/signing/coutinual/member/${wx.getStorageSync("open")}/CHARGE`,
+      methods: 'GET',
+      success(res) {
+        wx.hideLoading()
+        let data = res.data.data
+        let extraData = {
+          appid: data.appId,
+          mch_id: data.mchId,
+          plan_id: data.planId,
+          contract_code: data.contractCode,
+          request_serial: data.requestSerial,
+          contract_display_account: data.contractDisplayAccount,
+          notify_url: data.notifyUrl,
+          sign: data.sign,
+          timestamp: data.timestamp
+        }
+        wx.navigateToMiniProgram({
+          appId: 'wxbd687630cd02ce1d', //固定值
+          extraData,
+          path: 'pages/index/index',
+          success(res) {
+            console.log(res);
+          },
+          fail(res) {
+            console.log(res);
+          }
+        });
+      },
+      fail: res => {
+        wx.hideLoading()
+      }
+    })
+  },
   // 会员介绍页
   skipToVip: app.debounce1(function () {
-    wx.navigateTo({
-      url: '/my_member/giftPacks/giftPacks',
-    })
+    let that = this
+    if (that.data.userAuthorization) {
+      if (that.data.userInfo.isExpired) {
+        wx.navigateTo({
+          url: '/my_member/openVip/openVip?status=openVip'
+        })
+      } else {//未过期
+        that.setData({
+          renewal: true
+        })
+      }
+      /* wx.navigateTo({
+        url: '/my_member/giftPacks/giftPacks'
+      }) */
+    } else {
+      that.toLogin();
+    }
   }, 1000),
   //跳转到钱包
   toWallet: function () {
@@ -160,32 +219,36 @@ Page({
   },
   // 加载页面基本数据
   showPageData: function () {
-    let that = this, isLoading = true
+    let that = this, isLoading = true, renewal = false
     that.data.userInfo.isSkip = false//禁止立即续费跳转
+    that.setData({ renewal })
     const userInfo = axios.getData({ url: `${app.baseUrl}service-member/new/query/usrInfo`, header: { 'Cookie': "JSESSIONID=" + cache.get('sessionId', 'null') } });//用户基本数据
     const pullNew = axios.getData({ url: `${app.baseUrl}service-member/public/get/my/home/statistics/info?userId=${cache.get("userId", null)}` })// 个人中心会员拉新相关统计数据
     const greatUrl = axios.getData({ url: `${app.baseUrl}service-item/user/include/member/combination/${app.globalData.branch.branchNo}/${cache.get("userId", null)}` })//超值大礼包
     const getOpneId = axios.getData({ url: `${app.baseUrl}service-order-prc/saleOrder/queryopenid?sessionId=${cache.get("sessionId", "null")}` })//获取openId
     const getMember = axios.getData({ url: `${app.baseUrl}service-item/user/new/member/item/${app.globalData.branch.branchNo}/${cache.get("userId", null)}` }) //新会员超值购
-    Promise.all([userInfo, pullNew, greatUrl, getOpneId, getMember]).then(res => {
+    const getrenewal = axios.getData({ url: `${app.baseUrl}service-member/public/check/countinual/${wx.getStorageSync("userId")}` }) //是否开通自动续费
+    Promise.all([userInfo, pullNew, greatUrl, getOpneId, getMember, getrenewal]).then(res => {
       // console.log(res);
       let userInfo = res[0].data.respData, greatPackage = [], amount = {}, memberPromotions = []
       const { experienceCardUsed, effectiveTo, memberStatus, expiredDate } = userInfo;
       const isChargeTime = res[2].data.respData ? res[2].data.respData.status == 1 ? false : true : true // 超值大礼包
       cache.put("open", res[3].data.respData.openId) //获取openId
       const isfirstPackStatus = res[4].data.respData ? res[4].data.respData.status == 1 ? true : false : false // 新会员超值购 true 可购买 false 不可购买
+      const isRenewal = res[5].data.respData;//是否开通自动续费
       const { memberName, memberImg } = utils.chmemberName(memberStatus, expiredDate)
       const now_date = utils.getNowDate(new Date())
       const isExpired = memberStatus != 'NON_MEMBERS' ? utils.compareDate(now_date, effectiveTo) : true
       const userText = memberStatus == 'NON_MEMBERS' ? '未开通会员' : `${effectiveTo} 过期`
       const distanceDays = that.datedifference(now_date, effectiveTo), isMobile = userInfo.mobile ? false : true // isExpired true 已过期  false 未过期
-      userInfo = { ...userInfo, effectiveTo, isChargeTime, isExpired, experienceCardUsed, isfirstPackStatus, memberName, memberImg, userText, isSkip: true, hasTerminate: false, distanceDays, isMobile }
-      wx.setStorageSync("userInfo", userInfo)
+      const isMember = memberStatus != 'NON_MEMBERS' && memberStatus != 'EXPIRED_MEMBERS' // 是否会员 true 会员 false 非会员
+      userInfo = { ...userInfo, effectiveTo, isChargeTime, isExpired, experienceCardUsed, isfirstPackStatus, memberName, memberImg, userText, isSkip: true, hasTerminate: false, distanceDays, isMobile, isRenewal, isMember }
+      wx.setStorageSync("userInfos", userInfo)
       if (userInfo.uniqueCode) {//获取base64图片数据
         wx.request({
           url: `${app.baseUrl}service-member/public/wx/code`,
           data: {
-            "scene": "referenceCode=" + userInfo.uniqueCode,
+            "scene": "referenceCode-" + userInfo.uniqueCode,
             "page": null,
             "width": 200
           },
@@ -316,6 +379,7 @@ Page({
     } else {
       that.toLogin()
     }
+
   },
   // 跳转地址页
   myOrder: function () {
@@ -387,7 +451,7 @@ Page({
           that.setData({ userAuthorization: true })
           that.getUserInfos()
           that.showPageData()
-        } else {
+        } else {//未登录
           that.setData({ userAuthorization: false, isLoading })
         }
       }
@@ -469,8 +533,8 @@ Page({
       order.push(items)
       app.globalData.order = order
       // 首单免费 需要是会员
-      if (status == 'firstFree' && memberStatus == 'NON_MEMBERS' || status == 'firstFree' && memberStatus == 'EXPIRED_MEMBERS') {
-        this.showToast('你还不是会员')
+      if (status == 'sendMember' && (memberStatus == 'NON_MEMBERS' || memberStatus == 'EXPIRED_MEMBERS')) {
+        this.showToast('要成为会员才能购买')
       } else {
         wx.navigateTo({
           url: `/pages/confirmOrder/confirmOrder?commoditStatus=myPage&originaPrice=${originaPrice}&totalPrice=${totalPrice}&status=${status}`
@@ -555,7 +619,7 @@ Page({
     that.roundRectColor(ctx, 85 * rpx, 313 * rpx, 132 * rpx, 24 * rpx, 20, 'rgba(0,0,0,.11)');
     ctx.fillStyle = "#fff";
     ctx.setFontSize(12 * rpx);
-    ctx.fillText('可加二维码发朋友圈', 95 * rpx, 330 * rpx);
+    ctx.fillText('可将二维码发朋友圈', 95 * rpx, 330 * rpx);
     ctx.restore();
     ctx.save();
     ctx.draw();

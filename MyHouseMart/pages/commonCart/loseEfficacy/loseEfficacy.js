@@ -8,7 +8,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    outmodedItems:null
+    outmodedItems: null
   },
 
   /**
@@ -16,7 +16,7 @@ Component({
    */
   data: {
     show: false,
-    outmodedItems:[]
+    outmodedItems: []
   },
   ready() {
     this.setData({
@@ -27,34 +27,35 @@ Component({
    * 组件的方法列表
    */
   methods: {
- 
-    empty(){
+
+    empty() {
       let that = this
       wx.showModal({
         content: '你确认清空全部失效商品吗',
-        success(res){
-          if(res.confirm){
+        success(res) {
+          if (res.confirm) {
             let data = []
             let outmodedItems = that.properties.outmodedItems
             outmodedItems.map(i => {
               data.push({
-                "itemNO": i.itemNo, "bizLine": i.bizLine
+                "itemNO": i.itemNo,
+                "bizLine": i.bizLine
               })
             })
             console.log(data)
             call.postData("/service-item//trolley/deleteTrolley?sessionId=" + cache.get("sessionId", null) + "&branchNo=" + app.globalData.branch.branchNo, data, (res) => {
-                  that.setData({
-                    outmodedItems:[]
-                  })
-                  
+              that.setData({
+                outmodedItems: []
+              })
+
             })
-           
-          }else if(res.cancel){
+
+          } else if (res.cancel) {
 
           }
         }
       })
-        
+
     },
     open() {
       this.setData({

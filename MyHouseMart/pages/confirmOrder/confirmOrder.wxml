@@ -38,7 +38,7 @@
         </view>
       </view>
       <!-- 送达时间 -->
-      <view class="locationTime">
+      <view class="locationTime" wx:if="{{branchNo!='888888'}}">
         <text>送达时间</text>
         <text>30分钟可送达</text>
         <text>不包括标注时间商品</text>
@@ -54,16 +54,15 @@
   <!-- 到店自提 -->
   <view class='outside' wx:if="{{num==2}}">
     <!-- 门店地址 -->
-    <view class='shopLocation' catchtap="toRecent">
+    <view class="shopLocation {{branchNo==888888 ? 'myMall' : ''}}" catchtap="toRecent">
       <view class="location-recent" wx:if="{{storeAddress.length != 0}}">
-        <text>{{storeAddress.branchName?storeAddress.branchName:'暂无自提点'}}</text>
-        <text>{{storeAddress.locDetail?storeAddress.locDetail:'你所在城市尚未开通到店自提服务'}}</text>
+        <text>{{storeAddress.branchName?storeAddress.branchName:''}}</text>
+        <text>{{storeAddress.locDetail?storeAddress.locDetail:''}}</text>
       </view>
       <view class="loaction-myhome" wx:if="{{branchNo == '888888' && storeAddress.length == 0}}">
         <text>请选择自提门店</text>
       </view>
       <text wx:if="{{storeAddress.range}}">{{storeAddress.range < 500 ? we.toFixed(storeAddress.range) : we.toFixed(storeAddress.range/1000) + 'k'}}m</text>
-      <image wx:if="{{branchNo==888888}}" class="toPaysvg" src="../../images/right_gray.svg" />
     </view>
     <!-- 邀请得返现提醒 -->
     <view class="cashback-invite" wx:if="{{userInfo.memberStatus!='NON_MEMBERS' && userInfo.memberStatus!='EXPIRED_MEMBERS' && !userInfo.firstOrderState }}">
@@ -89,37 +88,42 @@
     </view>
     <view>
       <view class='commodityDetails' wx:for="{{commonCommodity}}" wx:key="{{index}}" wx:if="{{item.quantity!=0}}">
-        <view class="commodityCon">
-          <text class="returnAmt" wx:if="{{item.refundValue!=0}}">返现¥{{we.toFixed(item.refundValue)}}</text>
-          <image class='commodity-img' src='{{item.thumbPic==""||item.thumbPic==null?"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png":item.thumbPic}}'></image>
+        <view class="commodityMess">
+          <view class="commodityCon">
+            <text wx:if="{{(item.promotionRule.promotionType!='MULTIPLE_RETURN' && item.refundValue!=0) || (item.promotionRule.promotionType=='MULTIPLE_RETURN' && item.refundValue!=0 && (item.refundMultiple==null || item.refundMultiple==0))}}" class="{{item.isreturnMoney?'returnAmt':'noreturnAmt'}}">返¥{{we.toFixed(item.refundValue)}}</text>
+            <text wx:if="{{item.promotionRule.promotionType=='MULTIPLE_RETURN' && item.refundValue!=0 && item.refundMultiple!=null && item.refundMultiple!=0}}" class="{{item.isreturnMoney?'returnAmt':'noreturnAmt'}}">返¥{{we.toFixed(item.refundValue)}}x{{item.promotionRule.promotionRule[0].multipleValue}}</text>
+            <image class='commodity-img' src='{{item.thumbPic?item.thumbPic:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+          </view>
+          <view class='commodity'>
+            <view class='commodity-Name'>
+              <text class='commodityName'>{{item.itemName}}</text>
+              <view class='speci-cont'>
+                <!-- <text wx:if="{{we.toArray(item.extOptions)!=0}}">规格: </text> -->
+                <!-- <text wx:if="{{we.toArray(item.extOptions)!=0}}" class='specification' wx:for="{{item.extOptions}}" wx:key="index" wx:for-item="extOptions">{{extOptions.dataName}}</text> -->
+              </view>
+              <view class='commodity-arrive'>
+                <text class="commodity-time" wx:if="{{we.toArray(item.stTimes)!=0 && we.isNumber(item.stTimes[0].deliveryTimeFrom)!=0 && we.isNumber(item.stTimes[0].deliveryTimeTo)!=0 && item.stTimes[0].stType=='OUTFOOD'}}">{{we.subString(item.stTimes[0].deliveryTimeFrom)}}-{{we.subString(item.stTimes[0].deliveryTimeTo)}}送达</text>
+                <text class="commodity-discount" wx:if="{{we.toArray(item.satisfied)!=0}}" style="{{we.toArray(item.stTimes)==0?'margin-left:0':''}}">{{item.satisfied[0]}}</text>
+              </view>
+            </view>
+            <!-- 普通商品展示数据 -->
+            <view class='commodity-Money' wx:if="{{commoditStatus!='Presale'}}">
+              <text class='discountsMoney'>¥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+              <text class='salePrice' wx:if="{{item.disPrice==null?false:true}}">¥{{we.toFixed(item.salePrice)}}</text>            
+              <text class="commodityNum">x{{item.quantity}}</text>
+            </view>
+            <!-- 预售商品展示数据 -->
+            <view class='commodity-Money' wx:if="{{commoditStatus=='Presale'}}">
+              <text class='discountsMoney' wx:if="{{item.activitySalePrice!=null}}">¥{{item.activitySalePrice!=null?we.toFixed(item.activitySalePrice):we.toFixed(item.salePrice)}}</text>
+              <text class='salePrice' wx:if="{{item.activitySalePrice==null?false:true}}">¥{{we.toFixed(item.salePrice)}}</text>            
+              <text class="commodityNum">x{{item.quantity}}</text>
+            </view>
+          </view>
         </view>
-        <view class='commodity'>
-          <view class='commodity-Name'>
-            <text class='commodityName'>{{item.itemName}}</text>
-            <view class='speci-cont'>
-              <!-- <text wx:if="{{we.toArray(item.extOptions)!=0}}">规格: </text> -->
-              <!-- <text wx:if="{{we.toArray(item.extOptions)!=0}}" class='specification' wx:for="{{item.extOptions}}" wx:key="index" wx:for-item="extOptions">{{extOptions.dataName}}</text> -->
-            </view>
-            <view class='commodity-arrive'>
-              <text class="commodity-time" wx:if="{{we.toArray(item.stTimes)!=0 && we.isNumber(item.stTimes[0].deliveryTimeFrom)!=0 && we.isNumber(item.stTimes[0].deliveryTimeTo)!=0 && item.stTimes[0].stType=='OUTFOOD'}}">{{we.subString(item.stTimes[0].deliveryTimeFrom)}}-{{we.subString(item.stTimes[0].deliveryTimeTo)}}送达</text>
-              <text class="commodity-discount" wx:if="{{we.toArray(item.satisfied)!=0}}" style="{{we.toArray(item.stTimes)==0?'margin-left:0':''}}">{{item.satisfied[0]}}</text>
-            </view>
-          </view>
-
-          <!-- 普通商品展示数据 -->
-          <view class='commodity-Money' wx:if="{{commoditStatus!='Presale'}}">
-            <text class='discountsMoney'>¥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
-            <text class='salePrice' wx:if="{{item.disPrice==null?false:true}}">¥{{we.toFixed(item.salePrice)}}</text>            
-            <text class="commodityNum">x{{item.quantity}}</text>
-          </view>
-
-          <!-- 预售商品展示数据 -->
-          <view class='commodity-Money' wx:if="{{commoditStatus=='Presale'}}">
-            <text class='discountsMoney' wx:if="{{item.activitySalePrice!=null}}">¥{{item.activitySalePrice!=null?we.toFixed(item.activitySalePrice):we.toFixed(item.salePrice)}}</text>
-            <text class='salePrice' wx:if="{{item.activitySalePrice==null?false:true}}">¥{{we.toFixed(item.salePrice)}}</text>            
-            <text class="commodityNum">x{{item.quantity}}</text>
-          </view>
-
+        <!-- 不返现提醒 -->
+        <view class="cash-reminder" wx:if="{{!item.isreturnMoney}}">
+          <view class="cashback-tag">活动</view>
+          <view class="cashback-text">该商品参与促销活动，不与返现叠加</view>
         </view>
       </view>
       <!-- 套餐 -->
@@ -162,7 +166,7 @@
         </view>
         <view>
           <text class='vipCrd-text'>开通后，本单</text>
-          <text class='vipCrd-warn'>立返现{{we.toFixed(reAllMnt)}}元</text>
+          <text class='vipCrd-warn'>立返{{we.toFixed(reAllMnt)}}元</text>
         </view>
       </view>
       <view class="vImg rightImg">
@@ -231,10 +235,10 @@
     <view class='summation'>
       <view class='summationPrice'>
         <block wx:if="{{!ifPayAmt && (userInfo.memberStatus=='MEMBERS'||userInfo.memberStatus=='EXPERIENCE'||userInfo.memberStatus=='ENTERPRISE')}}">
-          <view class="reBack">本次返现 <text class="reBack-price">￥{{we.toFixed(reAllMnt)}}</text></view>
+          <view class="reBack">本次返现 <text class="reBack-price">¥{{we.toFixed(reAllMnt)}}</text></view>
         </block>
         <text class="count">合计</text>
-        <text class="count-price">￥{{num==1?we.toSum(aggregate,shippingFee):we.toFixed(aggregate)}}</text>
+        <text class="count-price">¥{{num==1?we.toSum(aggregate,shippingFee):we.toFixed(aggregate)}}</text>
       </view>
     </view>
   </view>
@@ -252,7 +256,7 @@
     <view class="refund-text" catchtouchmove="preventTouchMove" catchtap="refundDes">退款说明<image src="../../images/ques.svg" /></view>
     <view class="payingMain">
       <!-- 售价 -->
-      <view class="sumPrice">合计：<text>￥{{num==1?we.toSum(aggregate,shippingFee):we.toFixed(aggregate)}}</text></view>
+      <view class="sumPrice">合计：<text>¥{{num==1?we.toSum(aggregate,shippingFee):we.toFixed(aggregate)}}</text></view>
       <view class="payPrice">
         <text wx:if="{{preferentialCombined>=0}}" class="payPrice-pre">优惠¥{{we.toFixed(preferentialCombined)}}</text>
         <text class="{{preferentialCombined>=0?'payPrice-combs':'payPrice-comb'}}">原价¥{{we.toFixed(originaPrice)}}</text>

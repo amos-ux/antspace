@@ -4,7 +4,7 @@ var url = app.baseUrl + "service-member/";
 var urL = app.baseUrl + "service-mall/";
 var cache = require("../../utils/cache");
 let request = require("../../utils/soul_chen")
-let timer, itemOptions, price, refund,blId,bizLineCode
+let timer, itemOptions, price, refund, blId, bizLineCode
 Page({
   data: {
     len: '',
@@ -16,13 +16,13 @@ Page({
     NumRefundValue: '',
     Price: '', //单价
     TotalPrice: '',
-    status:1,
+    status: 1,
   },
   onLoad(options) {
     console.log("options", options);
     this.RefundValue()
-    blId=options.blId
-    bizLineCode=options.bizLineCode?options.bizLineCode:'PRESALE'
+    blId = options.blId
+    bizLineCode = options.bizLineCode ? options.bizLineCode : 'PRESALE'
     this.http()
   },
   http() {
@@ -74,31 +74,31 @@ Page({
         request.request('/service-item/public/get/template/item', ITEMCLS, 'POST', false),
         request.request('/service-item/public/get/template/item', SINGLE, 'POST', false),
       ]).then(res => {
-        let {ITEMRANK}=this.data
+        let { ITEMRANK } = this.data
         this.setData({
           ITEMRANK: res[0].respData != null ? res[0].respData[0] : [],
           ITEMCLS: res[1].respData,
-          SINGLE: res[2].respData.slice(0,3)
-        },()=>{
-              let {ITEMRANK,status}=this.data
-              let startTime=ITEMRANK.items[0].stTimes[0].activityDateFrom+"-"+ITEMRANK.items[0].stTimes[0].activityTimeFrom.replace(/:/g,"-")
-              let endTime=ITEMRANK.items[0].stTimes[0].activityDateTo+"-"+ITEMRANK.items[0].stTimes[0].activityTimeTo.replace(/:/g,"-")
-              if(ITEMRANK.items[0].stTimes){
-                let timer=setInterval(()=>{
-                  if(status==1){
-                    this.TodayDate(startTime,endTime)
-                  }else{
-                    clearInterval(timer)
-                  }
-                },1000)
+          SINGLE: res[2].respData.slice(0, 3)
+        }, () => {
+          let { ITEMRANK, status } = this.data
+          let startTime = ITEMRANK.items[0].stTimes[0].activityDateFrom + "-" + ITEMRANK.items[0].stTimes[0].activityTimeFrom.replace(/:/g, "-")
+          let endTime = ITEMRANK.items[0].stTimes[0].activityDateTo + "-" + ITEMRANK.items[0].stTimes[0].activityTimeTo.replace(/:/g, "-")
+          if (ITEMRANK.items[0].stTimes) {
+            let timer = setInterval(() => {
+              if (status == 1) {
+                this.TodayDate(startTime, endTime)
+              } else {
+                clearInterval(timer)
               }
-              
-              
+            }, 1000)
+          }
+
+
         })
-      
-      wx.hideLoading()
-      wx.hideNavigationBarLoading()
-    })
+
+        wx.hideLoading()
+        wx.hideNavigationBarLoading()
+      })
   },
   onShow() {
     timer = setInterval(() => {
@@ -114,26 +114,26 @@ Page({
       [
         request.request('/service-item/public/get/template/item', ITEMRANK, 'POST', false),
       ]).then(res => {
-        let {ITEMRANK}=this.data
+        let { ITEMRANK } = this.data
         this.setData({
           ITEMRANK: res[0].respData != null ? res[0].respData[0] : [],
-        },()=>{
-              let {ITEMRANK,status}=this.data
-              let startTime=ITEMRANK.items[0].stTimes[0].activityDateFrom+"-"+ITEMRANK.items[0].stTimes[0].activityTimeFrom.replace(/:/g,"-")
-              let endTime=ITEMRANK.items[0].stTimes[0].activityDateTo+"-"+ITEMRANK.items[0].stTimes[0].activityTimeTo.replace(/:/g,"-")
-              if(ITEMRANK.items[0].stTimes){
-                let timer=setInterval(()=>{
-                  if(status==1){
-                    this.TodayDate(startTime,endTime)
-                  }else{
-                    clearInterval(timer)
-                  }
-                },1000)
-              }     
+        }, () => {
+          let { ITEMRANK, status } = this.data
+          let startTime = ITEMRANK.items[0].stTimes[0].activityDateFrom + "-" + ITEMRANK.items[0].stTimes[0].activityTimeFrom.replace(/:/g, "-")
+          let endTime = ITEMRANK.items[0].stTimes[0].activityDateTo + "-" + ITEMRANK.items[0].stTimes[0].activityTimeTo.replace(/:/g, "-")
+          if (ITEMRANK.items[0].stTimes) {
+            let timer = setInterval(() => {
+              if (status == 1) {
+                this.TodayDate(startTime, endTime)
+              } else {
+                clearInterval(timer)
+              }
+            }, 1000)
+          }
         })
-      wx.hideLoading()
-      wx.hideNavigationBarLoading()
-    })
+        wx.hideLoading()
+        wx.hideNavigationBarLoading()
+      })
   },
   onHide() {
     clearInterval(timer)
@@ -164,20 +164,20 @@ Page({
     let formId = e.detail.formId,
       index = e.detail.target.dataset.index,
       item = e.detail.target.dataset.item,
-      {ITEMRANK}=this.data
+      { ITEMRANK } = this.data
     if (e.detail.target.dataset.remind == "Y") {
-        let Josn = {
-            "openId": wx.getStorageSync("openId"),
-            formId,
-            "stId": ITEMRANK.stId,
-            "notificationStatus":"REQUESTED",
-            "userId":wx.getStorageSync("userId"),
-            "notificationItem": item.itemNo,
-            "blId":blId,	
-            "branchNo":app.globalData.branch.branchNo,
-            "typeKey":"PRESELL"
-          }
-      request.request("/service-order-prc/notifications/clickNotificationsStatus", Josn,'POST',false).then(res => {
+      let Josn = {
+        "openId": wx.getStorageSync("openId"),
+        formId,
+        "stId": ITEMRANK.stId,
+        "notificationStatus": "REQUESTED",
+        "userId": wx.getStorageSync("userId"),
+        "notificationItem": item.itemNo,
+        "blId": blId,
+        "branchNo": app.globalData.branch.branchNo,
+        "typeKey": "PRESELL"
+      }
+      request.request("/service-order-prc/notifications/clickNotificationsStatus", Josn, 'POST', false).then(res => {
         let tom = ITEMRANK
         tom.items[index].remindMe = false
         this.setData({
@@ -196,12 +196,12 @@ Page({
         "openId": wx.getStorageSync("openId"),
         formId,
         "stId": ITEMRANK.stId,
-        "userId":wx.getStorageSync("userId"),
-        "notificationStatus":"CANCELLED",
+        "userId": wx.getStorageSync("userId"),
+        "notificationStatus": "CANCELLED",
         "notificationItem": item.itemNo,
-        "blId": blId,	
-        "branchNo":app.globalData.branch.branchNo,
-        "typeKey":"PRESELL"
+        "blId": blId,
+        "branchNo": app.globalData.branch.branchNo,
+        "typeKey": "PRESELL"
       }
       request.request("/service-order-prc/notifications/clickNotificationsStatus", Josn).then(res => {
         let tom = ITEMRANK
@@ -231,7 +231,7 @@ Page({
       header: {
         'Cookie': "JSESSIONID=" + cache.get('sessionId', 'null')
       },
-      success: function(rest) {
+      success: function (rest) {
         if (rest.data.respData !== null && rest.data.respData.length !== 0) {
           if (rest.data.respData.memberStatus == "NON_MEMBERS" || rest.data.respData.memberStatus == "EXPIRED_MEMBERS") {
             that.setData({
@@ -243,58 +243,58 @@ Page({
     })
   },
   plus() { //商品数量增加
-  
-        let {
+
+    let {
       number,
       quantityLimitTotal,
       limitedByUser,
       stockQty
     } = this.data
-    if(limitedByUser==null){   //限购数等于空 没有上限  根据库存判定
-      if(number<stockQty){   //判定库存
+    if (limitedByUser == null) {   //限购数等于空 没有上限  根据库存判定
+      if (number < stockQty) {   //判定库存
         this.setData({
-            number: number + 1,
-            TotalPrice: (number + 1) * price,
-            refundValue: (number + 1) * refund
-          })
-      }else{
+          number: number + 1,
+          TotalPrice: (number + 1) * price,
+          refundValue: (number + 1) * refund
+        })
+      } else {
         wx.showToast({
-              title: '单品已经达到上限',
-              icon: 'none',
-              uration: 1500
-          })
+          title: '单品已经达到上限',
+          icon: 'none',
+          uration: 1500
+        })
       }
-    }else{
-      if(limitedByUser>stockQty){   //如果预售上限不为空，判定预售上限是否小于库存  T：判定购买数量是否小于预售上线  F:用库存去决定购买上限
-        if(number<stockQty){
+    } else {
+      if (limitedByUser > stockQty) {   //如果预售上限不为空，判定预售上限是否小于库存  T：判定购买数量是否小于预售上线  F:用库存去决定购买上限
+        if (number < stockQty) {
           this.setData({
             number: number + 1,
             TotalPrice: (number + 1) * price,
             refundValue: (number + 1) * refund
           })
-        }else{
+        } else {
           wx.showToast({
             title: '单品已经达到上限',
             icon: 'none',
             uration: 1500
           })
         }
-      }else{
-        if(number<limitedByUser){  
+      } else {
+        if (number < limitedByUser) {
           this.setData({
             number: number + 1,
             TotalPrice: (number + 1) * price,
             refundValue: (number + 1) * refund
           })
-        }else{
-            wx.showToast({
-              title: '单品已经达到上限',
-              icon: 'none',
-              uration: 1500
-            })
+        } else {
+          wx.showToast({
+            title: '单品已经达到上限',
+            icon: 'none',
+            uration: 1500
+          })
         }
       }
-     
+
     }
 
   },
@@ -310,25 +310,25 @@ Page({
       })
     }
   },
-  toVip(e){ //跳转VIP
-    let isStatus=e.currentTarget.dataset.isstatus
-    let items=item,{item,number,TotalPrice}=this.data,
-        json=[]
-        json.push(item)
-        const originaPrice = item.salePrice * number;
-        const totalPrice = item.activitySalePrice == null ? item.salePrice * number:item.activitySalePrice*number;
-        // item.disPrice==null?item.salePrice:item.disPrice;
-        json[0].quantity=number;
-        json[0].bizLine= bizLineCode
-        json[0].thumbPic=item.picAddr;
-        json[0].commoditStatus=='Presale'
-        json[0].blId= blId
-        json[0].comb=false;
-        json[0].vipPrice = item.salePrice;//会员价
-        app.globalData.order = json;
-        wx.navigateTo({
-          url:`/pages/confirmOrder/confirmOrder?commoditStatus=Presale&isStatus=${isStatus}&originaPrice=${originaPrice}&totalPrice=${totalPrice}`
-        })
+  toVip(e) { //跳转VIP
+    let isStatus = e.currentTarget.dataset.isstatus
+    let items = item, { item, number, TotalPrice } = this.data,
+      json = []
+    json.push(item)
+    const originaPrice = item.salePrice * number;
+    const totalPrice = item.activitySalePrice == null ? item.salePrice * number : item.activitySalePrice * number;
+    // item.disPrice==null?item.salePrice:item.disPrice;
+    json[0].quantity = number;
+    json[0].bizLine = bizLineCode
+    json[0].thumbPic = item.picAddr;
+    json[0].commoditStatus == 'Presale'
+    json[0].blId = blId
+    json[0].comb = false;
+    json[0].vipPrice = item.salePrice;//会员价
+    app.globalData.order = json;
+    wx.navigateTo({
+      url: `/pages/confirmOrder/confirmOrder?commoditStatus=Presale&isStatus=${isStatus}&originaPrice=${originaPrice}&totalPrice=${totalPrice}`
+    })
   },
   toFlashSale(e) {
     let items = e.currentTarget.dataset.item
@@ -336,29 +336,29 @@ Page({
       url: '../FlashSale/FlashSale?blId=' + items.blId + "&bizLine=" + bizLineCode
     })
   },
-  toShop(e){
-    let item=e.currentTarget.dataset.item
-    let {ITEMRANK}=this.data
-    item.isVip=this.data.isVip
-    item.dateFrom=item.stTimes[0]?item.stTimes[0].activityTimeFrom:null
-    item.dateTo=item.stTimes[0]?item.stTimes[0].activityTimeTo:null
-    item.stId=item.stId
-    item.blId=blId
-    item.date=item.stTimes[0]?item.stTimes[0].activityDateFrom.split('-')[2]>new Date().getDate()?"TOMORROW":"TODAY":null
-        wx.navigateTo({
-            url:'/pages/goodsDetails/goodsDetails?details='+JSON.stringify(item)
-        })
-  },
-  toLink(e){
-    let index=e.currentTarget.dataset.index
-    let {SINGLE}=this.data
+  toShop(e) {
+    let item = e.currentTarget.dataset.item
+    let { ITEMRANK } = this.data
+    item.isVip = this.data.isVip
+    item.dateFrom = item.stTimes[0] ? item.stTimes[0].activityTimeFrom : null
+    item.dateTo = item.stTimes[0] ? item.stTimes[0].activityTimeTo : null
+    item.stId = item.stId
+    item.blId = blId
+    item.date = item.stTimes[0] ? item.stTimes[0].activityDateFrom.split('-')[2] > new Date().getDate() ? "TOMORROW" : "TODAY" : null
     wx.navigateTo({
-      url:SINGLE[index].link
+      url: '/pages/goodsDetails/goodsDetails?details=' + JSON.stringify(item)
     })
   },
-  toSearch:function(){
+  toLink(e) {
+    let index = e.currentTarget.dataset.index
+    let { SINGLE } = this.data
     wx.navigateTo({
-        url: `/pages/shopSearch/shopSearch?blId=${blId}&bizLine=${bizLineCode?bizLineCode:'PRESALE'}`,
+      url: SINGLE[index].link
+    })
+  },
+  toSearch: function () {
+    wx.navigateTo({
+      url: `/pages/shopSearch/shopSearch?blId=${blId}&bizLine=${bizLineCode ? bizLineCode : 'PRESALE'}`,
     })
   },
   Router(e) {
@@ -381,9 +381,9 @@ Page({
     })
   },
   OpenExplain(e) { //打开说明弹窗
-   this.setData({
+    this.setData({
       explain: true,
-      eta:e.currentTarget.dataset.item.eta
+      eta: e.currentTarget.dataset.item.eta
     })
   },
   Snatch(e) {
@@ -394,11 +394,11 @@ Page({
     refund = item.refundValue == null ? 0 : item.refundValue
     this.setData({
       isMember: true,
-      stockQty:item.stockQty,
+      stockQty: item.stockQty,
       TotalPrice: item.activitySalePrice == null ? item.salePrice : item.activitySalePrice,
       refundValue: item.refundValue == null ? 0 : item.refundValue,
       quantityLimitTotal: item.quantityLimitTotal,
-      limitedByUser:item.limitedByUser,
+      limitedByUser: item.limitedByUser,
       number: 1,
       item
     })
@@ -414,6 +414,7 @@ Page({
   stopBublle(e) { //阻止冒泡
 
   },
+  // 数字滚动动画
   show_num(n) {
     var len = String(n).length;
     this.setData({
@@ -422,7 +423,7 @@ Page({
     var char = String(n).split("")
     var h = ''
     let self = this
-    wx.createSelectorQuery().select('.unit-num').boundingClientRect(function(rect) {
+    wx.createSelectorQuery().select('.unit-num').boundingClientRect(function (rect) {
       h = rect.height
       var animate = []
       for (var i = 0; i < len; i++) {
@@ -461,7 +462,7 @@ Page({
     }
   },
   TodayDate(startDate, endDate) {
-    if (startDate||endDate) {
+    if (startDate || endDate) {
       let d = new Date(),
         startArr = startDate.split("-"),
         endArr = endDate.split("-"),
@@ -470,21 +471,21 @@ Page({
         _TimeRubbingStart = _TimeStart.getTime() / 1000, //开始时间搓
         _TimeRubbingEnd = _TimeEnd.getTime() / 1000, //结束时间搓 
         NewTimeRubbing = d.getTime() / 1000; //本地时间搓
-        if(NewTimeRubbing>_TimeRubbingStart){  //now greater than startTime
-            if(NewTimeRubbing<_TimeRubbingEnd){
-              this.setData({
-                status:1 //活动时间内
-              })
-            }else{
-              this.setData({
-                status:2  //活动已结束
-              })
-            }
-        }else{
+      if (NewTimeRubbing > _TimeRubbingStart) {  //now greater than startTime
+        if (NewTimeRubbing < _TimeRubbingEnd) {
           this.setData({
-            status:3 //活动未开始
+            status: 1 //活动时间内
+          })
+        } else {
+          this.setData({
+            status: 2  //活动已结束
           })
         }
+      } else {
+        this.setData({
+          status: 3 //活动未开始
+        })
+      }
     } else {
       /**
        * 传入值不准为空
@@ -494,7 +495,7 @@ Page({
     }
 
   },
-  SeveralDays(e){
+  SeveralDays(e) {
     console.log(e)
   }
 })

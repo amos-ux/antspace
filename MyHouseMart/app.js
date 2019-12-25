@@ -4,8 +4,8 @@ const ald = require('./utils/ald-stat.js')
 let bool = false
 App({
   // 生产环境
-  baseUrl: "https://api.antspace.com/myhome/cloud/v1/",
-  baseUrls:  "wss://api.antspace.com/myhome/cloud/v1/",
+  // baseUrl: "https://api.antspace.com/myhome/cloud/v1/",
+  // baseUrls:  "wss://api.antspace.com/myhome/cloud/v1/",
 
   // dev2
   // baseUrl: "http://10.0.0.12:8989/myhome/cloud/v1/",   
@@ -13,61 +13,58 @@ App({
 
   // pp
   // baseUrl: "https://wongkimshing.iask.in/myhome/cloud/v1/",
-  // baseUrls: "ws://10.0.0.31:31899/myhome/cloud/v1/",
+  // baseUrls: "wss://wechat-dev.antspace.com/myhome/cloud/v1/",
 
   // test环境
-  // baseUrl: "https://antspace-dev.oicp.vip/myhome/cloud/v1/",
-  // baseUrls: "wss://antspace-dev.oicp.vip/myhome/cloud/v1/",
+  baseUrl: "https://antspace-dev.oicp.vip/myhome/cloud/v1/",
+  baseUrls: "wss://antspace-dev.oicp.vip/myhome/cloud/v1/",
 
   // 测试环境
   // baseUrl: "http://10.0.0.31:31899/myhome/cloud/v1/",
 
   globalData: {
     //存储店铺号
-    branchNo:"",
-    seckillDetail: [],
-    id: true,
+    branchNo:"",// 我家商城 支付所在店铺
+    seckillDetail: [],// 秒杀详情
+    id: true,// 判断是否切换店铺
     search: false,
     totalPrice: 0,//优惠价
     originaPrice: 0,//原价
     order: [],//购物车数据
     disPrice: 0,
     refreshOrder: true,//跳转订单是否刷新
-    setMeal: [],
-    comMeal: [],
-    orderShow: false,
-    commodityList: false,
-    linkParam1: null,
-    linkParam2: null,
-    userInfa: null,
+    setMeal: [],// 随心配套餐
+    comMeal: [],// 随心配套餐
     appType: "",
-    version: "110",
-    orderData: [],
+    orderData: [],//存储订单数据
     screenBrightness: null,
     chonseStoreId: null,
     totalFee: null,
     payStatus: null,
     signingStatus: false,
     branch: {},
+    show:false,//业务线首页判断数据  更改店铺号为88888
     message: [],  //售后服务
     messages: [], //申请退款
     invoice: [],  //申请开票
     invoiceState: [],//开票成功开票中
-    user: false,
-    quit: false,
+    quit: false,//强制退出小程序弹窗
     cardremind: true,//是否展示券提醒
-    popUp:{},
-    skip:false,
+    popUp:{},//存储弹窗数据
+    skip:false,//跳转
+    faraway:false,//启用偏远地区弹窗
     number:"",   //弹窗数据
     mall:false,//是不是商城
+    getBackHide:false//控制弹窗只弹一次
   },
   onLaunch: function (e) {
     bool = true
     wx.clearStorage();
+    wx.clearStorageSync();
     let that = this
     wx.getSystemInfo({//  获取页面的有关信息                         
       success: function (res) {
-        let ww = res.windowWidth;
+        let ww = res.windowWidth;   
         let hh = res.windowHeight;
         that.globalData.ww = ww;
         that.globalData.hh = hh;
@@ -84,7 +81,17 @@ App({
     if (res.query.scene){
       let code = res.query.scene
       let sence = code.split("-")
-      cache.put("referenceCode", sence[1])
+
+      if (sence[1].length>5){
+
+        cache.put("blId", sence[0])
+        cache.put("itemNo", sence[1])
+        cache.put("branchNo", sence[2])
+      } else if (sence[0] == "referenceCode"){
+        cache.put("referenceCode", sence[1])
+        console.log(sence[0])
+        console.log(cache.get("referenceCode", "null"))
+      }
     }
     
     let that = this

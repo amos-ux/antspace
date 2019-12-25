@@ -11,15 +11,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-    code:"",
+    code: "",
     openId: '',
     shareType: "",
-    codes:true,
-    userInfo:{},
-    user:true,
-    show:false,
-    formId:null,
-    getPhoneNumber:false
+    codes: true,
+    userInfo: {},
+    user: true,
+    show: false,
+    formId: null,
+    getPhoneNumber: false
   },
   // bindsubmit(e){
   //   console.log(e)
@@ -30,7 +30,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
   closeUp(data) {
@@ -52,22 +52,22 @@ Page({
       app.globalData.number = index
     })
   },
-  userInfo(e){
+  userInfo(e) {
     console.log(e)
-    if (e.detail.cloudID){
-       let data = {
-            "jsCode":this.data.code,
-            "username": e.detail.userInfo.nickName,
-            "shareplanId":cache.get("openId","null"),
-            "shareLoginCode":cache.get("shareType","null"),
-            "province": e.detail.userInfo.province,
-            "gender": e.detail.userInfo.gender,
-            "country": e.detail.userInfo.country,
-            "city": e.detail.userInfo.city,
-            "formId": cache.get("formId", "null"),
-            "referenceCode": cache.get("referenceCode", "null"),
-            "avatarUrl": e.detail.userInfo.avatarUrl,
-       }
+    if (e.detail.cloudID) {
+      let data = {
+        "jsCode": this.data.code,
+        "username": e.detail.userInfo.nickName,
+        "shareplanId": cache.get("openId", "null"),
+        "shareLoginCode": cache.get("shareType", "null"),
+        "province": e.detail.userInfo.province,
+        "gender": e.detail.userInfo.gender,
+        "country": e.detail.userInfo.country,
+        "city": e.detail.userInfo.city,
+        "formId": cache.get("formId", "null"),
+        "referenceCode": cache.get("referenceCode", "null"),
+        "avatarUrl": e.detail.userInfo.avatarUrl,
+      }
       call.postData("/service-member/weChat/v2/register", data, (res) => {
         console.log(res)
         cache.put("userId", res.data)
@@ -86,17 +86,17 @@ Page({
     }).then((res) => {
       console.log(res)
       if (res) {
-        if (res.data.mobile==""){
+        if (res.data.mobile == "") {
           this.setData({
             userInfo: res.data,
             getPhoneNumber: true
           });
-        }else{
+        } else {
           let that = this
           if (app.globalData.skip) {
             wx.redirectTo({
               url: '/my_member/inviteFriends/inviteFriends',
-              success(){
+              success() {
                 let number = app.globalData.number.split("")
                 number[2] = "0"
                 let str = number.join("")
@@ -105,7 +105,7 @@ Page({
             })
           } else {
             wx.navigateBack({
-              success(){
+              success() {
                 let number = app.globalData.number.split("")
                 number[2] = "0"
                 let str = number.join("")
@@ -114,13 +114,11 @@ Page({
             })
           }
         }
-        
-      
       }
     })
   },
   //获取手机号码
-  number: function (e) {
+  number: function(e) {
     let that = this
     if (e.detail.iv) {
       utils.wxLogin(res => {
@@ -153,87 +151,97 @@ Page({
               }
             })
           }
-        
-        }, res => {//失败
+        }, res => { //失败
           that.showToast(res.data.respDesc)
           wx.navigateBack({})
         })
-      }, res => {//失败
+      }, res => { //失败
         that.showToast(res.data.respDesc)
         wx.navigateBack({})
       })
     }
   },
-  showToast: function (tips) {
-    wx.showToast({ title: tips, icon: 'none', duration: 1500 })
+  showToast: function(tips) {
+    wx.showToast({
+      title: tips,
+      icon: 'none',
+      duration: 1500
+    })
   },
-  Nlogin(){
+  Nlogin() {
     wx.navigateBack({
 
-    }) 
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
-   let that =this
+    let that = this
     wx.getSetting({
-      success(res){
-        if (res.authSetting["scope.userInfo"]){
-        }else{
+      success(res) {
+        console.log(res)
+        if (res.authSetting["scope.userInfo"]) {
           utils.wxLogin((res) => {
+            console.log(res)
             that.setData({
               code: res
             })
-            
+
           })
-        } 
+        } else {
+          utils.wxLogin((res) => {
+            console.log(res)
+            that.setData({
+              code: res
+            })
+
+          })
+        }
       }
     })
-
-
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   }
 })

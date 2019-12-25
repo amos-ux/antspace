@@ -8,7 +8,7 @@
     </view>
     <view class='kinds'>
       <text class='text' wx:if="{{branchNo!='888888'}}">距您{{range>500?we.toFixed(range/1000)+"km":we.toFixed(range)+"m"}}</text>
-      <view class='text1' wx:if="{{pickupFrom!==null}}">
+      <view class='text1' wx:if="{{pickupFrom!==null}}" style="{{branchNo=='888888'?'margin-left:0;':''}}">
         <image src='../../../images/afhalen.svg'></image>
         到店自取
       </view>
@@ -47,6 +47,12 @@
         <image src='../../../images/discount.svg'></image>
         <block wx:for="{{planNames}}" wx:key="index">
           <text>{{item}}</text>
+        </block>
+      </view>
+      <view class='sales' >
+        <image src='../../../images/return.svg'></image>
+        <block >
+          <text>部分商品多倍返现</text>
         </block>
       </view>
     </view>

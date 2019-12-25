@@ -99,8 +99,6 @@ Component({
           url: '/pages/register/register',
         })
       }
-
-
     },
     //跳转商品详情
     details(e) {
@@ -137,7 +135,5 @@ Component({
         }
       }, 25);
     },
-  
   },
- 
 })

@@ -55,12 +55,12 @@
       </view>
       <view wx:if="{{Tabindex==2}}" style="display:{{experienceCardUsed==false?'block':''}};float:{{experienceCardUsed==false?'right':'none'}}" catch:tap="renew" class="renew-father">
         <label class="checkbox">
-          <radio-group>
+          <radio-group wx:if="{{isRadio==false}}">
             <!-- checked="{{renewal}}" -->
-            <radio class="automatic" disabled >
+            <radio class="automatic" checked="{{renewal}}" >
             </radio>
           </radio-group>
-          <text class="renew">开启自动续费，可随时取消</text>
+          <text class="renew" style="padding-left:{{isRadio==true?0:'60rpx'}}">{{autoText}}</text>
           <!-- <navigator target="miniProgram" extra-data="{{extradata}}" app-id="wxbd687630cd02ce1d" class="renew">开启自动续费，可随时取消</navigator > -->
         </label>
       </view>

@@ -25,11 +25,11 @@ Page({
     stockQty: 0, //库存量
     cartQuantity: 0, //购物车数据
     pageNum: 1, //分页数
-
-     specification: [],
+    specification: [],
     option: false,
     options: [],
     extOptions: [],
+    userAuthorization: false,//是否已经登录
   },
 
   //跳转商品详情
@@ -91,7 +91,10 @@ Page({
             }).then(() => {
               if (!that.data.hide_good_box) return;
               that.finger = {};
-              let topPoint = {}, { cartQuantity } = that.data
+              let topPoint = {},
+                {
+                  cartQuantity
+                } = that.data
               that.finger['x'] = e.touches["0"].clientX;
               that.finger['y'] = e.touches["0"].clientY;
               if (that.finger['y'] < that.busPos['y']) {
@@ -115,14 +118,14 @@ Page({
               that.showToast(desc)
             })
 
-          }else{
+          } else {
             that.setData({
               specification: specification,
               options: option,
               option: true //显示规格
             })
           }
-          
+
         } else {
           wx.navigateTo({
             url: '/pages/register/register',
@@ -133,10 +136,7 @@ Page({
   },
   // 加入购物车动画
   startAnimation: function () {
-    let index = 0,
-      that = this,
-      bezier_points = that.linePos['bezier_points'],
-      len = bezier_points.length - 1;
+    let index = 0, that = this, bezier_points = that.linePos['bezier_points'], len = bezier_points.length - 1;
     that.setData({
       hide_good_box: false,
       bus_x: that.finger['x'],
@@ -160,9 +160,8 @@ Page({
   quantity: function () {
     let that = this
     axios.getData({
-      isToast:true,
-      url:`${urlItem}trolley/queryTrolleyCount?branchNo=${app.globalData.branch.branchNo}&sessionId=${cache.get("sessionId", this)}`
-    }).then(res=>{
+      url: `${urlItem}trolley/queryTrolleyCount?branchNo=${app.globalData.branch.branchNo}&sessionId=${cache.get("sessionId", this)}`
+    }).then(res => {
       that.setData({
         cartQuantity: res.data.respData
       })
@@ -183,42 +182,23 @@ Page({
     that.busPos = {};
     that.busPos['x'] = 20; //购物车的位置
     that.busPos['y'] = app.globalData.hh - 60;
-    that.getHistory(); //获取搜索历史
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.quantity()
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+    let that = this
+    wx.getSetting({
+      success(res) {
+        const userAuthorization = res.authSetting["scope.userInfo"] ? true : false
+        that.setData({ userAuthorization })
+        if (userAuthorization) {
+          that.getHistory(); //获取搜索历史
+          that.quantity() //获取购物车数量
+        }
+      }
+    })
   },
 
   /**
@@ -230,29 +210,21 @@ Page({
   },
 
   /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
-  /**
    * 输入搜索关键字
    */
   wxSearchInput: function (value) {
     let that = this;
     let len = value.detail.value.length;
-    const {pageNum} = that.data
+    const { pageNum } = that.data
     that.setData({
       wxSearchData: value.detail.value,
       pageNum: len >= 2 ? pageNum : 1
     })
-    if (len >= 2) { //输入两个搜索文字
+    if (len >= 1) { //输入两个搜索文字
       that.toSearch(); //获取商品列表数据
     } else {
       that.getHistory(); //重新获取搜索记录
       that.emptyMess(); //置空数据
-      that.showToast('请输入两个以上关键字')
     }
   },
 
@@ -265,10 +237,12 @@ Page({
     if (that.data.wxSearchData == '' || that.data.wxSearchData == null) {
       // 取消 返回上一页
       wx.navigateBack()
-      that.setData({pageNum:1})
+      that.setData({
+        pageNum: 1
+      })
     } else {
-      wx.showLoading({title: '加载中...'})
-      if (that.data.wxSearchData.length >= 2 && that.data.order.length != 0) { // 有搜索结果
+      wx.showLoading({ title: '加载中...' })
+      if (that.data.wxSearchData.length >= 1 && that.data.order.length != 0) { // 有搜索结果
         wx.hideLoading();
         that.setData({
           isShow: true, //展示所有搜索商品
@@ -277,7 +251,7 @@ Page({
       } else { //没有搜索结果
         wx.hideLoading();
         that.setData({
-          pageNum:1,
+          pageNum: 1,
           isShow: false, //隐藏所有搜索商品
           isShowList: false, //隐藏列表页
         })
@@ -322,21 +296,24 @@ Page({
   // 获取搜索记录列表
   getHistory: function () {
     let that = this
-    axios.get({
-      url: `${urlItem}user/item/history/${cache.get("userId", null)}`
-    }).then(res => {
-      if (res.data.respData.length > 0) {
-        let historyList = app.trimSpace(app.unique(res.data.respData));
-        that.setData({
-          historyList: historyList.length > 0 ? historyList : []
-        })
-      }
-    })
+    const { userAuthorization } = that.data
+    if (userAuthorization) {
+      axios.getData({
+        url: `${urlItem}user/item/history/${cache.get("userId", null)}`
+      }).then(res => {
+        if (res.data.respData.length > 0) {
+          let historyList = app.trimSpace(app.unique(res.data.respData));
+          that.setData({
+            historyList: historyList.length > 0 ? historyList : []
+          })
+        }
+      })
+    }
   },
   // 清除搜索记录
   delHistory: function () {
     let that = this
-    axios.get({
+    axios.getData({
       url: `${urlItem}user/item/history/clean/${cache.get("userId", null)}`
     }).then(res => {
       that.showToast('清除成功')
@@ -352,15 +329,15 @@ Page({
   toResult: app.debounce1(function (e) {
     let that = this
     const wxSearchData = e.currentTarget.dataset.index
-    that.setData({wxSearchData})
+    that.setData({ wxSearchData })
     that.toSearch()
   }, 1000),
   // 获取商品列表
   toSearch: function () {
     let that = this
-    const {bizLine} = that.data
-    const options = that.getOptions(bizLine,1)
-    wx.showLoading({title: '加载中'})
+    const { bizLine, wxSearchData } = that.data
+    const options = that.getOptions(bizLine, 1)
+    wx.showLoading({ title: '加载中' })
     axios.post(options).then(res => {
       wx.hideLoading()
       let order = res.data.respData
@@ -373,72 +350,76 @@ Page({
           isHasShop: true, //无搜索结果 显示无搜索结果图标
         })
       } else { //有搜索结果
-        let newOrder = order.filter(item=>item.stockQty >= 0 && item.itemStatus != 'FORSALE')
+        let newOrder = order.filter(item => item.stockQty >= 0 && item.itemStatus != 'FORSALE')
         that.setData({
           order: newOrder.length == 0 ? [] : newOrder, //搜索结果列表
-          isShowList: newOrder.length == 0 ? false : true, //展示搜索结果列表
-          isShow: false,
+          isShowList: newOrder.length == 0 ? false : wxSearchData.length == 1 ? false : true, //展示搜索结果列表
+          isShow: wxSearchData.length == 1 ? true : false,
           isHasShop: newOrder.length == 0 ? true : false, //显示无搜索结果图标
         })
       }
     })
     app.globalData.search = false
   },
-  getOptions: function(bizLine,pageNum){
+  getOptions: function (bizLine, pageNum) {
     let that = this
-    const toOptions = {//非首页搜索
+    const { userAuthorization } = that.data
+    const toOptions = { //非首页搜索
       url: `${urlItem}public/search/by/name`,
-      data:{
+      data: {
         "pageNum": pageNum,
         "pageSize": 20,
         "searchParams": {
           "itemName": that.data.wxSearchData,
-          "userId": cache.get("userId", "null"),
+          "userId": userAuthorization ? cache.get("userId", "null") : 0,
           "branchNo": app.globalData.branch.branchNo,
           "blId": that.data.blId
         }
       }
     }
-    const inOptions = {//首页搜索
+    const inOptions = { //首页搜索
       url: `${urlItem}public/user/applet/homepage/search`,
-      data:{
+      data: {
         "pageNum": pageNum,
         "pageSize": 20,
         "searchParams": {
           "branchNo": app.globalData.branch.branchNo,
           "itemName": that.data.wxSearchData,
-          "userId": cache.get("userId", "null")
+          "userId": userAuthorization ? cache.get("userId", "null") : 0
         }
       }
     }
     return bizLine == 'isIndex' ? inOptions : toOptions
   },
-  getMoreMess: function(){
+  // 下滑获取更多数据
+  getMoreMess: function () {
     let that = this
-    let {bizLine,pageNum,wxSearchData,isShowList,isHasShop} = that.data
-    if(wxSearchData.length < 2 || isShowList || isHasShop){
+    let { bizLine, pageNum, wxSearchData, isShowList, isHasShop } = that.data
+    if (wxSearchData.length < 1 || isShowList || isHasShop) {
       return false
     }
     pageNum = Number(++pageNum)
-    const options = that.getOptions(bizLine,pageNum)
-    wx.showLoading({title: '加载中'})
-    axios.post(options).then(res=>{
+    const options = that.getOptions(bizLine, pageNum)
+    wx.showLoading({ title: '加载中' })
+    axios.post(options).then(res => {
       wx.hideLoading()
-      let {order} = that.data//之前保存的商品数据
-      let neworder = res.data.respData.filter(item=>item.stockQty >= 0 && item.itemStatus != 'FORSALE')
-      if(neworder.length>0){//有搜索结果
+      let { order } = that.data //之前保存的商品数据
+      let neworder = res.data.respData.filter(item => item.stockQty >= 0 && item.itemStatus != 'FORSALE')
+      if (neworder.length > 0) { //有搜索结果
         order.push(...neworder)
-        that.setData({order,pageNum})
-      }else{//没有搜索结果
+        that.setData({ order, pageNum })
+      } else { //没有搜索结果
         --pageNum
-        that.setData({pageNum})
+        that.setData({
+          pageNum
+        })
         that.showToast('没有更多了(˶˚  ᗨ ˚˶)')
       }
     })
     app.globalData.search = false
   },
   Snatch: function (e) { // 预售 马上抢
-    let item = e.currentTarget.dataset.item,that = this
+    let item = e.currentTarget.dataset.item, that = this
     price = item.activitySalePrice == null ? item.salePrice : item.activitySalePrice
     refund = item.refundValue == null ? 0 : item.refundValue
     that.setData({
@@ -453,7 +434,7 @@ Page({
     })
   },
   plus: function () { //商品数量增加
-    let that = this,{number,limitedByUser,stockQty} = that.data
+    let that = this, { number, limitedByUser, stockQty } = that.data
     if (limitedByUser == null) { //限购数等于空 没有上限  根据库存判定
       if (number < stockQty) { //判定库存
         that.setData({
@@ -489,8 +470,7 @@ Page({
     }
   },
   reduce: function () { //商品减少
-    let that = this;
-    let {number} = that.data
+    let that = this, { number } = that.data
     if (number > 1) {
       that.setData({
         number: number - 1,
@@ -500,8 +480,8 @@ Page({
     }
   },
   toVip: function (e) { //预售 跳转VIP
-    let that = this,isStatus = e.currentTarget.dataset.isstatus
-    let {item,number} = that.data,json = []
+    let that = this, isStatus = e.currentTarget.dataset.isstatus
+    let { item, number } = that.data, json = []
     json.push(item)
     const originaPrice = item.salePrice * that.data.number;
     const totalPrice = item.activitySalePrice == null ? item.salePrice * that.data.number : item.activitySalePrice * number;
@@ -516,8 +496,12 @@ Page({
       url: `/pages/confirmOrder/confirmOrder?commoditStatus=Presale&isStatus=${isStatus}&originaPrice=${originaPrice}&totalPrice=${totalPrice}`
     })
   },
-  showToast:function(tips,icon){
+  showToast: function (tips, icon) {
     let icons = icon || 'none'
-    wx.showToast({ title: tips,icon: icons,duration: 1500 })
+    wx.showToast({
+      title: tips,
+      icon: icons,
+      duration: 1500
+    })
   }
 })

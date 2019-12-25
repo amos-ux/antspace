@@ -31,17 +31,22 @@
           已取消
         </view>
         <view wx:else class="order-list-nav-right" style="{{item.orderStatus=='CANCELLED' || item.orderStatus=='TORETURN' ||item.orderStatus=='INVOICED' || item.orderStatus=='COMPLETED'?'color:#A0A1A3':'color:#FFA333'}}">
-          {{item.orderStatus=="UNPAID"?"待支付"
-          :item.orderStatus=="PICKING"?
-          item.orderStatus=='DISPATCHING' && item.orderType=='DIST'?'配送中'
-          :"配货中"
-          :item.orderStatus=="COMPLETED"?
-          "已完成":item.orderStatus=="CANCELLED"
-          ?"已取消"
-          :item.orderStatus=="REFUNDED"?
-          "退款中":item.orderStatus=="REJECTED"
-          ?"退款驳回":item.orderStatus=="TORETURN"
-          ?"已退款":item.orderStatus=="INVOICING"?"开票中":item.orderStatus=="INVOICED"?"已开票":item.orderStatus=="DISPATCHING"&&item.orderType=="SELF"?"待自提":item.orderStatus=="DISPATCHING"&&item.branchNo=='888888'&&item.orderType=='DIST'?'已送达':item.orderType=='PAID'?"配货中":'配送中'}}
+          {{
+            item.orderStatus=='UNPAID'  && item.orderType!=='NONE'?'待支付':
+            item.orderStatus=='GROUPING'?'待成团':
+            item.orderStatus=='PAID'?'配货中':
+            item.orderStatus=='PICKING'?item.branchNo=='888888'?'配送中':'配货中':
+            item.orderStatus=='REFUNDED'?'退款中':
+            item.orderStatus=='REJECTED'?'退货驳回':
+            item.orderStatus=='INVOICED'?'已开票':
+            item.orderStatus=='COMPLETED' || item.orderStatus=='INVOICING' || item.orderStatus=='INVOICED'?'已完成':
+            item.orderStatus=='CANCELLED' || (item.orderStatus=='UNPAID' && item.orderType=='NONE')?'已取消':
+            item.orderStatus=='TORETURN'?'已退款':
+            item.orderStatus=='DISPATCHING' && item.orderType=='SELF'?'待自提':
+            item.orderStatus=='DISPATCHING' && item.orderType=='DIST'?item.branchNo=='888888'?'已送达':'配送中':
+            item.orderStatus=="UNPAID"?"待支付":''
+
+          }}
         </view>
       </view>
       <view class="order-content">
@@ -65,9 +70,9 @@
         <view class="order-cancel" wx:if="{{item.orderStatus=='UNPAID'&&item.orderType!=='NONE'}}" catchtap="cancel" data-item="{{item}}">取消订单</view>
         <view class="order-confirm" wx:if="{{item.orderStatus=='UNPAID'&&item.orderType!=='NONE'}}" catchtap="pay" data-item="{{item}}">立即支付</view>
         <!-- <view class="order-refund">退款进度</view> -->
-        <view class="order-yard" wx:if="{{item.orderStatus=='PICKING'||(item.orderStatus=='DISPATCHING' && item.orderType=='SELF')}}">取件码：{{item.pickupCode}}</view>
-        <view class="order-collect" wx:if="{{item.orderStatus=='PICKING'||(item.orderStatus=='DISPATCHING' && item.orderType=='SELF')}}" catchtap="clickYard" data-item='{{item}}'>取件码</view>
-        <view class="order-cancel" wx:if="{{item.expressNo!=''}}"  catchtap="toLogIstics" data-item="{{item}}" data-index="{{index}}">查看物流</view>
+        <view class="order-yard" wx:if="{{item.orderStatus=='DISPATCHING' && item.orderType=='SELF'}}">取件码：{{item.pickupCode}}</view>
+        <view class="order-collect" wx:if="{{item.orderStatus=='DISPATCHING' && item.orderType=='SELF'}}" catchtap="clickYard" data-item='{{item}}'>取件码</view>
+        <view class="order-cancel" wx:if="{{item.expressNo!=''||(item.orderStatus=='PAID'&&item.branchNo=='888888')}}"  catchtap="toLogIstics" data-item="{{item}}" data-index="{{index}}">查看物流</view>
         <view class="order-confirm" wx:if="{{item.branchNo=='888888'&&item.orderType=='DIST'&&item.orderStatus=='DISPATCHING'&&(item.userConfirmed==''||item.userConfirmed==null)}}" data-index="{{index}}" data-item="{{item}}" catchtap="isModel">确认收货</view>
       </view>
 

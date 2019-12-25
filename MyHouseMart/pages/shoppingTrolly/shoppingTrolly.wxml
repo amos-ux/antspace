@@ -1,7 +1,7 @@
 <view class='page'>
   <view class="activity" wx:if="{{money-totalValue>0 && !show && userAuthorization && memberStatus!='NON_MEMBERS' && memberStatus!='EXPIRED_MEMBERS' && uniqueCode=='null'}}">再买{{we.toFixed(money-totalValue)}}元，即可参与“邀请返现”的活动</view>
 
-    <view class='vacancy' wx:if="{{show || !userAuthorization}}">
+  <view class='vacancy' wx:if="{{show || !userAuthorization}}">
     <view class='box-vacancy'>
       <view class='vacancy-view'>
         <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/c4240582002f4356904abc8a175489d1.png"></image>
@@ -17,13 +17,69 @@
   <view class="activity" wx:if="{{money-totalValue<=0 && !show && userAuthorization && memberStatus!='NON_MEMBERS' && memberStatus!='EXPIRED_MEMBERS' && uniqueCode=='null'}}">已达到参加"邀请赚返现"的条件，快去结算吧！</view>
   <view class='goodsPage'>
     <view class='goodsList'>
-  
+
       <view class='goods-nav' wx:if="{{!show && userAuthorization}}">
-      <view class='delect' catchtap='deletes'>删除</view>
+        <view class='delect' catchtap='deletes'>删除</view>
         <view class='discounts' bindtap="showModal" wx:if="{{discountsRoll.length!==0}}">
           <image src='../../images/cartDiscounts.svg'></image>
         </view>
       </view>
+
+      <!-- 多倍返现 -->
+      <view class='no-discount' wx:for="{{doubleRefundItem}}" wx:for-index="doubleRefundItemIndex"    wx:key="index" style="background:#FEF6F1;margin-top:0" wx:if="{{item.length!=0}}">
+        <view class="reminder">
+          <view class="reminder-view1">
+            <text class="reminder-text1">多倍返现</text>
+            <view class="reminder-view2">
+              <text class="reminder-text2" wx:if="{{item[0].promotionRule.promotionRule[0].endTime != null && item[0].promotionRule.promotionRule[0].startTime != null}}">活动时段</text>
+              <text class="reminder-text2" wx:for="{{item[0].promotionRule.promotionRule}}" wx:if="{{item[0].promotionRule.promotionRule[0].endTime != null && item[0].promotionRule.promotionRule[0].startTime != null}}" wx:key="index">{{we.slice(item.startTime)}}~{{we.slice(item.endTime)}};</text>
+              剩余{{item[0].promotionRule.promotionRule[0].day}}天
+            </view>
+          </view>
+
+        </view>
+        <view class='cart-goods' wx:for="{{item}}" wx:for-item="items" wx:key="index">
+          <view class='cart-icon'>
+            <view class='icon' style="{{items.astrict?'border:none':''}}" catchtap='check' data-number="{{doubleRefundItemIndex}}" data-index="{{index}}" data-item="{{items}}">
+              <icon type='success' wx:if="{{items.astrict}}" color='rgba(255, 163, 51, 1)' size='19'></icon>
+            </view>
+          </view>
+          <view class='cart-commodity'>
+            <view class='commodity-img'>
+              <image src='{{items.thumbPic?items.thumbPic:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
+              <text class="text" wx:if="{{items.refundValue!=0 && items.refundValue!=null && items.refundMultiple!=null && items.refundMultiple!=0}}" style="{{we.split(items.refundValue).length>=3?'font-size:22rpx':''}}">返¥{{we.toFixed(items.refundValue)}}×{{items.promotionRule.promotionRule[0].multipleValue}}</text>
+                         <text class="text" wx:if="{{items.refundMultiple==null || items.refundMultiple==0}}" style="{{we.split(items.refundValue).length>=3?'font-size:22rpx':''}}">返¥{{we.toFixed(items.refundValue)}}</text>
+            </view>
+            <view class='commodity-content'>
+              <view class='commodity-name'>{{items.itemName}}</view>
+
+              <!-- <view class='commodity-specification' wx:for="{{item.extOptions}}" wx:key='index' wx:for-item="e">{{e}}</view> -->
+              <!-- <view class='commodity-specification' wx:if="{{item.extOptions.lenght!==0}}">{{item.extOptions}}</view> -->
+              <view class='commodity-discount' style='{{items.extOptions.length==0 || items.extOptions==null?"margin-top:34rpx":""}}'>
+                <text wx:if="{{items.satisfied.length!==0}}">{{items.satisfied[0]}}</text>
+              </view>
+              <view class='commodity-price'>
+                <view style='display:flex;align-items:center' wx:if="{{items.activitySalePrice==null}}">
+                  <view class='commodity-vipprice' wx:if="{{items.disPrice!==null}}">¥{{we.toFixed(items.disPrice)}}</view>
+                  <view class='commodity-vipprice' wx:if="{{items.activitySalePrice!==null}}">¥{{we.toFixed(items.activitySalePrice)}}</view>
+                  <view class='commodity-saleprice' style='{{items.disPrice==null?"color:#FF5A52;font-size:30rpx;font-weight:500":" text-decoration: line-through"}}'>¥{{we.toFixed(items.salePrice)}}</view>
+                </view>
+                <view style='display:flex;align-items:center' wx:else>
+                  <view class='commodity-vipprice' wx:if="{{items.activitySalePrice!==null}}">¥{{we.toFixed(items.activitySalePrice)}}</view>
+                  <view class='commodity-saleprice' style='{{items.activitySalePrice==null?"color:#FF5A52;font-size:30rpx;font-weight:500":" text-decoration:line-through;"}}'>¥{{we.toFixed(items.salePrice)}}</view>
+                </view>
+                <view class='commodity-number'>
+                  <view class='commdity-subtring' catchtap='multiplicity' data-type="sub" data-number="{{doubleRefundItemIndex}}" data-index="{{index}}" data-item="{{items}}">-</view>
+                  <view class='commdity-quantity'>{{items.quantity}}</view>
+                  <view class='commdity-add' catchtap='multiplicity' data-type="add" data-index="{{index}}" data-number="{{doubleRefundItemIndex}}" data-item="{{items}}" style='{{items.quantity==items.stockQty?"color:rgba(213, 214, 217, 1)":""}}'>+</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="color-view"></view>
+      </view>
+      <!-- 参与促销 -->
       <view class='goodsCart' wx:if="{{fullItems.length!==0}}">
         <view class='cart-top'>
           <view class='cart-left'>
@@ -47,11 +103,11 @@
           <view class='cart-commodity'>
             <view class='commodity-img'>
               <image src='{{item.thumbPic?item.thumbPic:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
-              <text class="text" wx:if="{{item.refundValue!==0 && items.refundValue!==null}}">返现{{item.refundValue}}元</text>
+              <text class="text" wx:if="{{item.refundValue!==0 && items.refundValue!==null}}" style="{{we.split(item.refundValue).length>=3?'font-size:22rpx':''}}">返¥{{we.toFixed(item.refundValue)}}</text>
             </view>
             <view class='commodity-content'>
               <view class='commodity-name'>{{item.itemName}}</view>
-              
+
               <!-- <view class='commodity-specification' wx:for="{{item.extOptions}}" wx:key='index' wx:for-items="e">{{e}}</view> -->
               <view class='commodity-discount' style='{{item.extOptions.length==0 || item.extOptions==null?"margin-top:34rpx":""}}'>
                 <text wx:if="{{item.satisfied.lenght!==0}}">{{item.satisfied[0]}}</text>
@@ -87,11 +143,11 @@
           <view class='cart-commodity'>
             <view class='commodity-img'>
               <image src='{{item.thumbPic?item.thumbPic:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}'></image>
-              <text class="text" wx:if="{{item.refundValue!==0 && items.refundValue!==null}}">返现{{item.refundValue}}元</text>
+              <text class="text" wx:if="{{item.refundValue!==0 && items.refundValue!==null}}" style="{{we.split(item.refundValue).length>=3?'font-size:22rpx':''}}">返¥{{we.toFixed(item.refundValue)}}</text>
             </view>
             <view class='commodity-content'>
               <view class='commodity-name'>{{item.itemName}}</view>
-              
+
               <!-- <view class='commodity-specification' wx:for="{{item.extOptions}}" wx:key='index' wx:for-item="e">{{e}}</view> -->
               <!-- <view class='commodity-specification' wx:if="{{item.extOptions.lenght!==0}}">{{item.extOptions}}</view> -->
               <view class='commodity-discount' style='{{item.extOptions.length==0 || item.extOptions==null?"margin-top:34rpx":""}}'>
@@ -159,10 +215,10 @@
                 </view> -->
               </view>
               <view class='rell-top-right' style="{{item.dataTemplate.couponType=='DISCOUNT_COUPON' || item.dataTemplate.couponType=='PRICE_FULL_COUPON'?'':'margin-left:18rpx;width:100%'}}">
-                <view class='kind' >
+                <view class='kind'>
                   <view class='kind-view'>{{item.dataTemplate.couponTitle}}</view>
                   <view class='kind-view1' catchtap='button' wx:if="{{!item.useStatus}}">去凑单</view>
-                  <view class='kind-view2'  wx:if="{{item.useStatus}}" style="{{item.dataTemplate.couponType=='DISCOUNT_COUPON' || item.dataTemplate.couponType=='PRICE_FULL_COUPON'?'':''}}">可使用</view>
+                  <view class='kind-view2' wx:if="{{item.useStatus}}" style="{{item.dataTemplate.couponType=='DISCOUNT_COUPON' || item.dataTemplate.couponType=='PRICE_FULL_COUPON'?'':''}}">可使用</view>
                 </view>
                 <view class='branchKind'>{{item.dataTemplate.itemTarge}}/{{item.dataTemplate.targe}}</view>
                 <view class='date'>有效日期：{{item.dataTemplate.effectiveFrom}} - {{item.dataTemplate.effectiveTo}}</view>
@@ -182,7 +238,7 @@
   <loseEfficacy outmodedItems="{{outmodedItems}}"></loseEfficacy>
   <shade rule="{{rule}}" propsShow="{{propsShow}}"></shade>
 
-  <view class='fixed' wx:if="{{items.length || fullItems.length}}">
+  <view class='fixed' wx:if="{{items.length || fullItems.length || doubleRefundItem.length}}">
     <!-- <view class="fulfil" wx:if='{{text.length}}'>{{text}}</view> -->
     <view class='fixed-top' wx:if="{{we.toFixed(totalValue)<sendMonry}}">
       <view class='fixed-text'>
@@ -216,10 +272,22 @@
 <quit wx:if="{{quit}}"></quit>
 <wxs module="we">
   var toFixed = function(value) {
-    value = Number(value)
-    return value.toFixed(2)
+    if (typeof value == "number") {
+      return value.toFixed(2);
+    }
+  }
+
+  var split = function(value) {
+    if (typeof value == "number") {
+      return parseInt(value).toString()
+    }
+  }
+  var slice = function(value){
+      return value.slice(0,5)
   }
   module.exports = {
-    toFixed: toFixed
+    toFixed: toFixed,
+    split: split,
+    slice:slice
   }
 </wxs>

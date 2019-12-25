@@ -48,25 +48,23 @@ Page({
         })
       } else {
         const defaultPlace = usable.filter(item => item.defaultAddress == 'Y')
-        if (defaultPlace.length > 0) {
-          wx.showLoading({ title: '加载中...' })
-          axios.post({
-            url: `${url}/address/queryDistFee`,
-            data: {
-              "branchNo": app.globalData.branch.branchNo, //店铺号
-              "locationId": defaultPlace[0].locationId, //地址id
-              "totalPriceAmount": totalSummation, //原价总价
-            }
-          }).then(rest => {
-            wx.hideLoading()
-            prevPage.setData({
-              select: '',
-              location: defaultPlace[0],
-              shippingFee: Number(totalSummation) >= Number(amount) ? rest.data.respData.distPrice : 0, //配送费
-              sendFeeIiemNo: rest.data.respData.itemNo, //配送费商品号
-            })
-          }, () => { wx.hideLoading() })
-        }
+        wx.showLoading({ title: '加载中...' })
+        axios.post({
+          url: `${url}/address/queryDistFee`,
+          data: {
+            "branchNo": app.globalData.branch.branchNo, //店铺号
+            "locationId": defaultPlace.length > 0 ? defaultPlace[0].locationId : usable[0].locationId, //地址id
+            "totalPriceAmount": totalSummation, //原价总价
+          }
+        }).then(rest => {
+          wx.hideLoading()
+          prevPage.setData({
+            select: '',
+            location: defaultPlace.length > 0 ? defaultPlace[0] : usable[0],
+            shippingFee: Number(totalSummation) >= Number(amount) ? rest.data.respData.distPrice : 0, //配送费
+            sendFeeIiemNo: rest.data.respData.itemNo, //配送费商品号
+          })
+        }, () => { wx.hideLoading() })
       }
       that.setData({ unusable, usable, location, hint })
     }, () => { wx.hideLoading() })
@@ -112,7 +110,7 @@ Page({
   //修改地址
   modification: function (i) {
     wx.navigateTo({
-      url: '../site/site?p=' + JSON.stringify(this.data.usable[i.currentTarget.dataset.id]),
+      url: `../site/site?p=${encodeURIComponent(JSON.stringify(this.data.usable[i.currentTarget.dataset.id]))}`
     })
   },
   //添加收货地址

@@ -13,11 +13,16 @@
       <view class="content_item" catchtap='details' data-item="{{items}}">
         <view class="content_item_top">
           <image lazy-load="true" src='{{items.picAddr?items.picAddr:"https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"}}' />
-          <text class="text" style='{{items.stockQty==0 ||items.itemStatus=="FORSALE"?"background:rgba(160, 161, 163, 1)":""}}' wx:if="{{items.refundValue!==0 && items.refundValue!==null}}">返现{{items.refundValue}}元</text>
+          <text class="text" style='{{items.stockQty==0 || items.itemStatus=="FORSALE"?"background:rgba(160, 161, 163, 1)":we.split(items.refundValue).length>=3?"font-size:22rpx":""}}' wx:if="{{items.refundValue!==0 && items.refundValue!==null && items.promotionRule.promotionType!='MULTIPLE_RETURN'}}">返¥{{items.refundValue}}</text>
           <text class="text1" wx:if="{{items.secKilling}}">限时秒杀中</text>
 
           <view class='complete' wx:if="{{items.stockQty==0||items.itemStatus=='FORSALE'}}">
             <view>{{items.stockQty==0?"已售罄":"待售"}}</view>
+          </view>
+           <!-- 多倍返现 -->
+          <view class="returnCash" wx:if="{{items.refundValue!==0 && items.refundValue!==null &&items.promotionRule.promotionType=='MULTIPLE_RETURN'}}">
+            <view class="return-view">会员返现</view>
+            <view class="return-view1" style="padding-top:4rpx">¥{{we.toFixed(items.refundValue)}}×{{items.promotionRule.promotionRule[0].multipleValue}}</view>
           </view>
         </view>
         <view class="item_title">{{items.itemName}}</view>
@@ -28,7 +33,7 @@
           <view class='morning' wx:if="{{items.stTimes.length!==0}}" style="{{items.satisfied.length==0?'margin-left:16rpx':''}}">{{items.stTimes[0].stName}}</view>
         </view>
           <view class="box-Beforediscount">
-              <view class="Beforediscount" style='{{items.stockQty==0||items.itemStatus=="FORSALE"?"color:#A0A1A3;":""}}' wx:if="{{items.disPrice!==null}}">¥{{we.toFixed(items.disPrice)}}</view>
+            <view class="Beforediscount" style='{{items.stockQty==0||items.itemStatus=="FORSALE"?"color:#A0A1A3;":""}}' wx:if="{{items.disPrice!==null}}">¥{{we.toFixed(items.disPrice)}}</view>
           </view>
         <view class="Afterdiscount" style='{{items.disPrice==null && (items.stockQty==0||items.itemStatus=="FORSALE")?"color:#A0A1A3;font-size:30rpx;font-weight:500":items.disPrice==null ?"color:#FF5A52;font-size:30rpx":"text-decoration: line-through;color:#A0A1A3"}}'>¥{{we.toFixed(items.salePrice)}}</view>
         <view class="add" wx:if="{{items.stockQty!==0&&items.itemStatus!=='FORSALE'}}" catchtap="touchOnGoods" data-item="{{items}}">
@@ -48,7 +53,14 @@
       return value.toFixed(2);
     }
   }
-  module.exports = {
-    toFixed: toFixed
+ 
+  var split = function(value){
+        if(typeof value == "number"){
+            return parseInt(value)
+        }
+  }
+   module.exports = {
+    toFixed: toFixed,
+    split:split
   }
 </wxs>

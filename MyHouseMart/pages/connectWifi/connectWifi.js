@@ -1,9 +1,9 @@
-// pages/connectWifi/connectWifi.js
 let latitude, longitude
 let e = require("../../utils/util.js");
 var call = require("../../utils/call.js");
 var cache = require("../../utils/cache.js");
 let app = getApp()
+let branchNo
 Page({
 
   /**
@@ -34,7 +34,11 @@ Page({
       type: 'gcj02',
       //还需要在这判断是否授权如果没有授权在 发起定位   ,授权过了就不发起
       success: function (res) {
-    
+        let data = {
+          latitude: res.latitude,
+          longitude : res.longitude
+        }
+        cache.put("data", data)
         latitude = res.latitude
         longitude = res.longitude
         that.instrument() 
@@ -47,9 +51,13 @@ Page({
     })
   },
   branchSelect() { //店铺选择先加载
+    if (cache.get("branchNo", "null")) {
+      branchNo = cache.get("branchNo", "null")
+    }
     let data = {
       'latitude': latitude,
-      'longitude': longitude
+      'longitude': longitude,
+      "branchNo": branchNo
     }
     call.postData("/service-item/user/get/nearest/branch", data, (rest) => {
       app.globalData.chonseStoreId = rest.respData.branchNo;
@@ -74,6 +82,7 @@ Page({
    */
   onShow: function() {
     this.type() //连接wifi
+  
   },
   instrument() {
     let that = this

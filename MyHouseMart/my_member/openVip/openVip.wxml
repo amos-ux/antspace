@@ -1,5 +1,5 @@
 <srcoll-view class="page" style="{{status=='openVip'?'padding-bottom: 170rpx;':''}}" scroll-y="true" wx:if="{{status=='openVip'}}">
-  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8d340a6619f246b0959d99aa3e29eadb.png"></image>
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/01a3a0939a8a4bfa9dedf49baf1c4a6f.png" />
 </srcoll-view>
 <view class="big-box" catchtap="skipVip" wx:if="{{status=='openVip'}}">
   <view>加入会员</view>

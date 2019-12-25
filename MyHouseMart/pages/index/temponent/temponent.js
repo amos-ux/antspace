@@ -12,8 +12,6 @@ Component({
     blPic: String,
     cartQuantity: Number,
     userAuthorization: Boolean
-
-
   },
 
   /**
@@ -25,7 +23,6 @@ Component({
     option:false,
     options:[],
     extOptions:[],
-    
   },
   lifetimes:{
     attached(){
@@ -103,14 +100,11 @@ Component({
             option:true //显示规格
           })
         }
-        
       }else{
         wx.navigateTo({
           url: '/pages/register/register',
         })
       }
-         
-    
     },
     //跳转商品详情
     details(e){

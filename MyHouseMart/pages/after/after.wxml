@@ -23,8 +23,11 @@
               </view>
               <view class='addNun'>
                 <text>数量：{{item.quantity}}</text>
-                <text class="refound-right" wx:if="{{item.refundAmt!=0}}">返现￥{{item.refundAmt*item.quantity}}</text>
+                <text class="{{item.refundFlag=='N'?'refound-right-delete':'refound-right'}}" wx:if="{{item.refundData&&goodsList.payType!='WALLET'&&item.refundTimes==1}}">返现￥{{Refund.toFixed(item.refundData)}}</text>
               </view>
+            </view>
+            <view class="multipleRefund" wx:if="{{item.refundTimes!=1&&item.refundTimes!=0&&item.refundTimes!=null}}">
+              <view class="multipleRefund-block">返现¥{{item.refundData}}x{{item.refundTimes}}</view>
             </view>
           </view>
         </block>
@@ -42,7 +45,11 @@
               </view>
               <view class='addNun'>
                 <text>数量：{{item.combItemQty}}</text>
+                <text class="{{item.refundFlag=='N'?'refound-right-delete':'refound-right'}}"  wx:if="{{item.refundData&&goodsList.payType!='WALLET'&&item.refundTimes==1}}">返现￥{{Refund.toFixed(item.refundData)}}</text>
               </view>
+            </view>
+            <view class="multipleRefund" wx:if="{{item.refundTimes!=1&&item.refundTimes!=0&&item.refundTimes!=null}}">
+              <view class="multipleRefund-block">返现¥{{item.refundData}}x{{item.refundTimes}}</view>
             </view>
           </view>
         </block>
@@ -100,7 +107,7 @@
   <view class='_style'></view>
   <view class='voucherBox'>
     <view class='voucher'>
-      <text>凭证图片</text>
+      <text>凭证图片（必填）</text>
       <!-- <text>最多三张</text> -->
     </view>
     <view class='voucher_Box'>
@@ -136,3 +143,21 @@
     </view>
   </view>
 </scroll-view>
+<wxs module="Refund">
+  var comboRefund = function(arr) {
+    var length = arr.length,refungMonry=0
+    for(var i=0;i<length;i++){
+      refungMonry+=arr[i].refundAmt*arr[i].quantity
+    }
+    return refungMonry.toFixed(2)
+  }
+  var toFixed = function(value, num) {
+    num = num || 2
+    value = Number(value ? value : 0)
+    return value.toFixed(num);
+  }
+  module.exports = {
+    comboRefund: comboRefund,
+    toFixed:toFixed
+  }
+</wxs>

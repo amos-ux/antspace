@@ -363,8 +363,11 @@ Page({
     if (!ifPayAmt) { //未选中钱包支付 改用钱包支付
       commonCommodity.map(item => {
         item.returnMoney = false
-        reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.refundValue : 0
+        const isInActivity = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.promotionRule.promotionRule[0].multipleValue == item.refundMultiple : true : true
+        item.mulreturnMoney = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.refundValue * (isInActivity ? item.promotionRule.promotionRule[0].multipleValue : 1) : item.refundValue : item.refundValue //多倍返现金额
+        reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.mulreturnMoney : 0
       })
+      reAllMnt = (Math.floor(reAllMnt * 100) / 100).toFixed(2)
       that.setData({
         discounts: 0,
         couponPrice: 0,
@@ -383,9 +386,12 @@ Page({
         that.getTicket(useCoupon); //获取券默认选中券
       } else {//没有券
         commonCommodity.map(item => {
-          reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.refundValue : 0
           item.returnMoney = planNos.indexOf(item.planNo) == -1 ? true : false
+          const isInActivity = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.promotionRule.promotionRule[0].multipleValue == item.refundMultiple : true : true
+          item.mulreturnMoney = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.refundValue * (isInActivity ? item.promotionRule.promotionRule[0].multipleValue : 1) : item.refundValue : item.refundValue //多倍返现金额
+          reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.mulreturnMoney : 0
         })
+        reAllMnt = (Math.floor(reAllMnt * 100) / 100).toFixed(2)
         that.setData({ reAllMnt, commonCommodity })
       }
     }
@@ -413,10 +419,11 @@ Page({
       const couponPrice = that.data.originaPrice - discounts //优惠售价
       const isreturnMoney = res.data.respData.returnMoney
       let { commonCommodity } = that.data, reAllMnt = 0
-      commonCommodity.map(item => {
+      commonCommodity.map(item => {//多倍返现和优惠券互斥
         item.returnMoney = item.couponPlanNo.indexOf(planNo) != -1 ? isreturnMoney : true;//使用券 置为true 
         reAllMnt += item.couponPlanNo.indexOf(planNo) != -1 ? isreturnMoney ? item.quantity * item.refundValue : 0 : item.quantity * item.refundValue
       })
+      reAllMnt = (Math.floor(reAllMnt * 100) / 100).toFixed(2)
       that.setData({
         planNo, planId, couponNo, discounts, couponPrice, commonCommodity, reAllMnt, isreturnMoney,
         ifPayAmt: false, //不选中钱包
@@ -669,14 +676,14 @@ Page({
             const { useCouponList, useProductList } = couponMess; //可用优惠券 可用商品券
             couponLen = useProductList.length + useCouponList.length; //获取可用券个数
             useCoupon = useCouponList.length > 0 ? useCouponList[0] : useProductList[0]; //正在使用的优惠券
-            deliveryFrom = branchNo == 888888 ? '00:00:00' : shopTimeMess.deliveryFrom; //外送开始时间
-            deliveryTo = branchNo == 888888 ? '23:59:59' : shopTimeMess.deliveryTo; //外送结束时间
+            deliveryFrom = branchNo == '888888' ? '00:00:00' : shopTimeMess.deliveryFrom; //外送开始时间
+            deliveryTo = branchNo == '888888' ? '23:59:59' : shopTimeMess.deliveryTo; //外送结束时间
             pickupFrom = shopTimeMess.pickupFrom; //自提开始时间
             pickupTo = shopTimeMess.pickupTo; //自提结束时间
-            const num = pickupFrom == null || pickupTo == null ? 1 : 2;
+            const num = pickupFrom == null || pickupTo == null ? 1 : branchNo == '888888' ? 1 : 2;
             if (mobileMess) { mobile = mobileMess.userMobile }
             that.animation = wx.createAnimation({ duration: 200 });
-            that.animation.translate(pickupFrom == null || pickupTo == null ? 0 : 356 * rpx, 0).step(); //除不支持自提 默认跳转到店自提
+            that.animation.translate(pickupFrom == null || pickupTo == null ? 0 : branchNo == '888888' ? 0 : 356 * rpx, 0).step(); //除不支持自提 默认跳转到店自提 (除了我家商城)
             let usabls = location.filter(item => item.isDistribution == 'Y')//可用地址
             const defaultPlace = usabls.filter(item => item.defaultAddress == 'Y')//默认地址
             if (usabls.length > 0) { //有可用地址
@@ -700,8 +707,8 @@ Page({
                 sendFeeIiemNo: ''
               })
             }
-            // 当用户余额足够支付 或者用户为会员时 使用钱包余额
-            if (userInfo.memberStatus != 'NON_MEMBERS' && userInfo.balanceAmount >= that.data.totalPrice && that.data.status!='greatPackage') {
+            // 使用钱包余额
+            if (userInfo.memberStatus != 'NON_MEMBERS' && userInfo.balanceAmount >= that.data.totalPrice && that.data.status != 'greatPackage') {
               that.getAmnt(couponLen); //会员
             } else { //钱包余额不足
               if (couponLen == 0) { //无优惠券
@@ -745,8 +752,11 @@ Page({
     let { commonCommodity, planNos } = that.data, reAllMnt = 0
     commonCommodity.map(item => {
       item.returnMoney = false
-      reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.refundValue : 0
+      const isInActivity = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.promotionRule.promotionRule[0].multipleValue == item.refundMultiple : true : true
+      item.mulreturnMoney = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.refundValue * (isInActivity ? item.promotionRule.promotionRule[0].multipleValue : 1) : item.refundValue : item.refundValue //多倍返现金额
+      reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.mulreturnMoney : 0
     })
+    reAllMnt = (Math.floor(reAllMnt * 100) / 100).toFixed(2)
     that.setData({
       discounts: 0,
       couponPrice: 0,
@@ -769,14 +779,18 @@ Page({
     wx.getSystemInfo({ success: res => { rpx = 1 * (res.windowWidth * res.pixelRatio) / (750 * res.pixelRatio) } })
     order.map(item => {//默认不选券情况
       number += item.quantity
-      reAllMnt += planNoList.indexOf(item.planNo) == -1 ? item.quantity * item.refundValue : 0
       item.returnMoney = planNoList.indexOf(item.planNo) == -1 ? true : false
+      item.isreturnMoney = planNoList.indexOf(item.planNo) == -1 ? true : false
+      const isInActivity = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.promotionRule.promotionRule[0].multipleValue == item.refundMultiple : true : true
+      item.mulreturnMoney = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.refundValue * (isInActivity ? item.promotionRule.promotionRule[0].multipleValue : 1) : item.refundValue : item.refundValue //多倍返现金额
+      reAllMnt += planNoList.indexOf(item.planNo) == -1 ? item.quantity * item.mulreturnMoney : 0
       if (item.comb == false) {
         commonCommodity.push(item); //普通商品
       } else {
         packageGoods.push(item); //套餐商品
       }
     })
+    reAllMnt = (Math.floor(reAllMnt * 100) / 100).toFixed(2)
     that.setData({ number, packageGoods, commonCommodity, reAllMnt })
   },
   // 预售 新会员超值购 续费大礼包
@@ -784,11 +798,14 @@ Page({
     let that = this, reAllMnt = 0
     wx.getSystemInfo({ success: res => { rpx = 1 * (res.windowWidth * res.pixelRatio) / (750 * res.pixelRatio) } })
     order.map(item => {
-      reAllMnt += item.quantity * item.refundValue * 1
+      const isInActivity = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.promotionRule.promotionRule[0].multipleValue == item.refundMultiple : true : true
+      item.mulreturnMoney = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.refundValue * (isInActivity ? item.promotionRule.promotionRule[0].multipleValue : 1) : item.refundValue : item.refundValue //多倍返现金额
+      reAllMnt += item.quantity * item.mulreturnMoney * 1
     })
+    reAllMnt = (Math.floor(reAllMnt * 100) / 100).toFixed(2)
     that.setData({ number: order[0].quantity, commonCommodity: order, reAllMnt, status })
   },
-  
+
   throwErr: function () {
     this.showLoading(false)
     wx.showModal({

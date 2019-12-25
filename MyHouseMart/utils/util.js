@@ -1,8 +1,8 @@
 //生产
-let urlPrefix = "https://api.antspace.com/myhome/cloud/v1";
-let webSocketPrefix = "wss://api.antspace.com/myhome/cloud/v1/service-member";
-let webUrl = 'https://api.antspace.com/myhome/cloud/v1';
-let wxUrl = "https://api.antspace.com/myhome/cloud/v1/service-item"
+// let urlPrefix = "https://api.antspace.com/myhome/cloud/v1";
+// let webSocketPrefix = "wss://api.antspace.com/myhome/cloud/v1/service-member";
+// let webUrl = 'https://api.antspace.com/myhome/cloud/v1';
+// let wxUrl = "https://api.antspace.com/myhome/cloud/v1/service-item"
 
 //dev2  开发环境
 // let urlPrefix = "http://10.0.0.12:8989/myhome/cloud/v1"
@@ -17,10 +17,10 @@ let wxUrl = "https://api.antspace.com/myhome/cloud/v1/service-item"
 // let wxUrl = "https://wongkimshing.iask.in/myhome/cloud/v1/service-item";
 
 //test环境
-// let urlPrefix = "https://antspace-dev.oicp.vip/myhome/cloud/v1"
-// let webSocketPrefix = "wss://antspace-dev.oicp.vip/myhome/cloud/v1/service-member"
-// let webUrl = "https://antspace-dev.oicp.vip/myhome/cloud/v1"
-// let wxUrl = "https://antspace-dev.oicp.vip/myhome/cloud/v1/service-item"
+let urlPrefix = "https://antspace-dev.oicp.vip/myhome/cloud/v1"
+let webSocketPrefix = "wss://antspace-dev.oicp.vip/myhome/cloud/v1/service-member"
+let webUrl = "https://antspace-dev.oicp.vip/myhome/cloud/v1"
+let wxUrl = "https://antspace-dev.oicp.vip/myhome/cloud/v1/service-item"
 
 //测试环境
 // let urlPrefix = "https://antspace-dev.oicp.vip/myhome/cloud/v1"

@@ -4,7 +4,7 @@
   <view class="shop-content" wx:for="{{commonBranchs}}" catchtap="getDetail" wx:key="index" data-item="{{item}}">
     <view class="shop-name">{{item.branchName}}</view>
     <view class="shop-place">
-      <text class="place-name">{{item.locDetail}}</text>
+      <view class="place-name">{{item.locDetail}}</view>
       <text class="place-distance">{{item.range < 500 ? we.toFixed(item.range) : we.toFixed(item.range/1000) + 'k'}}m</text>
     </view>
   </view>
@@ -16,7 +16,7 @@
   <view class="shop-content" wx:for="{{userBranchs}}" catchtap="getDetail" wx:key="index" data-item="{{item}}">
     <view class="shop-name">{{item.branchName}}</view>
     <view class="shop-place">
-      <text class="place-name">{{item.locDetail}}</text>
+      <view class="place-name">{{item.locDetail}}</view>
       <text class="place-distance">{{item.range < 500 ? we.toFixed(item.range) : we.toFixed(item.range/1000) + 'k'}}m</text>
     </view>
   </view>

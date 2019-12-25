@@ -46,14 +46,13 @@ Page({
      
   },
   openMap(e){
-    console.log(e)
-    let locDetail = e.currentTarget.dataset.map
-    let branchName = e.currentTarget.dataset.branchname
+
+   let item = e.currentTarget.dataset.item
     wx.openLocation({
-      latitude,
-      longitude,
-      name: branchName,
-      address: locDetail,
+      latitude: item.latitude,
+      longitude: item.longitude,
+      name: item.branchName,
+      address: item.locDetail,
       scale: 18
     })
   },

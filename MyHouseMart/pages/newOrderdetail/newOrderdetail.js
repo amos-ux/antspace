@@ -6,7 +6,7 @@ import QRCode from '../../utils/qrcode.js'
 var baseurl = app.baseUrl + "service-member/";
 import request from '../../utils/my_page'
 var cache = require("../../utils/cache.js");
-let timer
+let timer,sizeIndex=1
 Page({
 
   /**
@@ -37,8 +37,8 @@ Page({
     item: [],
     combo: [],
     model: false,
-    isCustomerService:false,
-    payOff:true
+    isCustomerService: false,
+    payOff: true
   },
   qrcode(data) {
     new QRCode('myQrcode', {
@@ -87,7 +87,7 @@ Page({
     let time
     let count = null
     // if (order.cabinetGridNo == "") {
-      var supplierNo = "NORMAL"
+    var supplierNo = "NORMAL"
     // } else {
     //   var supplierNo = "SUPPLIERNO"
     // }
@@ -119,7 +119,7 @@ Page({
     }
     this.countTime()
   },
-  //再来一单
+  //再来一单 暂时用不上
   recur(e) {
     console.log(e)
     let goods = e.currentTarget.dataset.chose.saleItems
@@ -181,7 +181,7 @@ Page({
     var date = new Date();
     var endDate = new Date(that.data.message.createdDate.replace(/\-/g, '/'));
     var now = date.valueOf();
-    var end = endDate.valueOf()*1 + 1800000;
+    var end = endDate.valueOf() * 1 + 1800000;
     var leftTime = end - now;
     var d, h, m, s, ms;
     if (leftTime >= 0) {
@@ -197,31 +197,36 @@ Page({
       that.setData({
         countdown: m + ":" + s
       })
-      timer=setTimeout(that.countTime, 100);
-    } else{
+      timer = setTimeout(that.countTime, 100);
+    } else {
       clearTimeout(timer)
-      wx.request({
-        url: url + 'saleOrder/updateOrderStatus',
-        method: "POST",
-        data: {
-          "orderNo": that.data.orderNo,
-          "orderStatus": "CANCELLED",
-          "pickupCode": that.data.pickupCode,
-          "orderType": that.data.orderType,
-        },
-        success: function (res) {
+      if(sizeIndex<4){
+        wx.request({
+          url: url + 'saleOrder/updateOrderStatus',
+          method: "POST",
+          data: {
+            "orderNo": that.data.orderNo,
+            "orderStatus": "CANCELLED",
+            "pickupCode": that.data.pickupCode,
+            "orderType": that.data.orderType,
+          },
+          success: function (res) {
+            sizeIndex++
+            clearTimeout(timer)
+          }
+        })
+      }
 
-        }
-      })
+
 
     }
   },
   pay: function () {
     let that = this;
     var sessionId = cache.get('sessionId', 'null');
-    if(that.data.payOff==true){
+    if (that.data.payOff == true) {
       that.setData({
-        payOff:false
+        payOff: false
       })
       wx: wx.request({
         url: baseurl + 'proceed/pay/' + that.data.orderNo,
@@ -231,7 +236,7 @@ Page({
           'Cookie': "JSESSIONID=" + sessionId
         },
         // data:{
-  
+
         // "storeId": that.data.branchNo,
         // "pickUpTime": that.data.pickUpString,
         // "pickUpString": that.data.pickUpString,
@@ -240,12 +245,12 @@ Page({
         // "locationId":that.data.locationId
         // },
         success: function (res) {
-  
+
           console.log(res)
           if (res.data.respCode !== "0000") {
             wx.showModal({
               title: res.data.respDesc,
-  
+
             })
           } else {
             var data = res.data.respData;
@@ -264,7 +269,7 @@ Page({
               },
               fail(res) {
                 that.setData({
-                  payOff:true
+                  payOff: true
                 })
                 wx.showToast({
                   title: '支付失败',
@@ -274,6 +279,10 @@ Page({
             })
           }
         }
+      })
+    } else {
+      that.setData({
+        payOff: true
       })
     }
   },
@@ -419,8 +428,8 @@ Page({
       list.userConfirmed = '已收货'
 
       this.setData({
-        model:false,
-        message:list
+        model: false,
+        message: list
       })
       console.log(this.data.message)
     })
@@ -431,15 +440,29 @@ Page({
     })
   },
   callPhone() {
-    let that=this
+    let that = this
     wx.makePhoneCall({
-      phoneNumber: app.globalData.orderData.operatorMobile,
+      phoneNumber: "13411080802",
       success: function () {
         console.log("拨打电话成功！")
       },
       fail: function () {
         that.setData({
-          isCustomerService:true
+          isCustomerService: true
+        })
+      }
+    })
+  },
+  copy(e) {
+    wx.setClipboardData({
+      data: e.currentTarget.dataset.item,
+      success: function (res) {
+        wx.getClipboardData({
+          success: function (res) {
+            wx.showToast({
+              title: '复制成功'
+            })
+          }
         })
       }
     })

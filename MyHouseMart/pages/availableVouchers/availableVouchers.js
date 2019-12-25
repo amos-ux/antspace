@@ -142,7 +142,7 @@ Page({
     const { planNos, total, totalPrice,commoditStatus} = options,{ order } = app.globalData
     planNoArr.push(...planNos.split(','))
     planNoArr = app.trimSpace(planNoArr)
-    wx.showLoading({title: '加载中...'})
+    wx.showLoading({title: '加载中...',mask:true})
     that.setData({planNos: planNoArr})
     let payCouponsParams = order.map(item => {
       return {couponPlanNo: item.couponPlanNo,itemQty: item.quantity,salePrice: item.salePrice}
@@ -179,8 +179,10 @@ Page({
     let prevPage = pages[pages.length - 2]; //上一个页面
     let { total, totalPrice, planNos, order, usable } = that.data,reAllMnt = 0
     order.map(item=>{
-      reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.refundValue : 0
       item.returnMoney = planNos.indexOf(item.planNo) == -1 ? true : false
+      const isInActivity = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.promotionRule.promotionRule[0].multipleValue == item.refundMultiple : true : true
+      item.mulreturnMoney = item.promotionRule ? item.promotionRule.promotionType == 'MULTIPLE_RETURN' ? item.refundValue * (isInActivity ? item.promotionRule.promotionRule[0].multipleValue : 1) : item.refundValue : item.refundValue //多倍返现金额
+      reAllMnt += planNos.indexOf(item.planNo) == -1 ? item.quantity * item.mulreturnMoney : 0
     })
     //直接调用上一个页面的setData()方法，把数据存到上一个页面中去
     prevPage.setData({

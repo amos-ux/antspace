@@ -37,13 +37,17 @@
           <view class="list_left">
             <image lazy-load class="{{item.stockQty!=0?'':'img_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
             <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
-            <view class="{{item.stockQty!=0?'status_start':'status_end'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返现{{item.refundValue}}</view>
+            <view class="{{item.stockQty!=0?'status_start':'status_end'}}"  hidden="{{item.promotionRule.promotionType=='MULTIPLE_RETURN'?true:item.refundValue==0||item.refundValue==null}}">返{{item.refundValue}}元</view>
             <view class="end" wx:if="{{item.stockQty==0}}">已售罄</view>
+            <view class="multipleRefund" wx:if="{{item.promotionRule.promotionType=='MULTIPLE_RETURN'&&item.refundValue!=null&&item.refundValue!=0}}">
+              <text class="multipleRefund-left">会员返现</text>
+              <text class="multipleRefund-right"><text class="two-multipleRefund-right-childen">￥</text >{{we.toFixed(item.refundValue)}}<text class="two-multipleRefund-right-childen"> x </text>{{item.promotionRule.promotionRule[0].multipleValue}}</text>
+            </view>
           </view>
           <view class="list_right">
             <view class="{{item.stockQty!=0?'list_right_title':'list_right_title_end'}}">{{item.itemName}}</view>
             <!-- <view class="months">月销售{{item.salesQty==null?0:item.salesQty}}</view> -->
-            <text class="{{item.stockQty!=0?'zhekou_1':'zhekou_1end'}}" style="{{item.satisfied.length==0?'border:none;margin-right:0':''}}">{{item.satisfied[0]}}</text>
+            <text class="{{item.stockQty!=0?'zhekou_1':'zhekou_1end'}}" style="{{item.satisfied.length==0?'border:none;margin-right:0':''}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">{{item.satisfied[0]}}</text>
             <view style="width:300rpx;min-height:40rpx;line-height:20rpx;">
               <!-- <text class="'zhekou_2"  wx:for="{{item.stTimes}}" wx:key="{{item}}" >{{item.stName}}</text> -->
             </view>

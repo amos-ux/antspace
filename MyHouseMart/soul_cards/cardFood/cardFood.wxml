@@ -34,7 +34,7 @@
       </view>
     </view>
   </view>
-  <view class="hot" wx:for="{{SINGLE}}" data-item="item" catchtap="Router" wx:key="{{item}}">
+  <view class="hot" wx:for="{{SINGLE}}" data-item="{{item}}" catchtap="Router" wx:key="{{item}}">
     <image src="{{item.path}}" class="hot_img" style="background:#ededed" />
     <view class="hot_left">
       <text class="title1">{{item.title}}</text>
@@ -44,7 +44,7 @@
     <view class="hot_right">
       <view class="hot_type" catchtap="toShop" data-item="{{item}}" wx:for="{{item.items}}" wx:key="{{item}}">
         <image class="{{item.stockQty!=0?'':'hot_type_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
-        <view class="{{item.stockQty==0?'Price_end':'Price'}}">￥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+        <view class="{{item.stockQty==0?'Price_end':'Price'}}">￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</view>
         <text class="end" wx:if="{{item.stockQty==0}}">已售罄</text>
         <view class="seckill" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
       </view>
@@ -60,12 +60,12 @@
       <view class="business_item_list" wx:for="{{item.items}}" wx:if="{{item.stockQty!=0}}" catchtap="toShop" data-item="{{item}}" wx:key="{{item}}">
         <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
         <view class="seckill-business" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
-        <text class="{{item.stockQty!=0?'text':'text_end'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <text class="{{item.stockQty!=0?'text':'text_end'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返{{we.toFixed(item.refundValue)}}元</text>
         <view>{{item.itemName}}</view>
         <view class="zk" style="min-height:48rpx;">
-          <view class="{{item.stockQty!=0?'_Discount':'_Discount_end'}}" style="display:{{item.satisfied.length==0?'none':''}}">{{item.satisfied[0]}}</view>
+          <view class="{{item.stockQty!=0?'_Discount':'_Discount_end'}}" style="display:{{item.satisfied.length==0?'none':''}}"wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">{{item.satisfied[0]}}</view>
         </view>
-        <text>￥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+        <text>￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</text>
         <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" src="../../images/add.svg" class="add" />
         <view style="display:inline-block" wx:if="{{item.itemStatus=='FORSALE'}}">
           <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
@@ -74,14 +74,14 @@
       </view>
       <!-- 已售罄 -->
       <view wx:for="{{item.items}}" wx:if="{{item.stockQty==0}}" wx:key="{{item}}" catchtap="toShop" data-item="{{item}}" class="business_item_list_end">
-        <text class="text_end" hidden="{{item.refundValue==0||item.refundValue==null}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <text class="text_end" hidden="{{item.refundValue==0||item.refundValue==null}}">返{{we.toFixed(item.refundValue)}}元</text>
         <image src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
         <view class="seckill-business" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
         <view>{{item.itemName}}</view>
         <view class="zk" style="{{item.satisfied.length==0?'margin-top:22rpx':''}}">
-          <view class="{{item.stockQty!=0?'_Discount':'_Discount_end'}}" style="border:{{item.satisfied.length==0?'none':''}}">{{item.satisfied[0]}}</view>
+          <view class="{{item.stockQty!=0?'_Discount':'_Discount_end'}}" style="border:{{item.satisfied.length==0?'none':''}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">{{item.satisfied[0]}}</view>
         </view>
-        <text>￥{{item.disPrice!=null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+        <text>￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</text>
         <view class="end">已售罄</view>
       </view>
     </view>
@@ -98,21 +98,25 @@
     <view class="content_item_first" wx:if="{{ITEMRANK.bizShowType=='ONE'}}" wx:for="{{ITEMRANK.items}}" data-item="{{item}}" catchtap="toShop" wx:key="item">
       <view class="item_first_left" wx:if="{{item.stockQty!=0}}">
         <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
-        <text class="text" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <text class="text" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}" style="display:{{(item.refundValue==0||item.refundValue==null)&&item.promotionRule.promotionType=='MULTIPLE_RETURN'?'none':''}}">返{{we.toFixed(item.refundValue)}}元</text>
         <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+        <view class="multipleRefund" wx:if="{{item.promotionRule.promotionType=='MULTIPLE_RETURN'&&item.refundValue!=null&&item.refundValue!=0}}">
+          <text class="multipleRefund-left">会员返现</text>
+          <text class="multipleRefund-right"><text class="two-multipleRefund-right-childen">￥</text >{{item.refundValue}}<text class="two-multipleRefund-right-childen"> x </text>{{item.promotionRule.promotionRule[0].multipleValue}}</text>
+        </view>
       </view>
       <view class="item_first_left_end" wx:else>
         <image lazy-load src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
         <text class="end">已售罄</text>
-        <text class="text_end" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <text class="text_end" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}" style="display:{{(item.refundValue==0||item.refundValue==null)&&item.promotionRule.promotionType=='MULTIPLE_RETURN'?'none':''}}">返{{we.toFixed(item.refundValue)}}元</text>
         <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
       </view>
       <view class="item_first_right" wx:if="{{item.stockQty!=0}}">
         <view class="right_title">{{item.itemName}}</view>
-        <view class="item_first_Discount" hidden="{{item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+        <view class="item_first_Discount" hidden="{{item.satisfied.length==0}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">{{item.satisfied[0]}}</view>
         <!-- <view class="item_first_Discount" >满额送卷</view> -->
         <view class="item_bottom">
-          <view class="item_first_start_money">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+          <view class="item_first_start_money">￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</view>
           <text class="item_first_end_money" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
         </view>
         <!-- <view class="item_first_end_money">￥{{item.disPrice}}</view> -->
@@ -124,10 +128,10 @@
       </view>
       <view class="item_first_right" wx:else>
         <view class="right_title_maxLength_end">{{item.itemName}}</view>
-        <view class="item_first_Discount_maxLength_end" hidden="{{item.item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+        <view class="item_first_Discount_maxLength_end" hidden="{{item.satisfied.length==0}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">{{item.satisfied[0]}}</view>
         <!-- <view class="item_first_Discount_maxLength_end" >满额送卷</view> -->
         <view class="item_bottom">
-          <view class="item_first_start_money_maxLength_end">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
+          <view class="item_first_start_money_maxLength_end">￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</view>
           <text class="item_first_end_money_maxLength_end" style="display:{{item.disPrice==0||item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
         </view>
       </view>
@@ -138,16 +142,23 @@
         <image lazy-load class="{{item.stockQty!=0?'':'item_second_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
         <view class="img_bottom" wx:if="{{item.itemStatus!='OUTOFSTOCK'}}"></view>
         <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
+        <view class="multipleRefund" wx:if="{{item.promotionRule.promotionType=='MULTIPLE_RETURN'&&item.refundValue!=null&&item.refundValue!=0}}">
+          <text class="two-multipleRefund-left">会员返现</text>
+          <view class="two-multipleRefund-right">
+            <text class="two-multipleRefund-right-childen">￥</text >{{item.refundValue}}
+            <text class="two-multipleRefund-right-childen-cls"> x </text>{{item.promotionRule.promotionRule[0].multipleValue}}
+          </view>
+        </view>
       </view>
       <text class="content_item_second_end" wx:if="{{item.stockQty==0}}">已售罄</text>
-      <text class="{{item.stockQty!=0?'text':'text_end'}}" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+      <text class="{{item.stockQty!=0?'text':'text_end'}}" style="display:{{(item.refundValue==0||item.refundValue==null)?'none':''}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">返{{we.toFixed(item.refundValue)}}元</text>
       <view class="{{item.stockQty!=0?'item_second_title':'item_second_title_end'}}">{{item.itemName}}</view>
 
-      <view class="{{item.stockQty!=0?'item_second_Discount':'item_second_Discount_end'}}" hidden="{{item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
+      <view class="{{item.stockQty!=0?'item_second_Discount':'item_second_Discount_end'}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}" hidden="{{item.satisfied.length==0}}">{{item.satisfied[0]}}</view>
       <!-- <view class="{{item.stockQty!=0?'item_second_Discount':'item_second_Discount_end'}}" >满额送卷</view>  -->
 
       <view class="item_bottom_second">
-        <text class="{{item.stockQty!=0?'item_second_start_money':'item_second_start_money_end'}}">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</text>
+        <text class="{{item.stockQty!=0?'item_second_start_money':'item_second_start_money_end'}}">￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</text>
         <text class="{{item.disPrice==null||0?'bug':'item_second_end_money'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
       </view>
       <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" class="add" catchtap='shoppingcart' data-item="{{item}}" src="../../images/add.svg" class="add" />
@@ -161,14 +172,19 @@
         <image lazy-load class="{{item.stockQty!=0?'':'item_second_end'}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
         <text class="end" wx:if="{{item.stockQty==0}}">已售罄</text>
         <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
-        <text class="{{item.stockQty!=0?'text':'text_end'}}" style="display:{{item.refundValue==0||item.refundValue==null?'none':''}}">返现{{we.toFixed(item.refundValue)}}</text>
+        <text class="{{item.stockQty!=0?'text':'text_end'}}" style="display:{{(item.refundValue==0||item.refundValue==null)?'none':''}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">返{{we.toFixed(item.refundValue)}}元</text>
         <view class="three_bottom" wx:if="{{item.stockQty==0}}"></view>
+        <view class="multipleRefund" wx:if="{{item.promotionRule.promotionType=='MULTIPLE_RETURN'&&item.refundValue!=null&&item.refundValue!=0}}">
+          <text class="multipleRefund-left">会员返现</text>
+          <text class="multipleRefund-right"><text class="two-multipleRefund-right-childen">￥</text >{{item.refundValue}}<text class="two-multipleRefund-right-childen"> x </text>{{item.promotionRule.promotionRule[0].multipleValue}}</text>
+        </view>
       </view>
       <view class="{{item.stockQty!=0?'item_title':'item_title_end'}}">{{item.itemName}}</view>
-      <view class="Discount" style="{{item.satisfied.length==0?'opacity:0':'opacity:1'}}" class="{{item.stockQty==0||item.itemStatus=='FORSALE'?'Discount_end':'Discount'}}">{{item.satisfied.length==0?'敬请期待':item.satisfied[0]}}</view>
-
-      <view class="{{item.stockQty!=0?'Afterdiscount':'Afterdiscount_end'}}">￥{{item.salePrice==null?we.toFixed(item.disPrice):we.toFixed(item.salePrice)}}</view>
-      <text class="{{item.stockQty==0?'Beforediscount_bug':'Beforediscount'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+      <view class="Discount" style="{{item.satisfied.length==0?'opacity:0':'opacity:1'}}" class="{{item.stockQty==0||item.itemStatus=='FORSALE'?'Discount_end':'Discount'}}" wx:if="{{item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">{{item.satisfied.length==0?'敬请期待':item.satisfied[0]}}</view>
+      <view style="position:absolute;bottom:15rpx;">
+        <view class="{{item.stockQty!=0?'Afterdiscount':'Afterdiscount_end'}}">￥{{item.disPrice==null?we.toFixed(item.salePrice):we.toFixed(item.disPrice)}}</view>
+        <text class="{{item.stockQty==0?'Beforediscount_bug':'Beforediscount'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
+      </view>
       <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" wx:if="{{item.stockQty!=0}}" src="../../images/add.svg" class="add" />
       <view style="display:inline-block" class="{{ITEMRANK.bizShowType=='THREE'?'three':''}}" wx:if="{{item.itemStatus=='FORSALE'}}">
         <text class="ForSale" catchtap='check' data-item="{{item}}">待售</text>
@@ -214,7 +230,7 @@
             <text class="{{item.stockQty==0?'Beforediscount_bug':'Beforediscount'}}" style="display:{{item.disPrice==null?'none':''}}">￥{{we.toFixed(item.salePrice)}}</text>
             <image style="z-index:10;display:{{item.stockQty==0?'none':item.itemStatus=='FORSALE'?'none':''}}" catchtap='shoppingcart' data-item="{{item}}" wx:if="{{item.stockQty!=0}}" src="../../images/add.svg" class="add" />
             <view style="display:inline-block" class="{{ITEMRANK.bizShowType=='THREE'?'three':''}}" wx:if="{{item.itemStatus=='FORSALE'}}">
-                        <text class="ForSale"  catchtap='check' data-item="{{item}}">待售</text>
+                        <text class="ForSale"  catchtap='check' data-item="{{item}}">待售</view>
                         <image  class="chen" src="../../images/Question.svg"  catchtap='check' data-index="{{item}}"/>
             </view>
           </view>

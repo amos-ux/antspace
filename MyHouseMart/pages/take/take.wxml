@@ -13,7 +13,7 @@
   </view>
   <view class='page-view'>
     <text class='page-view-title'>门牌号</text>
-    <input class='page-text' placeholder-class="placeholder-class" maxlength='12' placeholder='例：9栋606室' value='{{detailedAddress}}' bindinput="inputHouse" data-obj="message"></input>
+    <input class='page-text' placeholder-class="placeholder-class" maxlength='20' placeholder='例：9栋606室' value='{{detailedAddress}}' bindinput="inputHouse" data-obj="message"></input>
   </view>
   <view class='page-view'>
     <text class='page-view-title'>地址标签</text>

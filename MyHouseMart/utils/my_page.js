@@ -31,7 +31,7 @@ function load(loading = true) {
  * @return {*} any
  */
 function checkRes(res) {
-  if (res.data.respCode == '0000') {
+  if (res.data.respCode == '0000'||res.data.code=="00") {
     return res.data
   } else {
     return false

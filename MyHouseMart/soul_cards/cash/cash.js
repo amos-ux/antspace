@@ -310,7 +310,7 @@ Page({
         }
       }
       // nextlist.sort(this.createComparisonFunction("refundValue"))
-      console.error(nextlist)
+      // console.error(nextlist)
       nextlist.sort((a,b)=>{
         return b.refundValue-a.refundValue
       })

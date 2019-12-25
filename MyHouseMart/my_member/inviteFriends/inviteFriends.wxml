@@ -1,21 +1,16 @@
-<view class="invitefriends">
-  <view class="invaite-tips">
-    <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/be68d7c3224b474a9d01ef37d6cb9e29.svg" />
-    <text class="invaite-text">功能正在建设中，当前为体验阶段。体验阶段将不产生实际收益。功能正式上线后，您之前的关系会为您保留。</text>
-  </view>
-  <view class="content-top" style='{{(userInfo.memberStatus == "NON_MEMBERS")?"background:url(https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c5666a1fd654405582d0279528b0ed01.png); background-size: 100% 100%;":""}}'>
-    <view class="top-content">
-      <!-- <view class="tooplit">
-        <view class="tooplit-text">文**呀邀请好友成功 +10</view>
-      </view> -->
-    </view>
-    <view class="red-content" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus == 'EXPERIENCE' || userInfo.memberStatus ==  'ENTERPRISE' || userInfo.memberStatus ==  'EXPIRED_MEMBERS')}}">
+<view class="invaite-tips" wx:if="{{siteLevelValue=='Y'}}">
+  <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/be68d7c3224b474a9d01ef37d6cb9e29.svg" />
+  <text class="invaite-text">功能正在建设中，当前为体验阶段。体验阶段将不产生实际收益。功能正式上线后，您之前的关系会为您保留。</text>
+</view>
+<view class="invitefriends" style="{{siteLevelValue=='Y'?'margin-top: 114rpx;':''}}">
+  <view class="content-top" style='{{(userInfo.memberStatus == "NON_MEMBERS")?"background:url(https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/75a3f80d3b524f2c89d271b78be5a1c6.png); background-size: 100% 100%;":""}}'>
+    <view class="top-content"></view>
+    <!-- wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus == 'EXPERIENCE' || userInfo.memberStatus ==  'ENTERPRISE' || userInfo.memberStatus ==  'EXPIRED_MEMBERS')}}" -->
+    <view class="red-content"  wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus == 'EXPERIENCE' || userInfo.memberStatus ==  'ENTERPRISE' || userInfo.memberStatus ==  'EXPIRED_MEMBERS')}}">
       <view class="invite-btn">
         <view class="invite-link">
           <form report-submit bindsubmit="bindsubmit">
             <button form-type="submit" class="link-btn" open-type='share'>
-              <!-- <view class="light">
-              </view> -->
               <image class="invite-link-weixin ballon" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/fee276f7a39141e9adb45a512668114a.svg"></image>
             </button>
           </form>
@@ -30,51 +25,42 @@
         </view>
       </view>
       <view class="within-code">
-        <view class="within-code-btn">内邀码</view>
+        <view class="within-code-btns">内邀码</view>
         <view class="within-code-text">
           <text>{{userInfo.uniqueCode}}</text>
           <text class="within-code-text-copy" bindtap='copyBtn'>复制</text>
-        </view>
+        </view>             
+            
       </view>
     </view>
+    <!-- wx:if='{{!userInfo.firstOrderState && (userInfo.memberStatus == "MEMBERS" || userInfo.memberStatus == "EXPERIENCE" || userInfo.memberStatus ==  "ENTERPRISE")}}' -->
     <view class="red-content" wx:if='{{!userInfo.firstOrderState && (userInfo.memberStatus == "MEMBERS" || userInfo.memberStatus == "EXPERIENCE" || userInfo.memberStatus ==  "ENTERPRISE")}}'>
       <view class="within-code within-code-b">
-        <view class="within-code-btn">内邀码</view>
-        <view class="within-code-no-text">未激活</view>
+        <view class="within-code-btn" >
+        <!-- <text>体验会员</text> -->
+        <!-- <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/ab141e5f408e4559897f64703ed10f9d.png"></image> -->
+        </view>
+        <view class="within-code-no-text" catchtap="skipBile" style="margin-left:16rpx;font-size:20rpx;padding-top:30rpx;font-weigth:500">消费满{{money}}元及以上激活</view>
       </view>
       <view class="to-home">
-        <text> 需要完成一笔{{money}}元的订单</text>
-        <text> 才能激活内邀码</text>
-        <view class="home-order-btn ballon" catchtap="joinPreference">立即激活内邀码</view>
+        <!-- <text>需要完成一笔{{money}}元的订单</text> -->
+        <text style="font-weigth:500"> 激活内邀码  瓜分千万元！</text>
+        <view class="home-order-btn ballon"  catchtap="skipBile">立即激活</view>
       </view>
     </view>
     <view class="red-content red-content-c" wx:if='{{userInfo.memberStatus == "NON_MEMBERS"}}'>
       <view class="add-vip">
-        <!-- <view> -->
-        <!-- <view class="hint ballons">
-        <image  class="reminder" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/258e07dcb2944f859668e4c397dbd77a.png"></image> -->
-        <!-- <view class="hint-view">
-         <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/97d47364942742239a8949a23fd61c08.png"></image>
-         <text class="hint-text"></text>
-        </view> -->
-             
-<!--               
-        </view> -->
-          <!-- <image class="text" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/49b6380056a842c0aef57be03378b0d6.png"></image> -->
-          <!-- <view class="text">加入会员即可参加</view> -->
-        <!-- </view> -->
         <view class="add-vip-btn ballon" catchtap="joinVip">0元领会员</view>
         <view class="return-text">悄悄告诉你，在商城购物只有会员才有返现喔！</view>
       </view>
     </view>
   </view>
-  <view class="content-bottom">
-    <view class="title-content" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS'|| userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE'||userInfo.memberStatus == 'EXPIRED_MEMBERS')}}">
-      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c188df56129245b4a0688395f9a42fad.svg"></image>
-      <text class="text">邀请战绩</text>
-      <view class="line line4"></view>
+  <view class="content-bottom" style='{{userInfo.memberStatus == "NON_MEMBERS" ||(userInfo.memberStatus == "MEMBERS" &&!userInfo.firstOrderState) || (userInfo.memberStatus ==  "ENTERPRISE"&&!userInfo.firstOrderState) ?"height:100%":""}}'>
+    <!-- 邀请战绩 -->
+    <view class="title-record" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS'|| userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE' || userInfo.memberStatus == 'EXPIRED_MEMBERS')}}">
+      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/8b10672705f54c3dae0fcfa58421864f.png" />
     </view>
-    <view class="detail" wx:if="{{(userInfo.firstOrderState && userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE')||(userInfo.memberStatus == 'EXPIRED_MEMBERS')}}">
+    <view class="detail detailsBackground" style="height:282rpx;margin-top:28rpx" wx:if="{{(userInfo.firstOrderState && userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE')||(userInfo.memberStatus == 'EXPIRED_MEMBERS')}}">
       <view class="expired-box" wx:if="{{userInfo.memberStatus == 'EXPIRED_MEMBERS'}}">
         <text>会员已过期{{we.toAbs(userInfo.expiredDate)}}天，立即续费可避免收益损失</text>
         <view class="expired-btn" catchtap="vtRenew">立即续费></view>
@@ -116,50 +102,90 @@
         <view class="detail-btn">查看详情</view>
       </view>
     </view>
-    <view class="title-content">
-      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c188df56129245b4a0688395f9a42fad.svg"></image>
-      <text class="text">返现攻略</text>
-      <view class="line line4"></view>
+    <!-- 返现攻略 -->
+    <view class="return-strategy">
+      <!-- <image class="strategy-title" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/98a9e73d15234796b3d72291702cadf8.png" />
+      <image class="strategy-cont" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/5ca6ebbb8dd0456eac537fc78bbc2614.png" /> -->
+       <image class="strategy-title" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/fef299cd77bc4c7ab466275c46a410de.png" />
+      <image class="strategy-cont" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/dcc9e611c40f4a1bb38973fe49183173.png" />
     </view>
-    <view class="detail return-strategy">
-      <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/b864f51bd11342d9b0f92aed96050646.png"></image>
+    <!-- 轻松返现加倍 -->
+    <view class="title-cashback">
+      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/f58bc12eb3fa4f4389f7a7cbc502772f.png" />
     </view>
-    <view class="title-content" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE'|| userInfo.memberStatus ==  'ENTERPRISE')}}">
-      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c188df56129245b4a0688395f9a42fad.svg"></image>
-      <text class="text">轻松返现加倍</text>
-      <view class="line line5"></view>
-    </view>
-    <view class="detail redoubling" wx:if="{{userInfo.firstOrderState && (userInfo.memberStatus == 'MEMBERS' || userInfo.memberStatus=='EXPERIENCE')}}">
-      <view class="title-1">一重邀请赏金</view>
-      <view class="title-2">每邀1位好友，您将获得10元返现</view>
-      <image class="invitation-top-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/f08fa061c70c467ba345a76c189271b0.png"></image>
-      <view class="title-1">二重续费赏金</view>
-      <view class="title-2">1位好友每续费1个月，您将获得20元返现</view>
-      <view class="title-3">1人*1月*20元=20元</view>
-      <view class="invitation-img-box">
-        <image class="track" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/7473b083af09497685027a1b666f9b71.png"></image>
-        <image class="invitation-bottom-img" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/94fd0eb29d6248d4ac878bc083b3da69.png"></image>
-        <view class="bor"></view>
+    <view class="cashback-bgimg">
+      <view class="detail redoubling" style="margin:0">
+        <view class="title-1">一重邀请赏金</view>
+        <view class="title-2">每邀1位好友，您将获得10元返现</view>
+        <image class="invitation-top-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/31babdf1a8ec4a638b5eed94a3c6db3f.png"></image>
+        <view class="title-1">二重续费赏金</view>
+        <view class="title-2">1位好友每续费1个月，您将获得20元返现</view>
+        <view class="title-3">1人*1月*20元=20元</view>
+        <view class="invitation-img-box">
+          <image class="track" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/3b0c18813042447cb1455e259401b62a.png"></image>
+          <image class="invitation-bottom-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/aa7b268be6f34090a751691461031ee8.png"></image>
+          <view class="bor"></view>
+        </view>
       </view>
     </view>
-    <view class="activity-rules">
-      <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/e589bc350ac8431e80148ed3e6d2a806.png"></image>
+  </view>
+  <view class="activity-rules">
+    <view class="activity-desc">
+      <view class="activity-title">
+        <image class="activity-image" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/b4f4a9e15c0d4aada5306b0b9d4bc2a9.png"></image>
+        <text>邀请活动规则</text>
+      </view>
+      <view class="activity-content">
+        <view class="activity-main">
+          <view class="activity-headline">活动时间</view>
+          <view class="activity-text">
+            <text>邀请活动长期有效。</text>
+            <text>其中2019年12月10日-2020年01月31日为10元拉新奖励活动的有效期，20元续费奖励无有效期限制，长期有效。过有效期后，拉新将不再有10元邀请奖励。</text>
+          </view>
+        </view>
+        <view class="activity-main">
+          <view class="activity-headline">活动规则</view>
+          <view class="activity-text">
+            <text>1.激活内邀权的会员，通过此活动每成功邀请1位新用户领取会员，并且完成一笔消费达9.8元以上的订单，邀请者可获得10元返现奖励；受邀者每续费一个月我家会员，邀请者都将获得20元返现。返现奖励可以在【我的-钱包】中查看。</text>
+            <text>2.邀请途径：本平台有活动链接、面对面邀请码、内邀码邀请三种途径。仅通过以上三种邀请方式进行邀请才计入奖励计算。</text>
+            <text>3.续费途径：续费途径包含购买会员卡，购买续费大礼包，加入企业会员。</text>
+            <text>4.通过此活动达成的邀请者与受邀者关系，永久有效。</text>
+            <text>5.若用户在活动期间存在违规行为，包括但不限于机器作弊、刷IP等，经查实后，“我家”平台有权撤销其活动资格并取消其奖励，情节严重者将追究其法律责任。</text>
+          </view>
+        </view>
+        <view class="activity-main">
+          <view class="activity-headline">奖励发放规则</view>
+          <view class="activity-text">
+            <text>1.只有在会员期间获得的奖励才能发放至钱包，如会员过期期间产生的邀请成功记录、续费记录都不会产生返现收益。</text>
+            <text>2.会员失效期间损失的收益，在会员重新续费后不再进行补发。</text>
+            <text>3.会员续费后，在会员期间产生的邀请收益和续费收益将会直接到账进钱包。</text>
+          </view>
+        </view>
+        <view class="activity-main">
+          <view class="activity-headline">定义补充说明</view>
+          <view class="activity-text">
+            <text>1.新用户：从未注册过我家小程序的用户。同一个手机号、微信号算同一个用户。</text>
+            <text>2.消费达标：用户注册后，只要有一单消费达到平台消费门槛，即算消费达标。(举例：如平台要求消费达9.8元及以上才算达标，则需要消费任意一笔订单达9.8元及以上)</text>
+            <text>3.续费：除开首月会员，后续通过购买会员卡、购买续费大礼包、加入企业会员等，延长会员期限的方式，统称为“续费”。</text>
+            <text class="to-top">本次活动最终解释权归“我家”平台所有。</text>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
   <view class="alter-code" catchtouchmove="preventTouchMove" hidden="{{showCanvas}}">
     <view class="alter-code-bg"></view>
     <view class="canvas-box">
       <canvas class="canvas-code" canvas-id="shareImg" />
-      <!-- 点击这里保存 -->
       <view bindtap="clickShare" class="save-btn">保存到本地</view>
       <image class="close-btn" bindtap="close" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/25a2e274245f4975aab2b9418cd7cf16.png"></image>
     </view>
   </view>
 </view>
 <view class="back" wx:if="{{isHome}}">
-    <view class="back_home" catchtap='tohome'>
-      <image src="../../images/soul_home.svg" />
-    </view>
+  <view class="back_home" catchtap='tohome'>
+    <image src="../../images/soul_home.svg" />
+  </view>
 </view>
 <wxs module="we">
   var toAbs = function(value) {

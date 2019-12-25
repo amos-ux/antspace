@@ -85,7 +85,7 @@
       <text class="content-list-max" catch:tap="toDetailed">更多</text>
     </view>
     <view class="item"  wx:for="{{account}}" wx:key="{{index}}">
-      <view class="item-title">{{ item.transType=='REFUND'?'消费返现': item.transType=='NEWREFUND'?'邀请返现': item.transType=='CHGREFUND'?'分享续费返现': item.transType=='SALES'?'返现抵扣': item.transType=='ORETURN'?'系统回收': '赠送返现' }}
+      <view class="item-title">{{ item.transType=='REFUND'?'消费返现': item.transType=='NEWREFUND'?'邀请返现': item.transType=='CHGREFUND'?'分享续费返现': item.transType=='SALES'?'返现抵扣': item.transType=='ORETURN'?'系统回收': item.transType=='WALLETREFUND'?'售后退款':'赠送返现' }}
       </view>
       <view class="{{item.transType=='ORETURN'||item.transType=='SALES'?'item-reduce-moneny':'item-moneny'}}">{{item.transType=='ORETURN'||item.transType=='SALES'?item.transAmt!=0?'-':'':'+'}}{{we.toFixed(item.transAmt)}}</view>
       <view class="item-date">{{item.tranDate}}</view>

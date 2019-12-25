@@ -1,0 +1,166 @@
+<view class="container">
+  <view class="shop-desc">
+    <swiper class="shop-content" duration="500" interval="6000" autoplay="false" scroll-x="true" bindchange="bindchange" circular="true">
+      <swiper-item wx:for="{{shopDesc}}" wx:key="index">
+        <image class="shop-content" src="{{item}}" />
+      </swiper-item>
+    </swiper>
+    <view style="{{commodity.promotionRule.promotionType!='MULTIPLE_RETURN'?'bottom:24rpx':''}}" class="shop-list">
+      <text>{{current}}</text>
+      <text class="shop-line">/</text>
+      <text>{{shopDesc.length}}</text>
+    </view>
+    <!-- 多倍返现 -->
+    <view class="returnCash" wx:if="{{commodity.promotionRule.promotionType=='MULTIPLE_RETURN'}}">
+      <view class="returnCash-view-top">
+        <view>{{commodity.promotionRule.promotionRule[0].multipleValue}}倍返现<text style="margin-left:16rpx">剩余{{commodity.promotionRule.promotionRule[0].day}}</text>天</view>
+      </view>
+      <view class="returnCash-view-bottom">
+        <view class="returnCash-view-bottom-view1">
+          返现¥<text class="returnCash-view-bottom-text" style="font-family: 'Alternate';font-size:48rpx">{{we.toFixed(commodity.refundValue)}}×{{commodity.promotionRule.promotionRule[0].multipleValue}}</text>
+        </view>
+        <view class="returnCash-view-bottom-view2" wx:if="{{commodity.promotionRule.promotionRule[0].endTime!=null && commodity.promotionRule.promotionRule[0].startTime!=null}}">
+          <text class="returnCash-view-bottom-text1">活动时段</text>
+          <text class="returnCash-view-bottom-text2" style="{{item.length<3?'font-size:28rpx':''}}" wx:for="{{commodity.promotionRule.promotionRule}}" wx:key="index">{{we.sliceStr(item.startTime)}}~{{we.sliceStr(item.endTime)}};</text>
+        </view>
+        <view class="returnCash-view-bottom-view2" wx:else>
+          <text class="returnCash-view-bottom-text1">限时多倍返现</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="shop-details">
+    <view class="detail-title">{{commodity.itemName}}</view>
+    <view class="detail-prices">
+      <text class="disPrice">¥{{we.toFixed(commodity.disPrice?commodity.disPrice:commodity.salePrice ? commodity.salePrice : 0)}}</text>
+      <text class="salePrice">¥{{we.toFixed(commodity.salePrice ? commodity.salePrice : 0)}}</text>
+    </view>
+  </view>
+  <view class="promotion">
+    <view class="prom-profusion" wx:if="{{commodity.satisfied.length!=0}}" wx:for="{{commodity.satisfied}}" wx:key="index" wx:for-item="satisfied">
+      <view class="prom-title">促销</view>
+      <view class="prom-content prom-layout">
+        <view class="prom-tag">满减</view>
+        <view class="prom-tag-text">{{satisfied}}</view>
+      </view>
+    </view>
+    <view class="prom-profusion prom-after" wx:if="{{commodity.refundValue!=0}}" data-status="reallmnt" catchtap="openWindow">
+      <view class="prom-title">返现</view>
+      <view class="prom-content">
+        会员返现
+        <text class="return-num" wx:if="{{commodity.promotionRule.promotionType == 'MULTIPLE_RETURN'}}">{{we.toFixed(commodity.refundValue?commodity.refundValue * commodity.promotionRule.promotionRule[0].multipleValue:0)}}元</text>
+        <text class="return-num" wx:else>{{we.toFixed(commodity.refundValue?commodity.refundValue:0)}}元</text>
+      </view>
+    </view>
+    <view class="prom-profusion prom-after" data-status="supply" catchtap="openWindow" wx:if="{{commodity.stTimes.length!=0 && commodity.foodstr}}">
+      <view class="prom-title">供应</view>
+      <view class="prom-content">{{commodity.foodstr}}</view>
+    </view>
+    <view class="prom-profusion prom-after" data-status="service" catchtap="openWindow">
+      <view class="prom-title">说明</view>
+      <view class="prom-content">正品保证 售后无忧 全国包邮</view>
+    </view>
+  </view>
+  <view class="good-detail" wx:if="{{picDetailDTO.extAttributes.shoppingNoticImg}}">
+    <view class="good-title">
+      <text class="good-line">——</text>
+      <text class="good-name">配送说明</text>
+      <text class="good-line">——</text>
+    </view>
+    <view class="delivery">
+      <image src="{{picDetailDTO.extAttributes.shoppingNoticImg}}"  />
+    </view>
+  </view>
+  <view class="good-detail" wx:if="{{picDetailDTO.detailPic.length!=0}}">
+    <view class="good-title">
+      <text class="good-line">——</text>
+      <text class="good-name">商品详情</text>
+      <text class="good-line">——</text>
+    </view>
+    <view class='detailsImg' wx:for="{{picDetailDTO.detailPic}}" wx:key="{{index}}">
+      <image lazy-load='true' src='{{item}}' wx:if="{{item!==''}}" mode='widthFix'></image>
+    </view>
+  </view>
+  <view class="good-detail" wx:if="{{picDetailDTO.extAttributes.chooseNoticImg}}">
+    <view class="good-title">
+      <text class="good-line">——</text>
+      <text class="good-name">选品说明</text>
+      <text class="good-line">——</text>
+    </view>
+    <view class="selection">
+      <image src="{{picDetailDTO.extAttributes.chooseNoticImg}}" />
+    </view>
+  </view>
+</view>
+<view class="shop-car">
+  <view class="shop-img" catchtap="toIndex">
+    <image src="../../images/shop.svg" />
+    <text class='shop-text'>购物车</text>
+    <text class="shop-num" wx:if="{{cartQuantity!=0}}">{{cartQuantity}}</text>
+  </view>
+  <view class="shop-btn {{commodity.stockQty==0?'soldout':''}}" catchtap="shopping" data-item="{{commodity}}">{{commodity.stockQty==0?'已售罄':'加入购物车'}}</view>
+</view>
+<!-- 弹窗 -->
+<view class="popups" catchtouchmove="preventTouchMove" wx:if="{{openWindow}}">
+  <!-- 返现 -->
+  <view class="pop-cashback" wx:if="{{status=='reallmnt'}}">
+    <view class="pop-title">什么是会员返现</view>
+    <view class="pop-content">
+      <view class="pop-text">关于会员返现说明</view>
+      <view class="pop-cont">
+        <text>1.返现金是我家用以回馈付费会员用户的代币</text>
+        <text>2.返现金可与现金1:1抵扣使用</text>
+        <text>3.在购物时无门槛使用</text>
+        <text>4.可在个人中心-我的钱包查看返现金</text>
+        <text>5.使用返现金付款时，不能再参与返现</text>
+      </view>
+    </view>
+    <view class="pop-btn" data-status="reallmnt" catchtap="openWindow">我知道了</view>
+  </view>
+  <!-- 服务说明 -->
+  <view class="service" wx:if="{{status=='service'}}">
+    <view class="pop-title">服务说明</view>
+    <view class="service-content">
+      <view class="service-cont">
+        <view class="service-title">正品保证</view>
+        <view class="service-desc">所有商品由公司认证的供应商或者品牌商直供货源，保证100%安全。</view>
+      </view>
+      <view class="service-cont">
+        <view class="service-title">售后无忧</view>
+        <view class="service-desc">由第三方商家发货并提供售后服务</view>
+      </view>
+      <view class="service-cont">
+        <view class="service-title">正品保证</view>
+        <view class="service-desc">全国包邮（港澳台、新疆、西藏、内蒙古、青海、海南、宁夏除外）</view>
+      </view>
+    </view>
+    <view class="pop-btn" data-status="service" catchtap="openWindow">我知道了</view>
+  </view>
+  <!-- 供应说明 -->
+  <view class="supply" wx:if="{{status=='supply'}}">
+    <view class="pop-title">供应说明</view>
+    <view class="supply-content">
+      <view class="supply-cont" wx:for="{{commodity.stTimes}}" wx:key="index" wx:for-item="stTimes">
+        <view class="supply-name">{{stTimes.stName}}</view>
+        <view class="supply-time">
+          <text>供应时间：{{we.sliceStr(stTimes.activityTimeFrom)}}-{{we.sliceStr(stTimes.activityTimeTo)}}</text>
+          <text>送达时间：{{we.sliceStr(stTimes.deliveryTimeFrom)}}-{{we.sliceStr(stTimes.deliveryTimeTo)}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="pop-btn" data-status="supply" catchtap="openWindow">我知道了</view>
+  </view>
+</view>
+<wxs module="we">
+  var toFixed = function(num) {
+    num = Number(num);
+    return num.toFixed(2);
+  }
+  var sliceStr = function(str){
+    return str.slice(0,5)
+  }
+  module.exports = {
+    toFixed: toFixed,
+    sliceStr: sliceStr
+  }
+</wxs>

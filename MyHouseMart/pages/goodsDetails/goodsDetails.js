@@ -2,7 +2,10 @@ const app = getApp();
 import axios from '../../utils/axios.js'
 const call = require("../../utils/call.js");
 const cache = require("../../utils/cache.js");
-let time
+import {
+  base64src
+} from '../../utils/base64src.js'
+let time, userName
 Page({
 
   /**
@@ -42,12 +45,15 @@ Page({
     showExplain: false,
     remoteArea: [],
     branchNo: null,
-    status: null,//商品的状态 新会员超值购 sendMember 续费大礼包 greatPackage
+    status: null, //商品的状态 新会员超值购 sendMember 续费大礼包 greatPackage
     hideModal: true, //模态框的状态  true-隐藏  false-显示
-    animationData: {},//
-    showCanvas:false,
-    width:0,
-    height:0
+    animationData: {}, //
+    showCanvas: false,
+    width: 0,
+    height: 0,
+    imageCode: "",
+    code: "",
+    userAuthorization: false
   },
   remoteArea() {
     axios.get({
@@ -63,6 +69,7 @@ Page({
       }
     })
   },
+
   //开启加入购物车弹窗
   rob() {
     if (this.data.commodity.limitedByUser == 0 || this.data.commodity.stockQty == 0) {
@@ -87,11 +94,19 @@ Page({
 
   },
   // 阻止事件向下传递
-  preventTouchMove() { },
-  freeBuy: function (e) {
-    const { item: items } = e.currentTarget.dataset
-    const { salePrice: originaPrice, disPrice: totalPrice } = items
-    let { combSubItems, orderItemType } = items, order = [], itemQty = 0
+  preventTouchMove() {},
+  freeBuy: function(e) {
+    const {
+      item: items
+    } = e.currentTarget.dataset
+    const {
+      salePrice: originaPrice,
+      disPrice: totalPrice
+    } = items
+    let {
+      combSubItems,
+      orderItemType
+    } = items, order = [], itemQty = 0
     combSubItems.map(item => {
       item.orderItemType = orderItemType
       itemQty += item.quantity
@@ -307,9 +322,9 @@ Page({
 
       } else if (this.data.commodity.limitedByUser == null) {
         this.data.commodity.quantity++
-        this.setData({
-          commodity: this.data.commodity
-        })
+          this.setData({
+            commodity: this.data.commodity
+          })
       } else {
         if (this.data.commodity.quantity > this.data.commodity.limitedByUser - 1) {
           wx.showToast({
@@ -318,29 +333,25 @@ Page({
           })
         } else {
           this.data.commodity.quantity++
-          this.setData({
-            commodity: this.data.commodity
-          })
+            this.setData({
+              commodity: this.data.commodity
+            })
         }
       }
     } else if (type == "reduce") { //减
       if (this.data.commodity.quantity > 1) {
         this.data.commodity.quantity--
-        this.setData({
-          commodity: this.data.commodity
-        })
+          this.setData({
+            commodity: this.data.commodity
+          })
       } else {
         this.setData({
           close: false
         })
       }
     }
-
-
   },
-  //
   bindchange(e) {
-
     this.setData({
       // autoPlay:false,
       current: e.detail.current
@@ -349,7 +360,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     this.remoteArea()
     let that = this;
     let details = JSON.parse(options.details)
@@ -404,7 +415,7 @@ Page({
       that.setData({
         videoLink: t.respData.picDetailDTO == null ? "" : t.respData.picDetailDTO.videoLink,
         bigPic: t.respData.picDetailDTO == null ? '' : t.respData.picDetailDTO.bigPic, //大图
-        detailPic: t.respData.picDetailDTO == null ? '' : t.respData.picDetailDTO.detailPic, //商品详情图
+        detailPic: t.respData.picDetailDTO == null ? '' : app.trimSpace(t.respData.picDetailDTO.detailPic), //商品详情图
         shoppingNoticImg: t.respData.picDetailDTO == null || t.respData.picDetailDTO.extAttributes == null ? '' : t.respData.picDetailDTO.extAttributes.shoppingNoticImg, //配送说明图
         chooseNoticImg: t.respData.picDetailDTO == null || t.respData.picDetailDTO.extAttributes == null ? '' : t.respData.picDetailDTO.extAttributes.chooseNoticImg, //选品说明图
       })
@@ -415,67 +426,71 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.setData({
+  onShow: function() {
+    let that = this
+    wx.getSetting({
+      success(res) {
+        // that.orderData(1, 5, that.data.nav[that.data.i].type)
+        if (res.authSetting["scope.userInfo"]) { //true  代表已经获取信息
+          that.setData({
+            userAuthorization: true
+          })
+          wx.getUserInfo({
+            success(res) {
+              userName = res.userInfo.nickName
+            }
+
+          })
+        } else {
+          that.setData({
+            userAuthorization: false
+          })
+        }
+      }
+    })
+    that.setData({
       branchNo: app.globalData.branch.branchNo
     })
-    this.quantity()
+    that.quantity()
+    that.code()
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
     clearInterval(time)
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     wx.stopPullDownRefresh()
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function (options) {
-    console.log(options)
-    var that = this;
-    // 设置转发内容
-    var shareObj = {
-      title: "我家小程序",
-      path: '/pages/connectWifi/connectWifi', // 默认是当前页面，必须是以‘/’开头的完整路径
-      imgUrl: '', //转发时显示的图片路径，支持网络和本地，不传则使用当前页默认截图。
-      success: function (res) {　 // 转发成功之后的回调　　　　　
 
-      },
-
-    };
-
-    return shareObj;
-  },
   //规格加入购物车
   joinCart() {
 
@@ -522,7 +537,7 @@ Page({
     })
   },
   //加入购物车
-  shopping: function (e) {
+  shopping: function(e) {
     let that = this
     wx.getSetting({
       success(res) {
@@ -541,7 +556,6 @@ Page({
               "combSubItems": that.data.commodity.combSubItems
             }
             call.postData("/service-item/trolley/addItemToTrolley", data, (res) => {
-
               wx.showToast({
                 icon: "none",
                 title: '加入购物车成功',
@@ -565,8 +579,6 @@ Page({
               option: true //显示规格
             })
           }
-
-
         } else {
           wx.navigateTo({
             url: '/pages/register/register',
@@ -574,7 +586,6 @@ Page({
         }
       }
     })
-
   },
   //购物车数量
   quantity() {
@@ -610,111 +621,157 @@ Page({
   rpxPromise() {
     return new Promise((resolute, reject) => {
       wx.getSystemInfo({
-        success: function (res) {
+        success: function(res) {
           return resolute(res)
         },
       })
     })
   },
-  closeCanvas(){
-      this.setData({
-        showCanvas: false,
-      })
+  closeCanvas() {
+    this.setData({
+      showCanvas: false,
+    })
   },
-  setCanvas(){
+  code() {
+    let data = {
+      "scene": this.data.commodity.blId + "-" + this.data.commodity.itemNo + "-" + app.globalData.branch.branchNo,
+      "page": "my_member/shareDetail/shareDetail",
+      "width": 200
+    }
+    wx.request({
+      url: `${app.baseUrl}service-member/public/wx/code`,
+      data: data,
+      method: 'POST',
+      responseType: 'arraybuffer',
+      success: res => {
+        let base64 = wx.arrayBufferToBase64(res.data);
+        base64 = 'data:image/jpeg;base64,' + base64;
+        this.setData({
+          imageCode: base64
+        });
+        // //这个就是src   imageCode
+        // const that = this
+        // wx.getSystemInfo({
+        //   success: function (res) {
+        //     that.setData({
+        //       model: res.model,
+        //       screenWidth: res.windowWidth / 375,
+        //       screenHeight: res.windowHeight
+        //     })
+        //   },
+        // })
+        base64src(base64, res => {
+          this.setData({
+            code: res
+          })
+        });
+      }
+    })
+  },
+  setCanvas() {
     let path = "https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/f16b205b20bf494c9bb86694019beb9c.png"
-    let codeUrl = "https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/5fc5efcc8b68443eb086d4dffe4dd0c4.png"
-    Promise.all([this.pathPromise(this.data.commodity.picAddr), this.rpxPromise(), this.pathPromise(path), this.pathPromise(codeUrl)]).then(res=>{
+    let codeUrl = "https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png"
+
+    Promise.all([this.pathPromise(this.data.commodity.picAddr ? this.data.commodity.picAddr : codeUrl), this.rpxPromise(), this.pathPromise(path)]).then(res => {
       this.setData({
-        showCanvas:true,
+        showCanvas: true,
         width: (290 / 375) * res[1].screenWidth,
         height: (430 / 667) * res[1].screenHeight
       })
-
       let paths = res[2]
-      let code = res[3]
+      let code = this.data.code
       let that = this
       let url = res[0]
-      console.log(res)
       let windowWidth = res[1].screenWidth
       let windowHeight = res[1].screenHeight
       let ctx = wx.createCanvasContext('mycanvas');
-      ctx.drawImage(paths, 0, 0, (290 / 375) * windowWidth, (430 / 667) * windowHeight );
-      ctx.drawImage(url, (16 / 375) * windowWidth, (16 / 667) * windowHeight, (258 / 375) * windowWidth, (258 / 667) * windowHeight );
-      if (that.data.commodity.disPrice==null){
+      ctx.drawImage(paths, 0, 0, (290 / 375) * windowWidth, (430 / 667) * windowHeight);
+      ctx.drawImage(url, (16 / 375) * windowWidth, (16 / 667) * windowHeight, (258 / 375) * windowWidth, (258 / 667) * windowHeight);
+      if (that.data.commodity.disPrice == null) {
         ctx.setFillStyle("#FF5A52")
         ctx.setFontSize(24)
-        ctx.fillText("¥" + that.data.commodity.salePrice.toFixed(1), (16 / 375) * windowWidth, (310 / 667) * windowHeight)
-      }else{
+        ctx.fillText("¥" + that.data.commodity.salePrice.toFixed(2), (16 / 375) * windowWidth, (310 / 667) * windowHeight)
+      } else {
         ctx.setFillStyle("#FF5A52")
         ctx.setFontSize(24)
-        ctx.fillText("¥" + that.data.commodity.disPrice.toFixed(1), (16 / 375) * windowWidth, (310 / 667) * windowHeight )
+        ctx.fillText("¥" + that.data.commodity.disPrice.toFixed(2), (16 / 375) * windowWidth, (310 / 667) * windowHeight)
       }
       ctx.setFillStyle("#A0A1A3")
       ctx.setFontSize(15)
       let length = parseInt(that.data.commodity.salePrice).toString().length
-      let width,moveToWidth,lineToWidth
-      if(length==1){
-          width = 70
-          moveToWidth = 70
-          lineToWidth = 102
-      }else if(length==2){
+      let width, moveToWidth, lineToWidth
+      if (length == 1) {
         width = 86
         moveToWidth = 86
-        lineToWidth = 125 
-      }else if(length==3){
+        lineToWidth = 125
+      } else if (length == 2) {
         width = 102
         moveToWidth = 102
-        lineToWidth = 142 
+        lineToWidth = 142
+      } else if (length == 3) {
+        width = 120
+        moveToWidth = 120
+        lineToWidth = 160
       }
       let itemName = that.data.commodity.itemName
       let itemNameLength = that.data.commodity.itemName.length
-      let firstText,secondText,threeText
-      if (itemNameLength<=10){
-        firstText = itemName.substring(0,9)
-        console.log(firstText)
-      } else if (10<itemNameLength <= 20){
-        firstText = itemName.substring(0, 9)
-        secondText = itemName.substring(10, 19)
-
+      let firstText, secondText, threeText
+      if (itemNameLength <= 10) {
+        firstText = itemName.substring(0, 10)
+      } else if (10 < itemNameLength <= 20) {
+        console.log(itemNameLength)
+        firstText = itemName.substring(0, 10)
+        secondText = itemName.substring(10, 20)
+        threeText = itemName.substring(20, 30)
+      } else {
+        firstText = itemName.substring(0, 10)
+        secondText = itemName.substring(10, 20)
+        threeText = itemName.substring(20, 30)
       }
-      ctx.fillText("¥" + that.data.commodity.salePrice.toFixed(1), (width / 375) * windowWidth, (308/ 667) * windowHeight )
+      ctx.fillText("¥" + that.data.commodity.salePrice.toFixed(2), (width / 375) * windowWidth, (308 / 667) * windowHeight)
       ctx.beginPath()
       ctx.setStrokeStyle('#A0A1A3')
       ctx.setLineWidth(1)
-      ctx.moveTo((moveToWidth / 375) * windowWidth, (303/ 667) * windowHeight)
+      ctx.moveTo((moveToWidth / 375) * windowWidth, (303 / 667) * windowHeight)
       ctx.lineTo((lineToWidth / 375) * windowWidth, (303 / 667) * windowHeight)
       ctx.stroke()
       ctx.fillStyle = "#2B2D33";
       ctx.setFontSize(15)
-      ctx.fillText(firstText, (16 / 375) * windowWidth, (354/ 667) * windowHeight);
-      if (secondText){
+      ctx.fillText(firstText, (16 / 375) * windowWidth, (354 / 667) * windowHeight);
+      if (secondText) {
         ctx.fillStyle = "#2B2D33";
         ctx.setFontSize(15)
         ctx.fillText(secondText, (16 / 375) * windowWidth, (374 / 667) * windowHeight);
       }
+      if (threeText) {
+        ctx.fillStyle = "#2B2D33";
+        ctx.setFontSize(15)
+        ctx.fillText(threeText, (16 / 375) * windowWidth, (394 / 667) * windowHeight);
+      }
       ctx.drawImage(code, (186 / 375) * windowWidth, (292 / 667) * windowHeight, 88, 88);
       ctx.fillStyle = "#67686B";
       ctx.setFontSize(12)
-      ctx.fillText("扫码立即购买", (194 / 375) * windowWidth, (395/ 667) * windowHeight);
+      ctx.fillText("扫码立即购买", (194 / 375) * windowWidth, (395 / 667) * windowHeight);
       ctx.restore();
       ctx.save();
       ctx.draw();
-      
+
+    }).catch(res => {
+      console.log(res)
     })
   },
 
   //点击保存本地
-  saveShareImg: function () {
+  saveShareImg: function() {
     var that = this;
     wx.showLoading({
       title: '正在保存',
       mask: true,
     })
-    setTimeout(function () {
+    setTimeout(function() {
       wx.canvasToTempFilePath({
         canvasId: 'mycanvas',
-        success: function (res) {
+        success: function(res) {
           wx.hideLoading();
           var tempFilePath = res.tempFilePath;
           wx.saveImageToPhotosAlbum({
@@ -725,17 +782,17 @@ Page({
                 showCancel: false,
                 confirmText: '好的',
                 confirmColor: '#333',
-                success: function (res) {
-                  if (res.confirm) { 
+                success: function(res) {
+                  if (res.confirm) {
                     that.setData({
                       showCanvas: false,
                     })
                   }
                 },
-                fail: function (res) { }
+                fail: function(res) {}
               })
             },
-            fail: function (res) {
+            fail: function(res) {
               that.setData({
                 showCanvas: false,
               })
@@ -748,52 +805,94 @@ Page({
           })
         }
       });
-    },200);
+    }, 200);
   },
-  //分享弹窗 js 
-
-  showModal: function () {
-    var that = this;
-    that.setData({
-      hideModal: false
-    })
-    var animation = wx.createAnimation({
-      duration: 600,//动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
-      timingFunction: 'ease',//动画的效果 默认值是linear
-    })
-    this.animation = animation
-    setTimeout(function () {
-      that.fadeIn();//调用显示动画
-    }, 200)
-  },
-
-  hideModal: function () {
+  // 生成海报 
+  createYard() {
     var that = this;
     var animation = wx.createAnimation({
-      duration: 800,//动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
-      timingFunction: 'ease',//动画的效果 默认值是linear
+      duration: 800, //动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
+      timingFunction: 'ease', //动画的效果 默认值是linear
     })
     this.animation = animation
-    that.fadeDown();//调用隐藏动画   
-    setTimeout(function () {
+    that.fadeDown(); //调用隐藏动画   
+    setTimeout(function() {
       that.setData({
         hideModal: true
       })
-    }, 720)//先执行下滑动画，再隐藏模块
+      that.setCanvas()
+    }, 200) //先执行下滑动画，再隐藏模块
+  },
+  Wxshare() {
+
+  },
+  //分享弹窗 js 
+  onShareAppMessage: function(options) {
+    let that = this
+
+    var shareObj = {
+      title: userName + "亲情推荐",
+      path: `/my_member/shareDetail/shareDetail?itemNo=${this.data.commodity.itemNo}&branchNo=${app.globalData.branch.branchNo}&blId=${this.data.commodity.blId}`,
+      imageUrl: '',
+      success: function(res) {},
+    };
+    if (options.from == 'button') {
+      shareObj = {
+        title: userName + "亲情推荐",
+        path: `/my_member/shareDetail/shareDetail?itemNo=${this.data.commodity.itemNo}&branchNo=${app.globalData.branch.branchNo}&blId=${this.data.commodity.blId}`,
+        imageUrl: this.data.commodity.picAddr,
+        success(res) {},
+      }
+    }
+    return shareObj;
+  },
+  showModal: function() {
+    var that = this;
+    if (that.data.userAuthorization) {
+      that.setData({
+        hideModal: false
+      })
+      var animation = wx.createAnimation({
+        duration: 600, //动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
+        timingFunction: 'ease', //动画的效果 默认值是linear
+      })
+      this.animation = animation
+      setTimeout(function() {
+        that.fadeIn(); //调用显示动画
+      }, 200)
+    } else {
+      wx.navigateTo({
+        url: '/pages/register/register',
+      })
+    }
+  },
+
+  hideModal: function() {
+    var that = this;
+    var animation = wx.createAnimation({
+      duration: 800, //动画的持续时间 默认400ms   数值越大，动画越慢   数值越小，动画越快
+      timingFunction: 'ease', //动画的效果 默认值是linear
+    })
+    this.animation = animation
+    that.fadeDown(); //调用隐藏动画   
+    setTimeout(function() {
+      that.setData({
+        hideModal: true
+      })
+    }, 720) //先执行下滑动画，再隐藏模块
 
   },
 
-
-  fadeIn: function () {
+  fadeIn: function() {
     this.animation.translateY(0).step()
     this.setData({
-      animationData: this.animation.export()//动画实例的export方法导出动画数据传递给组件的animation属性
+      animationData: this.animation.export() //动画实例的export方法导出动画数据传递给组件的animation属性
     })
   },
-  fadeDown: function () {
+  fadeDown: function() {
     this.animation.translateY(300).step()
     this.setData({
       animationData: this.animation.export(),
     })
-  }, 
+  },
 })

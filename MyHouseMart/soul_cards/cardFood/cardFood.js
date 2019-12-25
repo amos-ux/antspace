@@ -3,7 +3,7 @@ var cache = require("../../utils/cache.js");
 var call = require("../../utils/call.js");
 let utils = require('../../utils/util.js')
 let app = getApp()
-let item,itemLIst
+let item,itemLIst,show
 Page({
   data: {
     DiamondZone: [], //金刚区
@@ -22,7 +22,6 @@ Page({
     weather: '',
     dateTime: [],
     wendu: '',
-
     specification: [],
     option: false,
     options: [],
@@ -30,6 +29,7 @@ Page({
   },
   onLoad(options) {
     let that = this
+    console.log(app.globalData.show)
     itemLIst = JSON.parse(options.item)
     item=JSON.parse(options.item)
     this.setData({
@@ -46,7 +46,7 @@ Page({
       backgroundColor: item.bizLineCode == 'OUTFOOD' || item.bizLineCode == 'COFFEE' ? '#ffffff' : '#FFEC14'
     })
     let data = {}
-    call.getData("/service-item/trolley/queryTrolleyCount?branchNo=" + app.globalData.branch.branchNo + "&sessionId=" + cache.get("sessionId", this), data, (res) => {
+    call.getData(`/service-item/trolley/queryTrolleyCount?branchNo=${app.globalData.show ? "888888" : app.globalData.branch.branchNo}&sessionId=${cache.get("sessionId", this)}`, data, (res) => {
       this.setData({
         shopLength: res.respData
       })
@@ -56,13 +56,15 @@ Page({
     this.busPos['y'] = app.globalData.hh - 50;
   },
   onShow() {
+
     let data = {}
-    call.getData("/service-item/trolley/queryTrolleyCount?branchNo=" + app.globalData.branch.branchNo + "&sessionId=" + cache.get("sessionId", this), data, (res) => {
+    call.getData(`/service-item/trolley/queryTrolleyCount?branchNo=${app.globalData.branch.branchNo}&sessionId=${cache.get("sessionId", this)}`, data, (res) => {
       this.setData({
         shopLength: res.respData
       })
     })
   },
+  // 购物车动画
   startAnimation: function() {
     var index = 0,
       that = this,
@@ -116,6 +118,7 @@ Page({
         return '十二'
     }
   },
+  // 获取天气接口
   http() {
     let that = this
     if (item.bizLineCode == 'COFFEE') {
@@ -155,34 +158,33 @@ Page({
       mask: true
     })
     let data = {
-      'branchNo': app.globalData.branch.branchNo,
+      'branchNo': app.globalData.show ? "888888" : app.globalData.branch.branchNo,
       'blId': item.blId,
       'kkStatus': 'Y'
     }
     let Advertisement = {
-      'branchNo': app.globalData.branch.branchNo,
+      'branchNo': app.globalData.show ? "888888" : app.globalData.branch.branchNo,
       'code': 'business_home_banner1',
       'bizLine': item.bizLineCode
     }
     let SINGLE = {
-      "branchNo": app.globalData.branch.branchNo,
+      "branchNo": app.globalData.show ? "888888" : app.globalData.branch.branchNo,
       "blId": item.blId,
       "templateType": "SINGLE"
     }
     let ITEMRANK = {
-      "branchNo": app.globalData.branch.branchNo,
+      "branchNo": app.globalData.show ? "888888" : app.globalData.branch.branchNo,
       "blId": item.blId,
       "templateType": "ITEMRANK"
     }
     let ITEMCLS = {
-      "branchNo": app.globalData.branch.branchNo,
+      "branchNo": app.globalData.show ? "888888" : app.globalData.branch.branchNo,
       "blId": item.blId,
       "templateType": "ITEMCLS"
     }
     Promise.all([
       request.request('/service-item/public/template/kingkong/find/list', data, 'GET', false),
-      request.request('/service-item/adverBanner/getWaterBarAdver', Advertisement, 'GET', false),
-
+      request.request('/service-item/adverBanner/getWaterBarAdver', Advertisement, 'GET', false)
     ]).then(res => {
       this.setData({
         DiamondZone: res[0].respData,
@@ -191,9 +193,9 @@ Page({
     })
     Promise.all(
       [
-        request.request('/service-item/public/get/template/item', ITEMRANK, 'POST', false),
-        request.request('/service-item/public/get/template/item', ITEMCLS, 'POST', false),
-        request.request('/service-item/public/get/template/item', SINGLE, 'POST', false),
+        request.request('/service-item/public/screen/push/item', ITEMRANK, 'POST', false),
+        request.request('/service-item/public/screen/push/item', ITEMCLS, 'POST', false),
+        request.request('/service-item/public/screen/push/item', SINGLE, 'POST', false),
       ]).then(res => {
       this.setData({
         ITEMRANK: res[0].respData != null ? res[0].respData[0] : [],
@@ -204,6 +206,13 @@ Page({
       wx.hideNavigationBarLoading()
     })
   },
+  onHide(){
+    app.globalData.show= false
+  },
+  onUnload(){
+    app.globalData.show = false
+  },
+
   toChoose(e) {
     wx.navigateTo({
       url: '/soul_cards/Choose/Choose?itemChild=' + JSON.stringify(e.currentTarget.dataset.item) + '&item=' + JSON.stringify(item)
@@ -225,7 +234,7 @@ Page({
   },
   //图片点击
   imgOclick(e) {
-    let items = this.data.banner.advers[e.target.dataset.index].adLink
+    let items = this.data.banner.advers[e.target.dataset.index].link
     // let parms=JSON.stringify({})
     const url = items.split('?')[0]
     const arr = items.split('?')[1].split('&')
@@ -276,7 +285,7 @@ Page({
             "sessionId": cache.get("sessionId", null),
             "itemNo": e.currentTarget.dataset.item.itemNo,
             "quantity": "1",
-            "branchNo": app.globalData.branch.branchNo,
+            "branchNo": app.globalData.show ? "888888" : app.globalData.branch.branchNo,
             "blId": e.currentTarget.dataset.item.blId,
             "isCombined": e.currentTarget.dataset.item.isCombined,
             "combSubItems": e.currentTarget.dataset.item.combSubItems
@@ -328,7 +337,6 @@ Page({
         }
       }
     })
-
   },
   shut(i) {
     let item = i.target.dataset.item,
@@ -355,6 +363,7 @@ Page({
   },
   Router(e) {
     let items = e.currentTarget.dataset.item
+    console.log(e.currentTarget.dataset.item)
     const url = items.link.split('?')[0]
     const arr = items.link.split('?')[1].split('&')
     let item = {

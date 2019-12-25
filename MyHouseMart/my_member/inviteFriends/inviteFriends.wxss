@@ -1,23 +1,43 @@
+@import '/myfont.wxss';
+
 page {
   width: 100%;
-  height: 100%;
-  background: #190b65;
   -webkit-overflow-scrolling: touch;
 }
 
+.page-bgImg {
+  width: 100%;
+  height: 5408rpx;
+  position: absolute;
+}
+
+.invite-bg {
+  width: 100%;
+  height: 5508rpx;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
 .invitefriends {
   width: 100%;
   padding-bottom: 36rpx;
   position: relative;
+ background: url('https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/a89af49223b94f359de60b87291f07cc.png') no-repeat center #FFBA54;
+  background-size:100% 100%;
+background-position: 0rpx 96rpx;
+
+
 }
 
-.invaite-tips{
+.invaite-tips {
   width: 100%;
-  padding: 20rpx 30rpx;
+  height: 114rpx;
+  padding: 24rpx 30rpx;
   box-sizing: border-box;
-  background-color: #FFFAEC;
+  background-color: #fffaec;
   font-size: 24rpx;
-  color: #FF3A3C;
+  color: #ff3a3c;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,36 +45,34 @@ page {
   top: 0;
   left: 0;
   z-index: 999;
+  opacity: 0.97;
 }
 
-.invaite-tips>image{
-  width:64rpx;
+.invaite-tips>image {
+  width: 64rpx;
   height: 50rpx;
   margin-right: 10rpx;
 }
 
-.invaite-text{
+.invaite-text {
   line-height: 34rpx;
   flex: 1;
 }
 
 .invitefriends .content-top {
   width: 100%;
-  height: 1106rpx;
-  background: #190b65;
-  background-image: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/a23b418bcfcc4847ab1e56e494a554e3.png");
+  height: 1184rpx;
+  background-image: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/e3afcb8774854674b6291756e1550486.png");
   background-size: 100% 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 116rpx;
+
 }
 
 .top-content {
   padding-top: 30rpx;
   text-align: center;
-  /* width: 582rpx;
-  height: 116rpx; */
 }
 
 .top-content .tooplit {
@@ -104,6 +122,11 @@ page {
   color: #f33740;
   font-size: 153rpx;
 }
+.detailsBackground{
+    /* background: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/c6da5c7ddbd14c598f24b935c0319117.png"); */
+    background: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/143562884c7d47ed8c7bc004663143dd.png");
+    background-size: 100% 100%;
+}
 
 .element-text .add {
   font-size: 100rpx;
@@ -135,18 +158,43 @@ page {
   color: #f33740;
   font-size: 43rpx;
 }
-
+.within-code-btns{
+ width: 160rpx;
+height: 64rpx;
+line-height: 64rpx;
+text-align: center;
+color: #ff1701;
+font-size: 28rpx;
+background: rgba(255, 255, 255, 1);
+border-radius: 8rpx 0rpx 0rpx 8rpx;
+}
 .within-code-btn {
-  width: 160rpx;
-  height: 64rpx;
+  width: 296rpx;
+  height: 150rpx;
   line-height: 64rpx;
   text-align: center;
-  color: #ff1701;
+  background: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/5a7df54795ff4b0799f56fa468ee379f.png");
+  background-size: 100% 100%;
   font-size: 28rpx;
-  background: rgba(255, 255, 255, 1);
-  border-radius: 8rpx 0rpx 0rpx 8rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 8rpx;
+  align-items: center;
+  
 }
-
+.within-code-btn text{
+    width: 112rpx;
+    margin-left: 10rpx;
+    font-family:PingFangSC-Regular,PingFang SC;
+    margin-bottom: 16rpx;
+  height: 40rpx;
+}
+.within-code-btn image{
+  width: 112rpx;
+   margin-left: 10rpx;
+  height: 40rpx;
+}
 .within-code-text-copy {
   font-size: 22rpx;
   color: rgba(255, 255, 255, 1);
@@ -209,32 +257,20 @@ page {
 .ballon {
   width: 156rpx;
   height: 156rpx;
-  -webkit-animation-name: scaleDraw; /*关键帧名称*/
-  -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
-  -webkit-animation-iteration-count: infinite; /*动画播放的次数*/
-  -webkit-animation-duration: 1s; /*动画所花费的时间*/
+  animation-name: scaleDraw; /*关键帧名称*/
+  animation-timing-function: ease-in-out; /*动画的速度曲线*/
+  animation-iteration-count: infinite; /*动画播放的次数*/
+  animation-duration: 1s; /*动画所花费的时间*/
 }
-/* .ballons{
-  
-  animation: free_download 15s infinite;
-}
-@keyframes free_download{
-    0%{transform:scale(0.5);}
-    25%{transform:scale(0.9);}
-    50%{transform:scale(0.5);}
-    75%{transform:scale(0.9);}
-    100%{transform:scale(0.5);}
-} */
+
 .content-bottom {
   padding: 0rpx 28rpx;
 }
 
-.title-content {
-}
-
-.title-content  image {
+.title-content image {
   height: 46rpx;
   width: 94rpx;
+  margin-bottom: 56rpx;
 }
 
 .title-content .text {
@@ -242,21 +278,40 @@ page {
   font-size: 36rpx;
   position: relative;
   left: -33rpx;
+  flex: 1;
 }
 
 .title-content {
   display: flex;
-  height: 46rpx;
+  height: 50rpx;
   align-items: center;
   justify-content: space-between;
-  margin-top: 58rpx;
-  margin-bottom: 22rpx;
+  margin-top: 48rpx;
 }
 
-.title-content  .line {
+.title-content .line {
   height: 2rpx;
-  background-color: #371eb1;
   white-space: nowrap;
+}
+
+.title-cashback {
+  width: 694rpx;
+  height: 46rpx;
+  margin-bottom: 28rpx;
+  margin-top: 48rpx;
+}
+
+.title-cashback image {
+  width: 100%;
+  height: 100%;
+}
+
+.cashback-bgimg {
+  /* background: url(https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/73c4c1bf5674479095fb182b755a1b4a.png); */
+  background: url(https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/1c757e9d351744cc80faf19a6b2f0038.png);
+
+  height: 1582rpx;
+  background-size: 100% 100%;
 }
 
 .line4 {
@@ -268,23 +323,44 @@ page {
 }
 
 .content-bottom {
-  height: 100%;
+  position: relative;
 }
 
-.content-bottom  .detail {
-  width: 694rpx;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 2px 16px 0px rgba(145, 21, 180, 0.24);
+.content-bottom .detail {
+  width: 696rpx;
+  height: 358rpx;
   border-radius: 16rpx;
+  margin-top: 48rpx;
 }
 
 .return-strategy {
-  text-align: center;
+  width: 100%;
+  margin-top: 48rpx;
+  display: flex;
+  flex-direction: column;
 }
 
-.return-strategy image {
-  height: 274rpx;
+.strategy-title {
+  width: 696rpx;
+  height: 46rpx;
+  margin-bottom: 28rpx;
+}
+
+.strategy-cont {
   width: 694rpx;
+  height: 282rpx;
+}
+
+.title-record {
+  width: 696rpx;
+  height: 46rpx;
+  margin-top: 48rpx;
+  margin-bottom: 28rpx;
+}
+
+.title-record>image {
+  width: 100%;
+  height: 100%;
 }
 
 .record {
@@ -295,7 +371,8 @@ page {
 }
 
 .recordLi {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
 }
 
 .dividing-line {
@@ -304,8 +381,9 @@ page {
 
 .look-detail {
   display: flex;
-  justify-content: center;
-  margin-bottom: 40rpx;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
 }
 
 .detail-btn {
@@ -318,7 +396,7 @@ page {
   text-align: center;
   color: rgba(230, 60, 65, 1);
   margin-bottom: 40rpx;
-  margin-top: 40rpx;
+  margin-top: 14rpx;
 }
 
 .prson-content {
@@ -328,7 +406,7 @@ page {
 }
 
 .prson-count {
-  font-family: DINAlternate-Bold, DINAlternate;
+  font-family: Alternate;
 }
 
 .prson-text {
@@ -341,14 +419,9 @@ page {
 }
 
 .redoubling {
-  padding: 38rpx 0rpx 36rpx 0rpx;
+  padding: 54rpx 0rpx 36rpx 0rpx;
   text-align: center;
 }
-
-/* .redoubling image {
-  width: 678rpx;
-  height: 1244rpx;
-} */
 
 .link-btn::after {
   border: none;
@@ -367,31 +440,35 @@ page {
 }
 
 .home-order-btn {
-  width: 494rpx;
-  height: 96rpx;
-  background: linear-gradient(180deg, rgba(255, 250, 236, 1) 0%, rgba(255, 223, 174, 1) 100%);
+  width: 393rpx;
+  margin-top:16rpx;
+  height: 86rpx;
+  background: #fff;
   box-shadow: 0px 4rpx 8rpx 0px rgba(160, 12, 27, 0.18);
   border-radius: 8rpx;
   text-align: center;
-  color: rgba(223, 60, 63, 1);
-  line-height: 96rpx;
-  margin-top: 54rpx;
+  color: #E21E2E;
+  line-height: 86rpx;
   font-family: PingFangSC-Medium, PingFang SC;
 }
 
 .within-code-no-text {
-  line-height: 64rpx;
-  width: 252rpx;
+  line-height: 150rpx;
+  width: 296rpx;
+  height: 150rpx;
+  
   box-shadow: 0px 2rpx 46rpx 0rpx rgba(0, 0, 0, 0.07);
-  border-radius: 0rpx 8rpx 8rpx 0rpx;
+   background: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/4cca19f818f34d438a2ae7fd985e2afb.png");
+  background-size: 100% 100%;
+  border-radius: 8rpx;
   color: rgba(44, 45, 51, 1);
   justify-content: center;
   text-align: center;
-  background-color: RGBA(225, 225, 225, 1);
+  box-sizing: border-box
 }
 
 .within-code-b {
-  margin-top: 62rpx;
+  margin-top: 50rpx;
 }
 
 .to-home {
@@ -418,40 +495,35 @@ page {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  position: relative
+  position: relative;
 }
 
 .add-vip-btn {
   width: 558rpx;
   height: 88rpx;
-  background: #FFF0D4;
+  background: #fff0d4;
   box-shadow: 4rpx 4rpx 16rpx 0rpx rgba(155, 17, 24, 0.32);
   border-radius: 8rpx;
   text-align: center;
-  color: #DF3541;
+  color: #df3541;
   font-size: 36rpx;
   margin-top: 152rpx;
   line-height: 88rpx;
   font-family: PingFangSC-Medium, PingFang SC;
 }
-.return-text{
-  color: #FFF0D4;
+
+.return-text {
+  color: #fff0d4;
   font-size: 24rpx;
   font-weight: 300;
-  margin-top: 18rpx
+  margin-top: 18rpx;
 }
-.text{
-  width: 572rpx;
-  height: 88rpx
 
+.text {
+  width: 572rpx;
+  height: 88rpx;
+  line-height: 88rpx;
 }
-/* .add-vip .text {
-  text-align: center;
-  color: rgba(243, 55, 64, 1);
-  font-size: 36rpx;
-  font-weight: 500;
-  font-family: PingFangSC-Medium, PingFang SC;
-} */
 
 .red-content-c {
   display: flex;
@@ -465,7 +537,8 @@ page {
 
 .activity-rules  image {
   width: 694rpx;
-  height: 1600rpx;
+  height: 1662rpx;
+  margin: 0 auto;
 }
 
 .alter-code {
@@ -593,8 +666,8 @@ page {
 }
 
 .invitation-top-img {
-  width: 658rpx;
-  height: 184rpx;
+  width: 672rpx;
+  height: 172rpx;
   margin-bottom: 48rpx;
 }
 
@@ -612,6 +685,7 @@ page {
 .redoubling  .title-3 {
   color: rgba(230, 60, 65, 1);
   font-size: 26rpx;
+  font-family: Alternate;
 }
 
 .invitation-bottom-img {
@@ -620,7 +694,7 @@ page {
   left: 10rpx;
   right: 0;
   margin: 0 auto;
-  width: 704rpx;
+  width: 642rpx;
   height: 998rpx;
   z-index: 1;
 }
@@ -650,11 +724,14 @@ page {
 
 .bor {
   width: 24rpx;
-  height: 22rpx;
+  height: 24rpx;
   position: absolute;
   top: 96rpx;
   left: 292rpx;
-  background-image: url("https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/85485df53cbc41ad98c877b23228fb80.svg");
+  /* border: 4rpx solid rgba(244, 76, 62, .5); *//* background: red;
+  border-radius: 50%; */
+  background-image: url("https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/bb55c5f70e204d1f8dbdc1239175d089.png");
+  background-size: 100% 100%;
   animation-name: move;
   /* 设置单次动画的执行时间 */
   animation-duration: 5s;
@@ -794,70 +871,136 @@ page {
     margin-left: 78rpx;
   }
 }
-.hint{
+
+.hint {
   position: absolute;
   border-radius: 16rpx;
   top: -40rpx;
-  right: -22rpx
+  right: -22rpx;
 }
-.hint-view{
-width: 278rpx;
+
+.hint-view {
+  width: 278rpx;
   height: 62rpx;
   display: flex;
   border-radius: 16rpx;
   justify-content: center;
   align-items: center;
-  position: relative
+  position: relative;
 }
-.reminder{
+
+.reminder {
   width: 264rpx;
   height: 80rpx;
 }
+
 /* .hint image{
   width: 258rpx;
   height: 40rpx;
 } */
-.hint-text{
-    width: 0;
-    height: 0;
-    border-left: 20rpx solid transparent;
-    border-right: 20rpx solid transparent;
-    border-top: 22rpx solid #FDB843;
-    position: absolute;
-    left: 23rpx;
-    bottom: -21rpx
+
+.hint-text {
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-top: 22rpx solid #fdb843;
+  position: absolute;
+  left: 23rpx;
+  bottom: -21rpx;
 }
-.back{
+
+.back {
   position: fixed;
   left: 24rpx;
   bottom: 48rpx;
   z-index: 10;
 }
-.back_home,.back_shop{
+
+.back_home, .back_shop {
   display: inline-block;
-  width:88rpx;
-  height:88rpx;
-  background:rgba(255,255,255,1);
-  box-shadow:0px 2rpx 4rpx 0px rgba(0,0,0,0.2);
-  opacity:0.95;
-  border:1rpx solid rgba(247,246,246,1);
+  width: 88rpx;
+  height: 88rpx;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 2rpx 4rpx 0px rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  border: 1rpx solid rgba(247, 246, 246, 1);
   border-radius: 50%;
   text-align: center;
   line-height: 88rpx;
   position: relative;
   z-index: 10;
 }
-.back_home{
+
+.back_home {
   margin-right: 24rpx;
 }
-.back_home image{
-  width:50rpx;
-  height:45rpx;
+
+.back_home image {
+  width: 50rpx;
+  height: 45rpx;
   margin-top: 21.5rpx;
 }
-.back_shop image{
-  width:47rpx;
-  height:45rpx;
-  margin-top: 21.5rpx;
 
+.back_shop image {
+  width: 47rpx;
+  height: 45rpx;
+  margin-top: 21.5rpx;
+}
+
+.activity-desc {
+  margin: 0 28rpx;
+  padding: 38rpx 24rpx;
+  box-sizing: border-box;
+  border-radius: 24rpx;
+  background-color: #fbb54a;
+  color: #a64d12;
+}
+
+.activity-title {
+  color: #a64d12;
+  font-weight: 500;
+  font-size: 32rpx;
+  width: 100%;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  position: relative;
+}
+
+.activity-title .activity-image {
+  width: 628rpx;
+  height: 6rpx;
+  position: absolute;
+  top: 20rpx;
+  left: 14rpx;
+}
+
+.activity-content {
+  color: #a64d12;
+  font-size: 24rpx;
+}
+
+.activity-main {
+  margin-top: 38rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-headline {
+  font-weight: 600;
+}
+
+.activity-text {
+  font-weight: 400;
+}
+
+.activity-text>text {
+  line-height: 40rpx;
+  display: block;
+  text-align: justify;
+}
+
+.to-top {
+  margin-top: 38rpx;
 }

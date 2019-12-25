@@ -12,7 +12,7 @@
     </view>
   </view>
   <view class='nav-top'>
-    <image class="nav-bgimg" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/zcxkjklh.png" />
+    <view class="nav-bgimg"></view>
     <!-- 搜索框 -->
     <view class='nav'>
       <view class='search' catchtap='skipSearch'>
@@ -68,14 +68,36 @@
           </view>
         </view>
       </view>
-      <view class='goodskind'>
-        <view class='goodskind-image' wx:for="{{string}}" wx:key="index" data-item="{{item}}" catchtap="BusinessLine">
-          <view class='image'>
-            <image src='{{item.bizLineImg}}'></image>
-          </view>
-          <view class='goodskind-text'>{{item.bizLineName}}</view>
-        </view>
+    </view>
+  </view>
+  <!-- 俩个 -->
+  <view class='goodskind' wx:if="{{string.length==2 || string.length==1}}" >
+    <view class='goodskind-image' wx:for="{{string}}"  wx:key="index" data-item="{{item}}" catchtap="BusinessLine">
+      <view class='image'>
+        <image src='{{item.bizLineImg}}'></image>
       </view>
+      <view class="goodskind-view">
+        <view class='goodskind-text'>{{item.bizLineName}}</view>
+        <view class='goodskind-text1'>{{item.bizLineDesc}}</view>
+      </view>
+    </view>
+  </view>
+  <!-- 三个 -->
+  <view class='goodskindThree' wx:if="{{string.length==3}}" >
+    <view class='goodskindThree-image' wx:for="{{string}}"  wx:key="index" data-item="{{item}}" catchtap="BusinessLine">
+      <view class='Threeimage'>
+        <image src='{{item.bizLineImg}}'></image>
+      </view>
+      <view class='goodskindThree-text'>{{item.bizLineName}}</view>
+    </view>
+  </view>
+  <!-- 四个 -->
+  <view class='goodskindFourthly' wx:if="{{string.length>3}}" >
+    <view class='goodskindFourthly-image' wx:for="{{string}}"  wx:key="index" data-item="{{item}}" catchtap="BusinessLine">
+      <view class='Fourthimage'>
+        <image src='{{item.bizLineImg}}'></image>
+      </view>
+      <view class='goodskindFourthly-text'>{{item.bizLineName}}</view>
     </view>
   </view>
   <invite show="{{show}}" listValue="{{listValue}}"></invite>
@@ -94,8 +116,8 @@
   <!-- 超值所想 -->
   <view class='overflow'>
     <view class='shopping'>
-      <view class='return' style="background:url({{item.backgroundPic}}) no-repeat;background-size:cover" catchtap='toCash' wx:for="{{activity}}" wx:key="index" data-item="{{item}}">
-        <view class='overflow-view1' wx:if="{{!userInfo.firstOrderStatus&&(userInfo.memberStatus!='NON_MEMBERS'||userInfo.memberStatus!='EXPIRED_MEMBERS')&&activity.blLink=='/my_member/orderDetails/orderDetails?status=firstFree'}}">
+      <view class='return' style="background:url({{item.backgroundPic}}) no-repeat;background-size:cover;background-color:#fff" catchtap='toCash' wx:for="{{activity}}" wx:key="index" data-item="{{item}}" wx:if="{{!userInfo.firstOrderStatus && userInfo.memberStatus!='NON_MEMBERS' &&userInfo.memberStatus!='EXPIRED_MEMBERS'&& item.blLink!='/my_member/orderDetails/orderDetails?status=firstFree'}}">
+        <view class='overflow-view1' >
           <text class="overflow-text1">{{item.isDisplay=='Y'?item.title:''}}</text>
           <view class="overflow-sckill" wx:if="{{!finish && item.code=='SECKILL' && item.activityTimeFrom!==null}}">
             {{nobegin?'距下场':"距结束"}}
@@ -147,29 +169,24 @@
 <view class="reminder" wx:if="{{(!userAuthorization || order.three) && !judegPopup}}">
   <view class="reminder-view">
     <image src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/d613cbfe387e4f78b166cdf4da20f72e.png" class="reminder-view">
-
       <image class="goods-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/66fe3fbc45f04d02b6c32ff15692364a.png"></image>
       <image class="good-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/8c3cebb5b6a84087ab1c74757fcd4977.png"></image>
     </image>
     <image class="good-button ballon" catchtap="giftSkip" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/a94b92acb3444c2f917c0123280ed22d.png"></image>
     <image class="close" catchtap="closeGiftSkip" src="../../images/close.svg"></image>
   </view>
-
-
 </view>
 
-<view class="explains" wx:if="{{showRemoteArea && branchNo=='888888'}}">
+<view class="explains" wx:if="{{faraway && branchNo=='888888' && !app.globalData.faraway}}">
   <view class="explains-view">
     <view class="explain-title">超出配送范围</view>
     <view class="explains-first">
       <view class="subtitle-text">
-
-        <text wx:for="{{remoteArea}}" wx:key="index">{{item}},</text> 等地区,暂不支持配送。
+        <text wx:for="{{remoteArea}}" wx:key="index">{{item}}{{index+1==remoteArea.length?'除外':'、'}}</text> 等地区，暂不支持配送。
       </view>
     </view>
     <view class="buttonConfirm" catchtap="buttonConfirm">我知道了</view>
   </view>
-
 </view>
 <wxs module="we">
   var toFixed = function(value) {

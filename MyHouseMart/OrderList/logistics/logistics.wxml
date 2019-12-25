@@ -1,10 +1,10 @@
 <view class="logistics">
     <view class="top">
-        <view class="first">
+        <view class="first" wx:if="{{ShipperName}}">
             <text class="logistics-name">{{ShipperName}}</text>
         </view>
         
-        <view class="second">
+        <view class="second" wx:if="{{list.logisticCode}}">
             <text class="logistics-number">快递单号</text>
             <text class="number">{{list.logisticCode}}</text>
         </view>

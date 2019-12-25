@@ -25,7 +25,7 @@ Page({
     }).then(res => {
       if (res.data.respData) {
         let giftPackage = (res.data.respData.itemPromotions)
-        const userInfo = wx.getStorageSync("userInfo")
+        const userInfo = wx.getStorageSync("userInfos")
         giftPackage.map(item => {
           item.picAddr = item.picAddr ? item.picAddr : 'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'//图片
           item.thumbPic = item.picAddr ? item.picAddr : 'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png'//图片
@@ -81,5 +81,16 @@ Page({
     wx.navigateTo({
       url: `/my_member/eventDesc/eventDesc?status=${e.currentTarget.dataset.status}`
     })
+  },
+  //跳转商品详情页
+  details(e) {
+    let { status, item: details, iscanbuy } = e.currentTarget.dataset
+    details.remarksName = details.remarksName.replace("'", "").replace("&", "").replace("=", "");
+    details.itemName = details.itemName.replace("'", "").replace("&", "").replace("=", "");
+    if (iscanbuy) {
+      wx.navigateTo({
+        url: `/pages/goodsDetails/goodsDetails?details=${JSON.stringify(details)}&type=gift&status=${status}`
+      })
+    }
   }
 })

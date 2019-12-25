@@ -47,7 +47,7 @@
         </view>
         <view class="vip-date" wx:else>
           <text class="vip-exipredate">{{userInfo.userText}}</text>
-          <text class="vip-exipredate" wx:if="{{userInfo.memberStatus=='ENTERPRISE'}}">自动续费</text>
+          <text class="vip-exipredate" wx:if="{{userInfo.isRenewal}}">自动续费</text>
         </view>
       </view>
     </view>
@@ -181,7 +181,7 @@
                   <text class="disprice">¥{{we.toFixed(data.disPrice)}}</text>
                   <text class="saleprice">¥{{we.toFixed(data.salePrice)}}</text>
                 </view>
-                <view class="buy-btn {{userInfo.isfirstPackStatus?'':'noclick-btn'}}" data-status='sendMember' data-item="{{data}}" catchtap="freeBuy" data-iscanbuy="{{userInfo.isfirstPackStatus}}">{{userInfo.isfirstPackStatus?'立即购买':'已加购'}}</view>
+                <view class="buy-btn {{userInfo.isfirstPackStatus?'':userInfo.isMember?'noclick-btn':''}}" data-status='sendMember' data-item="{{data}}" catchtap="freeBuy" data-iscanbuy="{{userInfo.isfirstPackStatus}}">{{userInfo.isfirstPackStatus?'立即购买':userInfo.isMember?'已加购':'立即购买'}}</view>
               </view>
             </view>
           </view>
@@ -197,7 +197,8 @@
             <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8d7a5991358242ff9069383d8709f290.svg" />
             <view>优惠券</view>
           </view>
-          <view class="service" catchtap='openFacePay' wx:if='{{userInfo.showFace || !userAuthorization}}'>
+           <!-- wx:if='{{userInfo.showFace || !userAuthorization}}' -->
+          <view class="service" catchtap='openFacePay'>
             <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/9450d2a4aac74d3ca88b59ede9f6130e.svg" />
             <view>刷脸支付</view>
           </view>
@@ -259,7 +260,7 @@
       </view>
     </view>
   </view>
-   <view class="alter-code" hidden="{{showCanvas}}"  catchtouchmove="preventTouchMove">
+   <view class="alter-code" hidden="{{showCanvas}}" catchtouchmove="preventTouchMove">
     <view class="alter-code-bg"></view>
     <view class="canvas-box">
       <canvas class="canvas-code" canvas-id="shareImg" />
@@ -287,6 +288,25 @@
       <text catchtap="{{isMember==false?'joinNow':'noJoin'}}">{{isMember==false?'立即加入':'我知道了'}}</text>
     </view>
     <image catchtap="noJoin" wx:if="{{!isMember}}" class="del" src="../../images/close_mh.svg" />
+  </view>
+</view>
+<!-- 自动续费 -->
+<view class="auto-renewal" catchtouchmove="preventTouchMove" wx:if="{{renewal}}">
+  <!-- 未开始自动续费 -->
+  <view class="no-renewal">
+    <view class="no-top">
+      <text class="no-title">{{userInfo.isRenewal?'已开启自动续费':'开启自动续费'}}</text>
+      <view class="no-desc" wx:if="{{!userInfo.isRenewal}}">开启【自动续费】，让收益不断线更聪明的选择，可随时取消。</view>
+      <view class="no-desc" wx:if="{{userInfo.isRenewal}}">
+        <text class="has-text">【自动续费】让收益不断线更聪明的选择！</text>
+        <text>如需关闭请往前微信支付中关闭。</text>
+      </view>
+    </view>
+    <view class="no-bottom">
+      <view class="no-btn" wx:if="{{!userInfo.isRenewal}}" catchtap="cancelSkip">再考虑一下</view>
+      <view class="no-btn" wx:if="{{!userInfo.isRenewal}}" catchtap="autoRenew">确认自动续费</view>
+      <view class="no-btn" wx:if="{{userInfo.isRenewal}}" catchtap="cancelSkip">我知道了</view>
+    </view>
   </view>
 </view>
 <wxs module="we">

@@ -409,6 +409,25 @@ page{
   box-sizing: border-box;
   margin-left: 18rpx;
   border-radius: 8px;
+  position: relative;
+}
+.multipleRefund{
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.multipleRefund-block{
+  height:36rpx;
+  background:linear-gradient(270deg,rgba(255,87,71,1) 0%,rgba(255,133,51,1) 100%);
+  box-shadow:0px 4rpx 10rpx 0px rgba(0,0,0,0.1);
+  border-radius:8rpx 0px 16rpx 0px;
+  line-height: 36rpx;
+  text-align: center;
+  font-size:20rpx;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(255,255,255,1);
+  padding: 0 4rpx 0 4rpx;
 }
 .addDetails{
   width: 460rpx;
@@ -431,6 +450,14 @@ page{
   font-family:PingFangSC-Regular,PingFang SC;
   font-weight:400;
   color:rgba(255,90,82,1);
+}
+.refound-right-delete{
+  text-decoration:line-through;
+  font-size:13px;
+  font-family:PingFangSC-Regular,PingFang SC;
+  font-weight:400;
+  color:rgba(160,161,163,1);
+  float:right;
 }
 .cause{
   width: 100%;

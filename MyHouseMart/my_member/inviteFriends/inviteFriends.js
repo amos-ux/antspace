@@ -1,9 +1,8 @@
-// pages/inviteFriends/inviteFriends.js
-
 import QRCode from '../../utils/qrcode.js';
 import _http from '../../utils/request.js';
-import {base64src} from '../../utils/base64src.js'
+import { base64src } from '../../utils/base64src.js'
 const cache = require("../../utils/cache.js");
+const call = require("../../utils/call.js");
 const app = getApp();
 const urlMember = app.baseUrl + "service-member/";
 Page({
@@ -25,10 +24,25 @@ Page({
     screenWidth: 0,
     screenHeight: 0,
     model: null,
-    money:"9.8",
-    isHome:false
+    money: "9.8",
+    isHome: false,
+    siteLevelValue: ""
   },
-  preventTouchMove: function () {},
+  skipBile() {
+    if (cache.get("item", "null") != "null") {
+      let item = cache.get("item", "null")
+      wx.navigateTo({
+        url: '/soul_cards/cardFood/cardFood?item=' + JSON.stringify(item),
+      })
+    } else {
+        wx.switchTab({
+          url: '/pages/index/index',
+        })
+    }
+
+  },
+
+  preventTouchMove: function () { },
   joinPreference() {
     wx.navigateTo({
       url: '/my_member/orderDetails/orderDetails?status=sendMember',
@@ -47,6 +61,17 @@ Page({
   vtRenew() {
     wx.navigateTo({
       url: '/my_member/JoinMember/JoinMember',
+    })
+  },
+  //控制提示 
+  control() {
+    _http.get({
+      url: `${app.baseUrl}service-user/public/get/auto/close/po/INVITA_BETA_TIPS`
+    }).then(res => {
+      this.setData({
+        siteLevelValue: res.data[0].siteLevelValue
+      })
+      console.log(this.data.siteLevelValue)
     })
   },
   code() {
@@ -69,7 +94,7 @@ Page({
         //这个就是src   imageCode
         const that = this
         wx.getSystemInfo({
-          success: function(res) {
+          success: function (res) {
             that.setData({
               model: res.model,
               screenWidth: res.windowWidth / 375,
@@ -83,17 +108,17 @@ Page({
       }
     })
   },
-  click: function() {
+  click: function () {
     wx.navigateTo({
       url: '/my_member/militaryExploits/militaryExploits',
     })
   },
-  money(){
+  money() {
     _http.get({
       url: `${app.baseUrl}service-user/public/member/doors`
-    }).then(res=>{
+    }).then(res => {
       this.setData({
-        money:res.data
+        money: res.data
       })
       console.log(res)
     })
@@ -101,10 +126,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    if(options.isHome){
+  onLoad: function (options) {
+    if (options.isHome) {
       this.setData({
-        isHome:true
+        isHome: true
       })
     }
     // this.getChargeRefund();
@@ -114,56 +139,56 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
+  onReady: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
     this.getUserInfo();
-
+    this.control()
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
+  onUnload: function () {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function(options) {
+  onShareAppMessage: function (options) {
     let that = this
     var shareObj = {
       title: "在吗？这里有一个赚(hao)返(yang)现(mao)的机会!",
       path: '/pages/connectWifi/connectWifi?referenceCode=' + that.data.userInfo.uniqueCode + "&formId=" + this.data.formId,
       imageUrl: 'https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/f2476719829745d182da52f791823ab1.jpg',
-      success: function(res) {},
+      success: function (res) { },
     };
     if (options.from == 'button') {
       shareObj = {
@@ -181,7 +206,7 @@ Page({
   /**
    * 面对面邀请
    */
-  onFaceInvitation: function() {
+  onFaceInvitation: function () {
     this.setData({
       showCanvas: false
     })
@@ -197,11 +222,11 @@ Page({
   /**
    * 一键复制事件
    */
-  copyBtn: function(e) {
+  copyBtn: function (e) {
     var that = this;
     wx.setClipboardData({
       data: that.data.userInfo.uniqueCode,
-      success: function(res) {
+      success: function (res) {
         wx.showToast({
           title: '复制成功',
         });
@@ -271,7 +296,7 @@ Page({
   /**
    * 点击保存分享码
    */
-  clickShare: function() {
+  clickShare: function () {
     wx.showLoading({
       title: '正在保存',
     })
@@ -309,18 +334,18 @@ Page({
     that.roundRectColor(ctx, 85 * rpx, 313 * rpx, 132 * rpx, 24 * rpx, 20, 'rgba(0,0,0,.11)');
     ctx.fillStyle = "#fff";
     ctx.setFontSize(12 * rpx);
-    ctx.fillText('可加二维码发朋友圈', 95 * rpx, 330 * rpx);
+    ctx.fillText('可将二维码发朋友圈', 95 * rpx, 330 * rpx);
     ctx.restore();
     ctx.save();
     ctx.draw();
   },
 
-  saveImageToPhoto: function(e) {
+  saveImageToPhoto: function (e) {
     let that = this
     if (e) {
       wx.saveImageToPhotosAlbum({
         filePath: e,
-        success: function() {
+        success: function () {
           wx.hideLoading();
           wx.showModal({
             title: '保存图片成功',
@@ -331,7 +356,7 @@ Page({
             showCanvas: true
           })
         },
-        fail: function(res) {
+        fail: function (res) {
           that.setData({
             showCanvas: true
           })
@@ -345,7 +370,7 @@ Page({
             wx.showModal({
               title: '提示',
               content: '保存图片失败，您可以点击确定设置获取相册权限后再尝试保存！',
-              complete: function(res) {
+              complete: function (res) {
                 if (res.confirm) {
                   wx.openSetting({}) //打开小程序设置页面，可以设置权限
                 } else {
@@ -363,7 +388,7 @@ Page({
     }
   },
   //绘制圆角矩形（纯色填充）
-  roundRectColor: function(context, x, y, w, h, r, color) {
+  roundRectColor: function (context, x, y, w, h, r, color) {
     context.save();
     context.setFillStyle(color);
     context.setStrokeStyle(color)
@@ -374,9 +399,9 @@ Page({
     context.stroke();
     context.closePath();
   },
-  tohome(){
+  tohome() {
     wx.switchTab({
-        url:'/pages/index/index'    
+      url: '/pages/index/index'
     })
   },
 })

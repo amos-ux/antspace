@@ -23,10 +23,11 @@
       <view class='page-view-left-text' wx:if="{{message.orderStatus=='DISPATCHING'&& message.orderType=='DIST'}}">店员配送</view>
       <view class='page-view-left-text' wx:if="{{message.orderStatus=='PICKING'}}">店员正在准备货物中...</view>
     </view>
+    <button open-type="contact" class="page-view-kefu"><text style="float:right">联系客服</text><image src='/images/kefu-black.svg' class="selectAdd-img" /></button>
   </view>
 
-  <view class='salt' wx:if="{{ message.orderStatus=='PICKING' || message.orderStatus=='PAID' ||(message.orderStatus=='DISPATCHING' && message.orderType=='SELF')}}">
-    <view class='take' wx:if="{{ message.orderStatus=='PICKING' || message.orderStatus=='PAID' ||(message.orderStatus=='DISPATCHING' && message.orderType=='SELF') }}">
+  <view class='salt' wx:if="{{ message.orderStatus=='DISPATCHING' && message.orderType=='SELF'}}">
+    <view class='take' wx:if="{{ message.orderStatus=='DISPATCHING' && message.orderType=='SELF' }}">
 
       <view class='take-yard'>
         <view class="take-pickupCode">{{message.pickupCode}}</view>
@@ -46,12 +47,12 @@
   </view>
   <view class='pick' wx:if="{{message.orderType=='SELF'}}">
     <view class='pick-view1'>自提门店</view>
-    <view class='pick-view2' wx:if="{{isCustomerService==false}}">{{message.branchName}}<button catchtap="callPhone"  wx:if="{{message.branchNo!='888888'}}"><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
+    <view class='pick-view2' wx:if="{{isCustomerService==false}}">{{message.branchName}}<button catchtap="callPhone" ><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
     <view class='pick-view2' wx:else>{{message.branchName}}<button open-type="contact"  wx:if="{{message.branchNo!='888888'}}"><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
     <view class='pick-view3'>{{message.bsLocDetail}}</view>
   </view>
   <view class='pick' style='height:155px;margin-top:16rpx' wx:if="{{message.orderType =='DIST'}}">
-    <view class='pick-view2' style='margin-top:16px;'>{{message.branchName}}<button catchtap="callPhone"  wx:if="{{message.branchNo!='888888'}}"><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
+    <view class='pick-view2' style='margin-top:16px;'>{{message.branchName}}<button catchtap="callPhone"  ><text class="callPhone">联系店铺</text><image src='/images/phone.svg' class="selectAdd-img" /></button></view>
     <view class='pick-view3' style='border-bottom:1px dashed #D1D1D1;height:30px;'>{{message.bsLocDetail}}</view>
     <view class='pick-view4'>[收货地址]{{message.locDetail}}</view>
     <view class='pick-view5'>
@@ -65,7 +66,7 @@
       <text class='content-top-num'>共{{message.itemTotal}}件</text>
     </view>
     <view class='inventory'>
-      <view class='content-center' wx:for="{{item}}" wx:key="{{index}}">
+      <view class='content-center' wx:for="{{item}}" wx:key="index">
         <view class='content-center-view'>
           <view class='content-center-view-left'>
             <image class='img' src='{{item.itemPicture==""?"../../images/null.svg":item.itemPicture}}'></image>
@@ -73,13 +74,19 @@
           <view class='content-center-view-right'>
             <view class='item-money'>
               <view class='itemName'>{{item.itemName}}</view>
-              <view class='money'>¥{{we.toFixed(item.quantity*item.salePrice)}}</view>
+                <view class='money'>¥{{we.toFixed(item.quantity*item.salePrice)}}</view>
             </view>
-            <view class='quantity'>数量: {{item.quantity}}</view>
+            <view class='quantity'><text >数量: {{item.quantity}}</text><text class="{{item.refundFlag=='N'?'refound-right-delete':'refound-right'}}" wx:if="{{item.refundData&&message.payType!='WALLET'&&item.refundTimes==1}}">返现￥{{item.refundData?Refund.toFixed(item.refundData):''}}</text></view>
           </view>
         </view>
+        <view class='fuck' wx:if="{{item.refundFlag=='N'}}">
+            <text class="activity">活动</text><text class="noRefund">该商品参与促销活动，不与返现叠加</text>
+        </view>
+        <view class="multipleRefund" wx:if="{{item.refundTimes!=1&&item.refundTimes!=0&&item.refundTimes!=null}}">
+          <view class="multipleRefund-block">返现¥{{item.refundData}}x{{item.refundTimes}}</view>
+        </view>
       </view>
-      <view class='content-centers' wx:for="{{combo}}" wx:key="{{index}}">
+      <view class='content-centers' wx:for="{{combo}}" wx:key="index">
         <view class='content-center-views'>
           <view class='content-center-view-left'>
             <image class='img' src='{{item.comboPic==""?"../../images/null.svg":item.thumbPicture}}'></image>
@@ -90,10 +97,17 @@
               <view class='quantity'>*{{item.combItemQty}}</view>
               <view class='money'>¥{{we.toFixed(item.combItemQty*item.combItemPrice)}}</view>
             </view>
+            <text class="{{item.refundFlag=='N'?'refound-right-delete':'refound-right'}}" wx:if="{{item.refundData&&message.payType!='WALLET'&&item.refundTimes==1}}">返现：¥{{item.refundData}}</text>
             <view class="comboList" wx:for="{{item.comItems}}" wx:key="index" wx:for-item="goods">
               <text class="combo-text">{{goods.itemName}}</text> *{{goods.quantity}}
             </view>
           </view>
+        </view>
+        <view class='fuck' wx:if="{{item.refundFlag=='N'}}">
+            <text class="activity">活动</text><text class="noRefund">该商品参与促销活动，不与返现叠加</text>
+        </view>
+        <view class="multipleRefund" wx:if="{{item.refundTimes!=1&&item.refundTimes!=0&&item.refundTimes!=null}}">
+          <view class="multipleRefund-block">返现¥{{item.refundData}}x{{item.refundTimes}}</view>
         </view>
       </view>
     </view>
@@ -105,6 +119,7 @@
       </view>
     </view>
     <view class='adjust'>
+      <!-- <view class='content-top-text2' wx:if="{{message.expressNo}}">运单号：<text>{{message.expressNo}}</text ><text class="copy" data-item="{{message.expressNo}}" catch:tap="copy">复制</text></view> -->
       <view class='content-top-text2'>订单编号：<text>{{message.orderNos}}</text></view>
       <view class='content-top-text2'>创建时间：<text>{{message.createdDate}}</text></view>
       <view class="content-top-text2" wx:if="{{message.notes}}">
@@ -150,9 +165,9 @@
       <view class='page-view-right' wx:if="{{message.orderStatus=='COMPLETED'}}" catchtap='invoice'>申请开票</view>
       <view class='page-view-right' wx:if="{{message.orderStatus=='UNPAID' && message.orderType!=='NONE'}}" catchtap='cancel'>取消订单</view>
 
-      <view class='page-view-right' wx:if="{{message.bizLine=='CVS'&&message.orderStatus=='DISPATCHING'&& message.orderType=='SELF' ||message.bizLine=='COFFEE'&&message.orderStatus=='DISPATCHING'&& message.orderType=='SELF'|| message.orderStatus=='PICKING'&&message.bizLine=='COFFEE'||message.orderStatus=='PICKING'&&message.bizLine=='CVS'}}"
+      <view class='page-view-right' wx:if="{{message.bizLine=='CVS'&&message.orderStatus=='DISPATCHING'&& message.orderType=='SELF' ||message.bizLine=='COFFEE'&&message.orderStatus=='DISPATCHING'&& message.orderType=='SELF'|| message.orderStatus=='PICKING'&&message.bizLine=='COFFEE'||message.orderStatus=='PICKING'&&message.bizLine=='CVS'||(message.orderStatus=='PAID'&&message.branchNo=='888888')}}"
         bindtap='jumpTo'>申请退款</view>
-      <view class="viewLogistics" wx:if="{{message.expressNo!=''}}" catch:tap="toLogIstics">查看物流</view>
+      <view class="viewLogistics" wx:if="{{message.expressNo!=''||(message.orderStatus=='PAID'&&message.branchNo=='888888')}}" catch:tap="toLogIstics">查看物流</view>
       <view class="confirmReceipt"  wx:if="{{message.branchNo=='888888'&&message.orderType=='DIST'&&message.orderStatus=='DISPATCHING'&&(message.userConfirmed==''||message.userConfirmed==null)}}" catch:tap="isModel">确认收货</view>  
   </view>
   <view class="model" wx:if="{{model}}">
@@ -168,5 +183,23 @@
   }
   module.exports = {
     toFixed: toFixed
+  }
+</wxs>
+<wxs module="Refund">
+  var comboRefund = function(arr) {
+    var length = arr.length,refungMonry=0
+    for(var i=0;i<length;i++){
+      refungMonry+=arr[i].refundAmt*arr[i].quantity
+    }
+    return refungMonry.toFixed(2)
+  }
+  var toFixed = function(value, num) {
+    num = num || 2
+    value = Number(value ? value : 0)
+    return value.toFixed(num);
+  }
+  module.exports = {
+    comboRefund: comboRefund,
+    toFixed:toFixed
   }
 </wxs>

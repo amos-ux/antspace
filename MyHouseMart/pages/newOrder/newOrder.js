@@ -4,7 +4,7 @@ var cache = require("../../utils/cache.js");
 import QRCode from '../../utils/qrcode.js'
 import request from '../../utils/my_page'
 var call = require("../../utils/call.js")
-var orderData = [],timer
+var orderData = [],timer,sizeIndex=1
 Page({
 
   /**user/order/calculate/price
@@ -176,16 +176,20 @@ Page({
         timer=setTimeout(that.countTime, 100);
       } else {
         clearTimeout(timer)
-        let data = {
-          "orderNo": a.orderNo,
-          "orderStatus": "CANCELLED",
-          "pickupCode": a.pickupCode,
-          "orderType": a.orderType,
+        if(sizeIndex<4){
+          let data = {
+            "orderNo": a.orderNo,
+            "orderStatus": "CANCELLED",
+            "pickupCode": a.pickupCode,
+            "orderType": a.orderType,
+          }
+          call.postData("/service-order-prc/saleOrder/updateOrderStatus", data, (res) => {
+            sizeIndex++
+            orderData = []
+            that.orderData(1, that.data.pageSize, that.data.status)
+          }, (res) => {})
         }
-        call.postData("/service-order-prc/saleOrder/updateOrderStatus", data, (res) => {
-          orderData = []
-          that.orderData(1, that.data.pageSize, that.data.status)
-        }, (res) => {})
+
       }
     }
   },
@@ -229,9 +233,14 @@ Page({
           title: res.respDesc,
           icon:"none"
         })
+        that.setData({
+          payOff:true
+        })
       })
     }else{
-
+      that.setData({
+        payOff:true
+      })
     }
 
   },

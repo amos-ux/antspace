@@ -27,8 +27,8 @@
         <view class="value-bottom">
           <view class="value-con">{{item.itemName}}</view>
           <view class="value-price">
-            <text class="disPrice">¥{{we.toFixed(item.salePrice)}}</text>
-            <text class="salePrice">¥{{we.toFixed(item.disPrice)}}</text>
+            <text class="disPrice">¥{{we.toFixed(item.disPrice ? item.disPrice : item.salePrice)}}</text>
+            <text class="salePrice" wx:if="{{item.disPrice}}">¥{{we.toFixed(item.salePrice)}}</text>
           </view>
           <view class="buy-btn" data-item="{{item}}" catchtap="freeBuy">立即购买</view>
         </view>

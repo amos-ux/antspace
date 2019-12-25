@@ -18,7 +18,7 @@ Page({
     radarImg: null,
     showCanvas: false
   },
-  qrcode(data){
+  qrcode(data) {
     new QRCode('myQrcode', {
       text: data,
       width: 200,
@@ -40,27 +40,24 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     wx.showLoading({
       title: '加载中',
     })
-    setTimeout(()=>{
-        wx.hideLoading()
-    },500)
-setTimeout(()=>{
-  // 创建连接
-  webSocket.connectSocket(`${app.baseUrls}service-member/webSocket/get/qrCode/${wx.getStorageSync('sessionId')}`);
-  // 设置接收消息回调
-  webSocket.onSocketMessageCallback = this.onSocketMessageCallback;
-},200)
-   
-
+    setTimeout(() => {
+      wx.hideLoading()
+    }, 500)
+    setTimeout(() => {
+      // 创建连接
+      webSocket.connectSocket(`${app.baseUrls}service-member/webSocket/get/qrCode/${wx.getStorageSync('sessionId')}`);
+      // 设置接收消息回调
+      webSocket.onSocketMessageCallback = this.onSocketMessageCallback;
+    }, 200)
     this.luminance(1)
-
   },
 
   // socket收到的信息回调
-  onSocketMessageCallback: function (msg) {
+  onSocketMessageCallback: function(msg) {
     let message = JSON.parse(msg)
     this.setData({
       parse: message,
@@ -69,19 +66,18 @@ setTimeout(()=>{
   },
   parse() {
     if (this.data.parse.resultCode == "flushCode") {
-      if (this.data.show) {//微信支付二维码
+      if (this.data.show) { //微信支付二维码
         this.setData({
           message: this.data.parse.data,
           qrcodeIndex: this.data.parse.data + "-00001133"
         })
         this.qrcode(this.data.qrcodeIndex)
-      } else {
+      } else { //钱包支付
         this.setData({
           message: this.data.parse.data,
           qrcodeIndex: this.data.parse.data + "-00001122"
         })
         this.qrcode(this.data.qrcodeIndex)
-
       }
     } else if (this.data.parse.resultCode == "startPay") {
       if (this.data.parse.data.timeStamp) {
@@ -98,7 +94,7 @@ setTimeout(()=>{
       }
     }
   },
-  luminance(data){
+  luminance(data) {
     wx.setScreenBrightness({
       value: data,
       success() {
@@ -108,21 +104,18 @@ setTimeout(()=>{
       },
     })
   },
-  onUnload: function (options) {
-
-    webSocket.closeSocket();
-    this.luminance(cache.get("luminance", this))
+  onUnload: function(options) {
+    webSocket.closeSocket(); //关闭websock连接
+    this.luminance(cache.get("luminance", this)) //关闭屏幕亮度
   },
   //打开选择
-  powerDrawer: function (e) {
-
+  powerDrawer: function(e) {
     var currentStatu = e.currentTarget.dataset.statu;
     this.util(currentStatu)
   },
 
   //关闭
-  util: function (currentStatu) {
-
+  util: function(currentStatu) {
     var animation = wx.createAnimation({
       duration: 200,
       timingFunction: "linear",
@@ -133,35 +126,28 @@ setTimeout(()=>{
     this.setData({
       animationData: animation.export()
     })
-    setTimeout(function () {
+    setTimeout(function() {
       animation.translateY(0).step()
       this.setData({
         animationData: animation
       })
       //关闭弹窗
       if (currentStatu == "close") {
-console.log("关闭了")
-        this.setData(
-          {
-            showModalStatus: false,
-            showCanvas: false
-          }
-        );
+        console.log("关闭了")
+        this.setData({
+          showModalStatus: false,
+          showCanvas: false
+        });
         console.log(this.data.showModalStatus)
         console.log(this.data.showCanvas)
-
-
       }
-
     }.bind(this), 200)
     if (currentStatu == "open") {
       console.log("我打开了")
-      this.setData(
-        {
-          showModalStatus: true,
-          showCanvas: true
-        }
-      );
+      this.setData({
+        showModalStatus: true,
+        showCanvas: true
+      });
       console.log(this.data.showModalStatus)
       console.log(this.data.showCanvas)
     }
@@ -179,7 +165,6 @@ console.log("关闭了")
   //微信支付选择
   wxPay() {
     console.log(this.data.showCanvas)
-
     this.setData({
       show: true,
       showModalStatus: false,
@@ -190,7 +175,6 @@ console.log("关闭了")
   },
   //关闭弹窗
   shut() {
-
     this.setData({
       showModalStatus: false,
       showCanvas: false
@@ -202,14 +186,14 @@ console.log("关闭了")
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
     this.account()
   },
 
@@ -217,21 +201,21 @@ console.log("关闭了")
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   }
 })

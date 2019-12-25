@@ -27,7 +27,7 @@
         </view>
         <view class='scroll-bottom'>
           <view class='scroll-bottom-left'>{{item.locDetail}}</view>
-          <view class='scroll-bottom-right' catchtap="openMap" data-map="{{item.locDetail}}" data-branchName="{{item.branchName}}">
+          <view class='scroll-bottom-right' catchtap="openMap" data-item="{{item}}">
             <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8ae7751dc57c4c4bb46ecb8a181d44f8.svg"></image>
             <view class='scroll-top-right' wx:if="{{item.range < 500}}">距{{we.toFixed(item.range)}}m</view>
           <view class='scroll-top-right' wx:if="{{item.range > 500}}">距{{we.toFixed(item.range/1000)}}km</view>
@@ -47,7 +47,7 @@
         </view>
         <view class='scroll-bottom'>
           <view class='scroll-bottom-left'>{{item.locDetail}}</view>
-          <view class='scroll-bottom-right' catchtap="openMap" data-map="{{item.locDetail}}" data-branchName="{{item.branchName}}">
+          <view class='scroll-bottom-right' catchtap="openMap" data-item="{{item}}">
               <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/8ae7751dc57c4c4bb46ecb8a181d44f8.svg"></image>
             <view class='scroll-top-right' wx:if="{{item.range < 500}}">{{we.toFixed(item.range)}}m</view>
           <view class='scroll-top-right' wx:if="{{item.range > 500}}">{{we.toFixed(item.range/1000)}}km</view>

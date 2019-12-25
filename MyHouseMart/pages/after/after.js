@@ -76,6 +76,7 @@ Page({
     
       for (let index in showGoodsList[i].saleItems) {
         ListAttr.push(showGoodsList[i].saleItems[index])
+        // 判断是否是配送费
         if(showGoodsList[i].saleItems[index].itemNo=='0000123456789'){
           this.setData({
             isDelivery:true,
@@ -215,42 +216,44 @@ Page({
       success(res) {
         // tempFilePath可以作为img标签的src属性显示图片
         const tempFilePaths = res.tempFilePaths
-        var path = res.tempFilePaths[0];
-        //上传图片接口
-        wx.showLoading({
-          title: '加载中...',
-        })
-        wx.uploadFile({
-          url: `${url}returnOrder/upload`,
-          // url: "http://10.0.0.31:31899/myhome/cloud/v1/service-order-prc/returnOrder/upload",
-          filePath: path,
-          name: 'picture',
-          success: function (rest) {
-          
-            let respData = (JSON.parse(rest.data)).respData
-            that.setData({
-              respData: respData
-            })
-          
-            that.data.imagesUrl.push(respData);
-            that.setData({
-              imagesUrl: that.data.imagesUrl
-            })
-            if (that.data.respData !== '') {
-              wx.showToast({
-                title: '上传成功',
-                icon: 'none'
+        // console.error(tempFilePaths)
+        for(let i=0;i<res.tempFilePaths.length;i++){
+          var path = res.tempFilePaths[i];
+          //上传图片接口
+          wx.showLoading({
+            title: '加载中...',
+          })
+          wx.uploadFile({
+            url: `${url}returnOrder/upload`,
+            // url: "http://10.0.0.31:31899/myhome/cloud/v1/service-order-prc/returnOrder/upload",
+            filePath: path,
+            name: 'picture',
+            success: function (rest) {
+              let respData = (JSON.parse(rest.data)).respData
+              that.setData({
+                respData: respData
+              })  
+              let arrImg=that.data.imagesUrl
+              arrImg.push(respData)
+              that.setData({
+                imagesUrl: arrImg
               })
+              if (that.data.respData !== '') {
+                wx.showToast({
+                  title: '上传成功',
+                  icon: 'none'
+                })
+              }
+              setTimeout(function () {
+                wx.hideLoading()
+              }, 2000)
+  
+            },
+            fail: (e) => {
+            
             }
-            setTimeout(function () {
-              wx.hideLoading()
-            }, 2000)
-
-          },
-          fail: (e) => {
-          
-          }
-        })
+          })
+        }
         tempFilePaths.forEach(p => {
           that.data.imgURL.push(p);
           that.setData({
@@ -266,12 +269,22 @@ Page({
   
     var _this = this;
     var images = _this.data.imgURL;
+    let httpImahe=this.data.imagesUrl
     var index = e.currentTarget.dataset.index; //获取当前长按图片下标
+    if(this.data.imgURL.length==1){
+      _this.setData({
+        imgURL: [],
+        imagesUrl:[]
+      })
+    }else{
+      images.splice(index, 1);
+      httpImahe.splice(index,1)
+      _this.setData({
+        imgURL: images,
+        imagesUrl:httpImahe
+      })
+    }
 
-    images.splice(index, 1);
-    _this.setData({
-      imgURL: images
-    })
   },
   //多列时间选择器
   bindPickerstartTimeChange: function (event) {
@@ -444,7 +457,7 @@ Page({
         i.comItems.map(e=>{
           pgrouping.push({
             itemNo: e.itemNo,
-            quantity: e.quantity,
+            quantity: i.combItemQty,
             soLineId: e.soLineId,
           })
         })
@@ -490,7 +503,7 @@ Page({
       return false
     }
 
-    if (this.data.respData == "") {
+    if (this.data.imagesUrl.length == 0) {
       wx.showToast({
         title: '请上传退款凭证',
         icon: 'none',
@@ -542,9 +555,9 @@ Page({
             confirmColor: '',
             success: function (res) {
               if (res.confirm) {
-                wx.navigateBack({
-                  delta: 2,
-                })
+                // wx.navigateBack({
+                //   delta: 2,
+                // })
               } else if (res.cancel) {
               }
             },

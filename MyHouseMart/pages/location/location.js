@@ -39,7 +39,7 @@ Page({
       wx.navigateBack()
     } else {
       wx.navigateTo({
-        url: '../site/site?p=' + JSON.stringify(this.data.message[i.currentTarget.dataset.id]),
+        url: `../site/site?p=${encodeURIComponent(JSON.stringify(this.data.message[i.currentTarget.dataset.id]))}`
       })
     }
   },

@@ -1,6 +1,7 @@
 const cache = require("../../utils/cache.js");
 const app = getApp()
 const url = app.baseUrl + "service-member/";
+let timer, index = 0, off = false
 import axios from '../../utils/axios.js';
 import request from '../../utils/my_page'
 Page({
@@ -23,7 +24,10 @@ Page({
     renewal: true,
     automaticModel: false,
     isVip: false,
-    firstValue:9.8
+    firstValue: 9.8,
+    autoText: '开启自动续费，可随时取消',
+    isRadio: false,
+    isAutomagin: false
   },
   /**
    * 生命周期函数--监听页面加载
@@ -56,6 +60,7 @@ Page({
       })
     }
     this.http()
+    this.checkAutomagin()
   },
   http() {
     let that = this
@@ -91,7 +96,7 @@ Page({
       that.setData({
         value: that.data.value
       })
-    }else{
+    } else {
       that.setData({
         value: e.detail.value
       })
@@ -139,124 +144,39 @@ Page({
     }
   },
   renew() {
-    wx.showToast({
-      title: '功能暂未开启',
-      icon: 'none'
-    })
-    // if(this.data.renewal==true){
-    //   this.setData({
-    //     automaticModel:true
-    //   })
-    // }else{
-    //   this.setData({
-    //     renewal:true
-    //   })
-    // }
+    // wx.showToast({
+    //   title: '功能暂未开启',
+    //   icon: 'none'
+    // })
+    if (this.data.renewal == true) {
+      this.setData({
+        automaticModel: true
+      })
+    } else {
+      this.setData({
+        renewal: true
+      })
+    }
   },
   pay() {
     const { Tabindex } = this.data
+    // 1 领取体验卡 2 购买会员卡
     if (Tabindex == 2) {
-      let p = {
-        "itemNo": this.data.chose.cardNo, //商品编号
-        "quantity": 1, //商品数量
-        "salePrice": this.data.chose.price, //商品原价
-        "vipPrice": this.data.chose.price, //会员价
-        "itemName": this.data.chose.cardName, //商品名
-        "weight": 10, //商品重量
+      if (this.data.isRadio == false && this.data.renewal == true) {
+        this.automatic()
+      } else {
+        this.payVip()
       }
 
-      let data = {
-        "branchNo": app.globalData.branch.branchNo,
-        "pickUpString": '',
-        "orderType": "SELF",
-        "pickUpTime": '',
-        "items": [p],
-        "locationId": "",
-        "totalFee": this.data.price,
-        "couponNo": "", //券编号
-        "planNo": "", //促销编号
-        "planId": "", //方案id
-        "notes": "", //订单备注
-      }
-      let that = this
-      wx.showLoading({
-        title: '支付中',
-        mask: true
-      })
-      if (!that.data.disable) {
-        this.setData({
-          disable: true
-        })
-        wx.request({
-          url: app.baseUrl + 'service-member/member/new/prepay',
-          method: "POST",
-          data: data,
-          header: {
-            'Cookie': "JSESSIONID=" + cache.get('sessionId', 'null')
-          },
-          success(rest) {
-            // 请求支付
-            wx.hideLoading()
-            if (rest.data.respCode == '0000') {
-              wx.requestPayment({
-                timeStamp: rest.data.respData.timeStamp,
-                nonceStr: rest.data.respData.nonceStr,
-                package: rest.data.respData.package,
-                signType: rest.data.respData.signType,
-                paySign: rest.data.respData.paySign,
-                success() { //支付成功
-                  that.setData({
-                    disable: false
-                  })
-                  wx.redirectTo({
-                    url: `/pages/paySuc/paySuc?payprice=${that.data.price}&payType=renewal`
-                  })
-                  setTimeout(() => {
-                    that.user()
-                  }, 2000)
-                },
-                fail() {
-                  wx.showToast({
-                    title: '已取消支付',
-                    icon: 'none'
-                  })
-                  that.setData({
-                    disable: false
-                  })
-                }
-              })
-            } else {
-              wx.hideLoading()
-              that.setData({
-                disable: false
-              })
-              wx.showToast({
-                title: '支付失败',
-                icon: "none"
-              })
-            }
-          },
-          fail() {
-            wx.hideLoading()
-            that.setData({
-              disable: false
-            })
-            wx.showToast({
-              title: '支付失败',
-              icon: "none"
-            })
-          }
-        })
-      }
     } else {
       if (this.data.value.length == 5 || this.data.referenceCode != '') {
         if (!this.data.disable) {
           this.setData({
             disable: true
           })
-          request('/service-user/public/member/doors',{},true,'GET').then(res=>{   //获取首单价格
+          request('/service-user/public/member/doors', {}, true, 'GET').then(res => {   //获取首单价格
             this.setData({
-              firstValue:res.respData
+              firstValue: res.respData
             })
           })
           wx.showLoading({
@@ -298,7 +218,7 @@ Page({
                 icon: 'none'
               })
             }
-          }).catch(err=>{
+          }).catch(err => {
             this.setData({
               disable: false
             })
@@ -342,6 +262,100 @@ Page({
    */
   onPullDownRefresh: function () {
 
+  },
+  payVip() {
+    let p = {
+      "itemNo": this.data.chose.cardNo, //商品编号
+      "quantity": 1, //商品数量
+      "salePrice": this.data.chose.price, //商品原价
+      "vipPrice": this.data.chose.price, //会员价
+      "itemName": this.data.chose.cardName, //商品名
+      "weight": 10, //商品重量
+    }
+
+    let data = {
+      "branchNo": app.globalData.branch.branchNo,
+      "pickUpString": '',
+      "orderType": "SELF",
+      "pickUpTime": '',
+      "items": [p],
+      "locationId": "",
+      "totalFee": this.data.price,
+      "couponNo": "", //券编号
+      "planNo": "", //促销编号
+      "planId": "", //方案id
+      "notes": "", //订单备注
+    }
+    let that = this
+    wx.showLoading({
+      title: '支付中',
+      mask: true
+    })
+    if (!that.data.disable) {
+      this.setData({
+        disable: true
+      })
+      wx.request({
+        url: app.baseUrl + 'service-member/member/new/prepay',
+        method: "POST",
+        data: data,
+        header: {
+          'Cookie': "JSESSIONID=" + cache.get('sessionId', 'null')
+        },
+        success(rest) {
+          // 请求支付
+          wx.hideLoading()
+          if (rest.data.respCode == '0000') {
+            wx.requestPayment({
+              timeStamp: rest.data.respData.timeStamp,
+              nonceStr: rest.data.respData.nonceStr,
+              package: rest.data.respData.package,
+              signType: rest.data.respData.signType,
+              paySign: rest.data.respData.paySign,
+              success() { //支付成功
+                that.setData({
+                  disable: false
+                })
+                wx.redirectTo({
+                  url: `/pages/paySuc/paySuc?payprice=${that.data.price}&payType=renewal`
+                })
+                setTimeout(() => {
+                  that.user()
+                }, 2000)
+              },
+              fail() {
+                wx.showToast({
+                  title: '已取消支付',
+                  icon: 'none'
+                })
+                that.setData({
+                  disable: false
+                })
+              }
+            })
+          } else {
+            wx.hideLoading()
+            that.setData({
+              disable: false
+            })
+            wx.showToast({
+              title: '支付失败',
+              icon: "none"
+            })
+          }
+        },
+        fail() {
+          wx.hideLoading()
+          that.setData({
+            disable: false
+          })
+          wx.showToast({
+            title: '支付失败',
+            icon: "none"
+          })
+        }
+      })
+    }
   },
   user() {
     const user = axios.getData({ url: `${app.baseUrl}service-member/new/query/usrInfo`, header: { 'Cookie': "JSESSIONID=" + cache.get('sessionId', 'null') }, isToast: true });
@@ -421,6 +435,17 @@ Page({
   },
   onShow() {
     this.user()
+    let that = this
+    if (off) {
+      off = false
+      timer = setTimeout(() => {
+        that.checkAutomagin()
+        if (that.data.isRadio == true) {
+          clearTimeout(timer)
+        }
+      }, 1500)
+    }
+
   },
   pickUpInformation() {
     const that = this
@@ -448,9 +473,9 @@ Page({
       url: `/my_member/eventDesc/eventDesc?status=${e.currentTarget.dataset.status}`
     })
   },
-  toMyPage(){
+  toMyPage() {
     wx.switchTab({
-      url:"/pages/myPage/myPage"
+      url: "/pages/myPage/myPage"
     })
   },
   freeBuy: function (e) {
@@ -488,49 +513,69 @@ Page({
     })
   },
   AutoRenew() {
-    this.automatic()
+    this.setData({
+      automaticModel: false
+    })
   },
   automatic() {  //开通自动续费
     wx.showLoading()
-    wx.request({
-      url: `http://antspace.vaiwan.com/public/signing/coutinual/member/${wx.getStorageSync("open")}/CHARGE`,
-      methods: 'GET',
-      success(res) {
-        let data = res.data.data
-        let extraData = {
-          appid: data.appId,
-          mch_id: data.mchId,
-          plan_id: data.planId,
-          contract_code: data.contractCode,
-          request_serial: data.requestSerial,
-          contract_display_account: data.contractDisplayAccount,
-          notify_url: data.notifyUrl,
-          sign: data.sign,
-          timestamp: data.timestamp
-        }
-        console.log(extraData)
-        wx.navigateToMiniProgram({
-          appId: 'wxbd687630cd02ce1d', //固定值，这个是填写微信官方签约小程序的id
-          extraData,
-          path: 'pages/index/index',
-          success(res) {
-            console.log(res);
-            // wx.setStorageSync('contract_id', "");
-            // me.globalData.contract_id = "";
-            // 成功跳转到签约小程序 
-          },
-          fail(res) {
-            console.log(res);
-            // 未成功跳转到签约小程序 
-          }
-        });
-        // that.setData({
-        //   extradata:data
-        // })
+    let that = this
+    request(`/service-member/public/signing/coutinual/member/${wx.getStorageSync("open")}/CHARGE`, {}, true, 'GET').then(res => {
+      let data = res.data
+      let extraData = {
+        appid: data.appId,
+        mch_id: data.mchId,
+        plan_id: data.planId,
+        contract_code: data.contractCode,
+        request_serial: data.requestSerial,
+        contract_display_account: data.contractDisplayAccount,
+        notify_url: data.notifyUrl,
+        sign: data.sign,
+        timestamp: data.timestamp
       }
+      wx.hideLoading()
+      wx.navigateToMiniProgram({
+        appId: 'wxbd687630cd02ce1d', //固定值，这个是填写微信官方签约小程序的id
+        extraData,
+        path: 'pages/index/index',
+        success(res) {
+          off = true
+          that.setData({
+            automaticModel: false
+          }, () => {
+            that.payVip()
+          })
+          // wx.setStorageSync('contract_id', "");
+          // me.globalData.contract_id = "";
+          // 成功跳转到签约小程序 
+        },
+        fail(res) {
+          that.setData({
+            automaticModel: false
+          })
+          wx.showToast({
+            title: '开通失败',
+            icon: 'none'
+          })
+          console.log(res);
+          // 未成功跳转到签约小程序 
+        }
+      });
+      // that.setData({
+      //   extradata:data
+      // })
     })
   },
   checkAutomagin() {
-
+    request(`/service-member/public/check/countinual/${wx.getStorageSync("userId")}`, {}, true, 'GET').then(res => {
+      if (res.respData) {
+        this.setData({
+          isRadio: true,
+          isAutomagin: res.respData,//自动续费  true 开  false:没开,
+          autoText: '已开通自动续费，可去微信支付中关闭',
+          renewal: false
+        })
+      }
+    })
   }
 })

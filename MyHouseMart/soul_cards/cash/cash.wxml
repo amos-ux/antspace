@@ -12,7 +12,7 @@
       <view class="left">
         <image lazy-load style="opacity:{{item.stockQty==0?'0.6':1}}" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
         <view wx:if="{{item.stockQty==0}}" class="end">已售罄</view>
-        <view class="{{item.stockQty==0?'text_end':'text'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返现￥{{item.refundValue}}</view>
+        <view class="{{item.stockQty==0?'text_end':'text'}}" hidden="{{item.refundValue==0||item.refundValue==null}}">返￥{{item.refundValue}}</view>
         <view class="seckill-one" wx:if="{{item.secKilling==true}}">限时秒杀中</view>
       </view>
       <view class="right">

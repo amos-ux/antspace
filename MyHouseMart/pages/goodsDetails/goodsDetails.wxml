@@ -14,8 +14,28 @@
       <view class="outfood-btn" catchtap="isOutfood">我知道了</view>
     </view>
   </view>
-  <text class="fixed" wx:if='{{bigPic.length}}'>{{current+1}}/{{bigPic.length+videoLink.length}}</text>
   <view class='titleImg'>
+    <text class="fixed" wx:if='{{bigPic.length}}' style="{{commodity.promotionRule.promotionType=='MULTIPLE_RETURN'?'bottom:94rpx;':''}}">{{current+1}}/{{bigPic.length+videoLink.length}}</text>
+    <!-- 多倍返现 -->
+    <view class="returnCash" wx:if="{{commodity.promotionRule.promotionType=='MULTIPLE_RETURN'}}">
+      <view class="returnCash-view-top">
+        <view>{{commodity.promotionRule.promotionRule[0].multipleValue}}倍返现<text style="margin-left:16rpx">剩余{{commodity.promotionRule.promotionRule[0].day}}</text>天</view>
+      </view>
+      <view class="returnCash-view-bottom">
+        <view class="returnCash-view-bottom-view1">
+          返现¥<text class="returnCash-view-bottom-text" style="font-family: 'Alternate';font-size:48rpx">{{we.toFixed(commodity.refundValue)}}×{{commodity.promotionRule.promotionRule[0].multipleValue}}</text>
+        </view>
+        <view class="returnCash-view-bottom-view2" wx:if="{{commodity.promotionRule.promotionRule[0].endTime!=null && commodity.promotionRule.promotionRule[0].startTime!=null}}">
+          <text class="returnCash-view-bottom-text1">活动时段</text>
+          <text class="returnCash-view-bottom-text2" style="{{item.length<3?'font-size:28rpx':''}}" wx:for="{{commodity.promotionRule.promotionRule}}" wx:key="index">{{we.sub(item.startTime)}}~{{we.sub(item.endTime)}};</text>
+        </view>
+        <view class="returnCash-view-bottom-view2" wx:else>
+          <text class="returnCash-view-bottom-text1">限时多倍返现</text>
+        </view>
+      </view>
+    </view>
+
+    <image class="title-tipsImg" wx:if="{{status=='greatPackage'}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/69e31b40fd1c4e7094ed6451560b65b8.png" />
     <swiper autoplay="{{videoLink.length?autoPlay:'true'}}" interval="3000" duration="500" circular="true" bindchange="bindchange" indicator-dots="{{indicatordots}}">
       <block wx:for="{{videoLink}}" wx:key="index" wx:if="{{videoLink.length}}">
         <swiper-item>
@@ -68,7 +88,7 @@
     </view>
     <!-- </block> -->
   </view>
-  <view class='goodsMessage' catchtap="setCanvas">
+  <view class='goodsMessage' >
     <text>{{commodity.itemName}}</text>
     <!-- 正在预售 -->
     <view class="detail" wx:if="{{commodity.date=='TODAY'}}">
@@ -84,6 +104,8 @@
     <view class='goodsMoney' wx:if="{{commodity.date!=='TODAY' && commodity.date!=='TOMORROW'}}">
       <text>¥{{we.toFixed(commodity.disPrice)==null?we.toFixed(commodity.salePrice):we.toFixed(commodity.disPrice)}}</text>
       <text>¥{{we.toFixed(commodity.salePrice)}}</text>
+      <!-- 商品二维码 -->
+      <image class="share-view" catchtap="showModal" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/125b410898c24b789803b8038174ca30.svg"></image>
     </view>
     <!-- 预售结束 -->
     <view class="salesVolume" wx:if='{{commodity.date=="YESTERDAY"}}'>
@@ -102,8 +124,9 @@
     </view>
     <view class='returnMoney' wx:if="{{commodity.refundValue!==0 && commodity.refundValue!==null&& commodity.date!=='TOMORROW'}}" catchtap="shade">
       <view class='return'>返现</view>
-      <view class='return-item'>本次返现
-        <text>{{commodity.refundValue}}元</text>
+      <view wx:if="{{commodity.refundValue!=0}}" class='return-item'>本次返现
+        <text wx:if="{{commodity.promotionRule.promotionType=='MULTIPLE_RETURN'}}">¥{{we.toFixed(commodity.refundValue*commodity.promotionRule.promotionRule[0].multipleValue)}}</text>
+        <text wx:else>{{we.toFixed(commodity.refundValue)}}</text>
       </view>
     </view>
     <view class='supply ' catchtap="isOutfood" wx:if="{{commodity.stTimes.length!==0}}">
@@ -121,11 +144,11 @@
     <view class='explain' catchtap="closeExplain" data-type="open" wx:if="{{branchNo=='888888'}}">
       <view class='supply-name'>说明</view>
       <view class='cart-left' >
-        <view class='cart-text'>正品保证 七天无忧退款 全国包邮</view>
+        <view class='cart-text'>正品保证 售后无忧 全国包邮</view>
       </view>
     </view>
   </view>
-  <view class='ShippingInstructions' wx:if="{{shoppingNoticImg==''?false:true}}">
+  <view class='ShippingInstructions' wx:if="{{shoppingNoticImg && branchNo!='888888'}}">
     <view class='instructions'>
       <text>——</text>
       <text>配送说明</text>
@@ -135,7 +158,7 @@
       <image lazy-load='true' src="{{shoppingNoticImg}}" mode='widthFix'></image>
     </view>
   </view>
-  <view class='details' wx:if="{{detailPic.length}}">
+  <view class='details' wx:if="{{detailPic.length!=0}}">
     <view class='detailsTitle'>
       <text>——</text>
       <text>商品详情</text>
@@ -146,7 +169,7 @@
     </view>
   </view>
 
-  <view class='selectionInstructions' wx:if="{{chooseNoticImg==''?false:true}}">
+  <view class='selectionInstructions' wx:if="{{chooseNoticImg}}">
     <view class='selection'>
       <text>——</text>
       <text>选品说明</text>
@@ -156,7 +179,6 @@
       <image lazy-load='true' src="{{chooseNoticImg}}" mode='widthFix'></image>
     </view>
   </view>
-  <!-- ===== -->
   <view class="model" catch:tap="close" wx:if="{{close}}">
     <view class="popup">
       <image wx:if="{{!commodity.isVip}}" src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/yhfghfhfghfg.jpg" />
@@ -168,15 +190,16 @@
           <text class="jia" catch:tap="plus" data-type="add">+</text>
         </view>
       </view>
-      <view class="benci">本次返现
-        <text>￥{{we.toFixed(commodity.refundValue?commodity.refundValue*commodity.quantity:0)}}</text>
+      <view wx:if="{{commodity.refundValue!=0}}" class="benci">本次返现
+        <text wx:if="{{commodity.promotionRule.promotionType=='MULTIPLE_RETURN'}}">¥{{we.toFixed(commodity.refundValue*commodity.promotionRule.promotionRule[0].multipleValue)}}</text>
+        <text wx:else>{{we.toFixed(commodity.refundValue)}}</text>
       </view>
       <button class='btn' catch:tap="toVips" wx:if="{{!commodity.isVip}}">29.9元开通会员，立即返现{{we.toFixed(commodity.refundValue)}}元</button>
       <!-- btn3 -->
       <button class="{{isVip?'btn3':'btn2'}}" catch:tap="toVip">马上抢</button>
     </view>
   </view>
-  <!-- ==== 普通商品-->
+  <!-- 普通商品-->
   <view class='toShopping' wx:if="{{!presell&&type!='gift'}}">
     <view class='cart' catchtap='skipCart'>
       <image src='../../images/shop.svg'></image>
@@ -207,74 +230,48 @@
   <view class='toShoppings' wx:if="{{commodity.date=='TODAY' && finish}}" style="background:#D6D6D6;">
     已结束
   </view>
-  <!-- <view class='specification' wx:if="{{specification}}" catchtap='specification'>
-    <view class='specification-content' catchtap='specificationContent'>
-      <view class='specification-goods'>
-        <view class='specification-img'>
-          <image src='{{commodity.picAddr?commodity.picAddr:"../../images/null.svg"}}'></image>
-        </view>
-        <view class='specification-name'>
-          <view class='goods-item'>
-            <text class='itemText'>{{commodity.itemName}}</text>
-            <view class='itemView' catchtap='over'>
-              <image src='../../images/over.svg'></image>
-            </view>
-          </view>
-          <view class='itemPrice'>
-            <view>
-              <text class='reduction' wx:for="{{commodity.satisfied}}" wx:key="{{index}}">{{item}}</text>
-            </view>
-            <view class='reductionPrice'>
-              <text class='Pricetext'>¥{{we.toFixed(commodity.disPrice==0?commodity.salePrice:commodity.disPrice)}}</text>
-              <text class='Pricetext1' wx:if="{{commodity.disPrice==0?false:true}}">¥{{we.toFixed(commodity.salePrice)}}</text>
-            </view>
-          </view>
-        </view>
-      </view> -->
-      <!-- <view class='temperature'>
-        <block wx:for="{{extOptions}}" wx:for-index="i" wx:key="index">
-          <view class='temperatureView'>
-            <view class='temperatureKind'>{{item.dataName}}</view>
-            <view class='temperaturecontent'>
-              <text class='temperaturetext {{item.isShow&&items.isShow?"alter":""}}' catchtap='shut' data-index="{{index}}" data-i="{{i}}" wx:for="{{item.options}}" wx:key="indexs" wx:for-item="items">{{items.name}}</text>
-            </view>
-          </view>
-        </block>
-
-      </view>
-      <view class='temperatureCart' catchtap='joinCart'>
-        加入购物车
-      </view> -->
-    <!-- </view>
-  </view> -->
 </view>
+
+<!-- 服务说明 -->
 <view class="explains" wx:if="{{showExplain}}">
-      <view class="explains-view">
-              <view class="explain-title">服务说明</view>
-              <view class="explains-first">
-                    <view class="subtitle">正品保证</view>
-                    <view class="subtitle-text">所有商品由公司认证的供应商或者品牌商直供货源，保证100%安全。</view>
-              </view>
-              <view class="explains-second">
-                    <view class="subtitle">7天无忧退款</view>
-                    <view class="subtitle-text">本商品支持7天无理由退货</view>
-              </view>
-              <view class="explains-three">
-                    <view class="subtitle">全国包邮</view>
-                    <view class="subtitle-text">全国包邮（<text wx:for="{{remoteArea}}" wx:key="index">{{item}},</text>）</view>
-              </view>
-      </view>
-      <image src="../../images/close.svg" catchtap="closeExplain" data-type="close"></image>
+  <view class="explains-view">
+    <view class="explain-title">服务说明</view>
+    <view class="explains-first">
+      <view class="subtitle">正品保证</view>
+      <view class="subtitle-text">所有商品由公司认证的供应商或者品牌商直供货源，保证100%安全。</view>
+    </view>
+    <view class="explains-second">
+      <view class="subtitle">售后无忧</view>
+      <view class="subtitle-text">由第三方商家发货并提供售后服务</view>
+    </view>
+    <view class="explains-three">
+      <view class="subtitle">全国包邮</view>
+      <view class="subtitle-text">全国包邮（<text wx:for="{{remoteArea}}" wx:key="index">{{item}}{{index+1==remoteArea.length?'除外）':'、'}}</text></view>
+    </view>
+  </view>
+  <image src="../../images/close.svg" catchtap="closeExplain" data-type="close"></image>
 </view>
 <!-- 海报 -->
-<view class="canvas-view" catchtap="closeCanvas" wx:if="{{showCanvas}}">
+<view class="canvas-view" catchtap="closeCanvas" wx:if="{{showCanvas}}" catchtouchmove="ture">
   <canvas canvas-id="mycanvas" class="canvas" catchtap="buttonCanvas" style="height:{{height}}px;width:{{width}}px" ></canvas>
   <view class="canvas-button" catchtap="saveShareImg">保存至本地</view>
 </view>
 <!-- 分享弹窗 -->
 <view class="modals modals-bottom-dialog" hidden="{{hideModal}}">
-    <view class="modals-cancel" bindtap="hideModal"></view>
-    <view class="bottom-dialog-body bottom-pos" animation="{{animationData}}"></view>
+  <view class="modals-cancel" bindtap="hideModal"></view>
+  <view class="bottom-dialog-body bottom-pos" animation="{{animationData}}">
+    <view class="pos-view">
+      <button class="pos-share" open-type="share" catchtap="Wxshare">
+        <image class="pos-share-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/07834dd86c1248da9e6cb5bbbbe0c7fc.svg"></image>
+        <view class="pos-share-view">分享给好友</view>
+      </button>
+      <view class="pos-yard" catchtap="createYard">
+        <image class="pos-yard-img" src="https://antspace-dev-img-1.oss-cn-shenzhen.aliyuncs.com/a703b4cc5ced44e5b4f962fa7373abf0.svg"></image>
+        <view class="pos-yard-view">生成海报</view>
+      </view>
+    </view>
+    <view class="pos-cancel" catchtap="hideModal">取消</view>
+  </view>
 </view>
 <!-- <button bindtap="showModal">点我</button> -->
 <!-- 规格弹窗 -->
@@ -297,7 +294,6 @@
     }
     return str.substring(0, 5)
   }
-
   module.exports = {
     toFixed: toFixed,
     replace: replace,

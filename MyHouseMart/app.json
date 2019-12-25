@@ -68,9 +68,11 @@
         "militaryExploits/militaryExploits",
         "openVip/openVip",
         "orderDetails/orderDetails",
-        "wallet/wallet"
+        "wallet/wallet",
+        "shareDetail/shareDetail"
       ]
-    },{
+    },
+    {
       "root": "OrderList",
       "name": "OrderList",
       "pages": [
@@ -91,7 +93,7 @@
         "my_member"
       ]
     },
-    "pages/newOrder/newOrder":{
+    "pages/newOrder/newOrder": {
       "network": "all",
       "packages": [
         "OrderList"

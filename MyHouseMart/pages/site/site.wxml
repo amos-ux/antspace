@@ -1,7 +1,7 @@
 <view class='page'>
   <view class='page-view'>
     <text class="page-view-title">联系人</text>
-    <input class='page-text' type='text' value='{{message.userName}}' bindinput="inputeidt" data-obj="message" data-item="userName" />
+    <input class='page-text' type='text' maxlength='12' value='{{message.userName}}' bindinput="inputeidt" data-obj="message" data-item="userName" />
   </view>
   <view class='page-view'>
     <text class='page-view-title'>手机号码</text>
@@ -13,7 +13,7 @@
   </view>
   <view class='page-view'>
     <text class='page-view-title'>门牌号</text>
-    <input class='page-text' value='{{message.detailedAddress}}' bindinput="inputHouse" data-obj="message" data-item="detailedAddress"></input>
+    <input class='page-text' maxlength='20' value='{{message.detailedAddress}}' bindinput="inputHouse" data-obj="message" data-item="detailedAddress"></input>
   </view>
   <view class='page-view'>
     <text class='page-view-title'>地址标签</text>

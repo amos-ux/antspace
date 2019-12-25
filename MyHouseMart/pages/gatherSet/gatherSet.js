@@ -77,7 +77,8 @@ Page({
         let data={
           "serviceType": "WECHAT",
           "openId": cache.get("open",this),
-          "contractTerminationRemark":"none"
+          "contractTerminationRemark":"none",
+          "type":'FACE'
         }
         if (res.confirm) {
           call.postData("/service-payment/trade/papay/delete/contract",data,(res)=>{

@@ -17,28 +17,26 @@ Page({
     longitude: null,
     latitude: null,
     detailedAddress: null,
-    memberAddressType: ""
+    memberAddressType: "",
+    locDetail: '',//详细地址
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     let that = this
-    if (JSON.parse(options.p).defaultAddress == 'Y') {
-      that.setData({
-        checked: true,
-      })
-    }
+    const details = decodeURIComponent((options.p))
     that.setData({
-      memberAddressType: JSON.parse(options.p).memberAddressType ? JSON.parse(options.p).memberAddressType : ''
+      checked: JSON.parse(details).defaultAddress == 'Y' ? true : false,
+      memberAddressType: JSON.parse(details).memberAddressType ? JSON.parse(details).memberAddressType : ''
     })
     wx.request({
-      url: url + 'address/user/get/addressDetail/' + JSON.parse(options.p).locationId,
+      url: url + 'address/user/get/addressDetail/' + JSON.parse(details).locationId,
       method: "POST",
       success(rest) {
         that.setData({
-          locationId: JSON.parse(options.p).locationId,
+          locationId: JSON.parse(details).locationId,
           message: rest.data.respData,
           cityName: rest.data.respData.cityName,
           provinceName: rest.data.respData.provinceName,
@@ -51,20 +49,22 @@ Page({
     })
   },
   // 获取用户信息
-  getUsersInfo: function() {
+  getUsersInfo: function () {
     let that = this;
     //读取缓存登录
     wx.getStorage({
       key: 'userInfo',
-      success: function(res) {
-        that.setData({
-          latitude: res.data,
-        })
+      success: function (res) {
+        if (typeof res.data != 'object') {
+          that.setData({
+            latitude: res.data,
+          })
+        }
       }
     })
     wx.getStorage({
       key: 'userInf',
-      success: function(res) {
+      success: function (res) {
         that.setData({
           longitude: res.data,
         })
@@ -72,7 +72,7 @@ Page({
     })
   },
   // 收货地址
-  skip: function() {
+  skip: function () {
     wx.navigateTo({
       url: '../mymoney/mymoney',
     })
@@ -83,125 +83,150 @@ Page({
       checked: !this.data.checked
     })
   },
-  // 节流 保存地址
+  // 节流 修改地址
   saveDebounce: app.debounce1(function () {
     this.save()
   }, 1000),
-  // 保存地址
-  save: function() {
+  // 修改地址
+  save: function () {
     let that = this
     const myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(19[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(16[0-9]{1})|(14[0-9]{1}))+\d{8})$/;
-    if (that.data.message.userName == '') {
+    const namereg = /^[A-Za-z0-9\u4e00-\u9fa5]+$/;
+    const detailreg = /[`@#$^&*''@#￥&*]/g
+    const {locDetail} = that.data
+    const {userName,userNumber,detailedAddress} = that.data.message
+    if (userName == '') {
       that.showToast('用户名不能为空哦');
       return false;
-    }
-    if (that.data.message.userNumber=='') {
+    }else if(!namereg.test(userName)){
+      that.showToast('用户名有误哦')
+      return false;
+    }else if (userNumber == '') {
       that.showToast('电话号码不能为空哦')
       return false;
-    }
-    if (!myreg.test(that.data.message.userNumber)) {
+    }else if (!myreg.test(userNumber)) {
       that.showToast('电话号码有误哦')
       return false;
-    }
-    if (that.data.message.locDetail == '') {
+    }else if (locDetail == '') {
       that.showToast('收货地址还没填写呢')
       return false;
-    }
-    if (that.data.message.detailedAddress == '') {
+    }else if (detailedAddress == '') {
       that.showToast('详细地址不能为空哦')
       return false;
-    }
-    wx.showLoading({
-      title: '加载中...',
-    })
-    if (that.data.checked == true) {
+    }else if(detailreg.test(detailedAddress)){
+      that.showToast('详细地址有误哦')
+      return false;
+    }else{
+      wx.showLoading({ title: '加载中...' })
       that.setData({
-        defaultAddress: "Y"
+        defaultAddress: that.data.checked ? "Y" : "N"
       })
-    } else {
-      that.setData({
-        defaultAddress: "N"
+      wx.request({
+        url: url + 'address/user/address/update',
+        method: "POST",
+        data: {
+          "userId": cache.get('userId', "null"),
+          "userName": that.data.message.userName,
+          "userNumber": that.data.message.userNumber,
+          "latitude": that.data.latitude,
+          "memberAddressType": that.data.memberAddressType,
+          "longitude": that.data.longitude,
+          "locDetail": that.data.locDetail,
+          "defaultAddress": that.data.defaultAddress,
+          "locationId": that.data.message.locationId,
+          "detailedAddress": that.data.message.detailedAddress,
+          "cityName": that.data.message.cityName,
+          "provinceName": that.data.message.provinceName,
+          "regionName": that.data.message.regionName,
+        },
+        success: function (res) {
+          if (res.data.respCode == '0000' || res.data.code == "00") {
+            wx.hideLoading()
+            wx.navigateBack()
+          } else {
+            wx.hideLoading()
+            that.showToast(res.data.respDesc)
+          }
+        },
+        fail: function () {
+          wx.hideLoading()
+          that.showToast('修改收货地址失败')
+        }
       })
     }
-    wx.request({
-      url: url + 'address/user/address/update',
-      method: "POST",
-      data: {
-        "userId": cache.get('userId', "null"),
-        "userName": that.data.message.userName,
-        "userNumber": that.data.message.userNumber,
-        "latitude": that.data.latitude,
-        "memberAddressType": that.data.memberAddressType,
-        "longitude": that.data.longitude,
-        "locDetail": that.data.locDetail,
-        "defaultAddress": that.data.defaultAddress,
-        "locationId": that.data.message.locationId,
-        "detailedAddress": that.data.message.detailedAddress,
-        "cityName": that.data.message.cityName,
-        "provinceName": that.data.message.provinceName,
-        "regionName": that.data.message.regionName,
-      },
-      success: function() {
-        wx.hideLoading()
-        wx.navigateBack()
-      }
-    })
   },
-  compony: function() {
+  compony: function () {
     let that = this
     that.setData({
       memberAddressType: "company",
     })
-    if (that.data.memberAddressType == "company" && that.data.memberAddressType == "home") {
-      that.setData({
-        memberAddressType: "",
-      })
-    }
   },
-  home: function() {
+  home: function () {
     let that = this
     that.setData({
       memberAddressType: "home",
     })
   },
   // 联系人
-  inputeidt: function(e) {
+  inputeidt: function (e) {
     let that = this
-    that.data.message.userName = e.detail.value
+    let { message } = that.data
+    message.userName = e.detail.value
+    that.setData({ message })
   },
   // 手机号码
-  inputPhone: function(i) {
+  inputPhone: function (e) {
     let that = this
-    that.data.message.userNumber = i.detail.value
+    let { message } = that.data
+    message.userNumber = e.detail.value
+    that.setData({ message })
   },
   // 门牌号
-  inputHouse: function(b) {
+  inputHouse: function (e) {
     let that = this
-    that.data.message.detailedAddress = b.detail.value
+    let { message } = that.data
+    message.detailedAddress = e.detail.value
+    that.setData({ message })
   },
   // 删除地址
-  delete: function() {
+  delete: function () {
     let that = this
     wx.request({
       url: url + 'address/user/del/address/by/' + that.data.locationId,
       method: "POST",
-      success: function(res) {
-        wx.navigateBack()
+      success: function (res) {
+        if (res.data.respCode == '0000' || res.data.code == "00") {
+          wx.navigateBack()
+        } else {
+          that.showToast(res.data.respDesc)
+        }
+      },
+      fail: function () {
+        that.showToast('删除地址失败')
       }
     })
   },
-  onShow: function() {
+  onShow: function () {
     let that = this
     that.getUsersInfo()
   },
   // 验证提示
-  showToast:function(tips){
+  showToast: function (tips) {
     wx.showToast({
       title: tips,
       icon: 'none'
     })
-    setTimeout(function(){
+    setTimeout(function () {
       wx.hideToast()
-    },1000)
+    }, 1000)
+  },
+  // 过滤json特殊字符
+  valueReplace: function (v) {
+    if (v.indexOf("\"") != -1) {
+      v = v.toString().replace(new RegExp('(["\"])', 'g'), "\\\"");
+    }
+    else if (v.indexOf("\\") != -1)
+      v = v.toString().replace(new RegExp("([\\\\])", 'g'), "\\\\");
+    return v;
   }
 })

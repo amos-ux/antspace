@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"enhance": false,
 		"postcss": true,
@@ -26,7 +26,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.9.4",
 	"appid": "wx959b6f560664682c",
-	"projectname": "MyHouseMartTEST",
+	"projectname": "MyHouseMart",
 	"cloudfunctionTemplateRoot": "",
 	"debugOptions": {
 		"hidedInDevtools": []
@@ -84,15 +84,15 @@
 				},
 				{
 					"id": 3,
-					"name": "my_member/orderDetails/orderDetails",
-					"pathName": "my_member/orderDetails/orderDetails",
-					"query": "status=greatPackage",
+					"name": "my_member/shareDetail/shareDetail",
+					"pathName": "my_member/shareDetail/shareDetail",
+					"query": "",
 					"scene": 1014
 				},
 				{
 					"id": 4,
-					"name": "首页",
-					"pathName": "pages/index/index",
+					"name": "商品详情",
+					"pathName": "pages/goodsDetails/goodsDetails",
 					"query": "status= vipInterests",
 					"scene": null
 				},
@@ -126,8 +126,8 @@
 				},
 				{
 					"id": 9,
-					"name": "my_member/militaryExploits/militaryExploits",
-					"pathName": "my_member/militaryExploits/militaryExploits",
+					"name": "pages/share/share",
+					"pathName": "pages/share/share",
 					"query": "",
 					"scene": null
 				},
@@ -154,8 +154,8 @@
 				},
 				{
 					"id": 13,
-					"name": "商品详情",
-					"pathName": "pages/goodsDetails/goodsDetails",
+					"name": "分享商品详情",
+					"pathName": "pages/share/share",
 					"query": "",
 					"scene": null
 				},
@@ -171,6 +171,12 @@
 					"name": "pages/after/after",
 					"pathName": "pages/after/after",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "my_member/shareDetail/shareDetail",
+					"pathName": "my_member/shareDetail/shareDetail",
 					"scene": null
 				}
 			]

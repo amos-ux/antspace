@@ -1,5 +1,5 @@
 //生产
-var webUrl = 'https://api.antspace.com/myhome/cloud/v1';
+// var webUrl = 'https://api.antspace.com/myhome/cloud/v1';
 
 //dev2 开发环境
 // let webUrl = "http://10.0.0.12:8989/myhome/cloud/v1";
@@ -8,7 +8,7 @@ var webUrl = 'https://api.antspace.com/myhome/cloud/v1';
 // var webUrl = "https://wongkimshing.iask.in/myhome/cloud/v1";
 
 //test环境
-// let webUrl = "https://antspace-dev.oicp.vip/myhome/cloud/v1";
+let webUrl = "https://antspace-dev.oicp.vip/myhome/cloud/v1";
 
 //测试环境
 // let webUrl = "http://10.0.0.31:31899/myhome/cloud/v1";
@@ -21,7 +21,7 @@ let request = function (url, parms, methods = 'POST', loading = true, isShowLoad
   }
   wx.showNavigationBarLoading()
   return new Promise((resolve, reject) => {
-    wx.request({
+    wx.request({  
       url: webUrl + url,
       data: parms,
       method: methods,
@@ -33,6 +33,7 @@ let request = function (url, parms, methods = 'POST', loading = true, isShowLoad
           if (loading == true) {
             wx.hideLoading()
           }
+          
           wx.hideNavigationBarLoading()
           return resolve(res.data)
         } else {

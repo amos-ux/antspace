@@ -15,20 +15,18 @@
         <image src='../../images/emptys.svg' catchtap='empty' />
       </view>
     </view>
-    <view catchtap="wxSearchConfirm" class="input-text">{{wxSearchData.length>=2?'搜索':'取消'}}</view>
+    <view catchtap="wxSearchConfirm" class="input-text">{{wxSearchData.length>=1?'搜索':'取消'}}</view>
   </view>
   
   <!-- 搜索结果列表 -->
   <scroll-view scroll-y="true" class="search-list" wx:if="{{isShowList && wxSearchData.length>=2}}">
     <block wx:for="{{order}}" wx:key="index">
-      <view catchtap="confirmView" class="order-name" data-item="{{item}}" data-index="{{index}}">
-        {{item.itemName}}
-      </view>
+      <view catchtap="confirmView" class="order-name" data-item="{{item}}" data-index="{{index}}">{{item.itemName}}</view>
     </block>
   </scroll-view>
 
   <!-- 历史搜索 -->
-  <view class="history" wx:if="{{wxSearchData.length<2 && historyList.length>0}}">
+  <view class="history" wx:if="{{wxSearchData.length==0 && historyList.length>0}}">
     <view class="history-top">
       <text>历史搜索</text>
       <image src="../../images/del.svg" catchtap="delHistory" class="del-icon" alt="" />
@@ -39,28 +37,36 @@
   </view>
 
   <!-- 没有搜索商品 -->
-  <view class="noshop" wx:if="{{wxSearchData.length>=2 && isHasShop}}">
+  <view class="noshop" wx:if="{{wxSearchData.length!=0 && isHasShop}}">
     <image src="https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/65252c0d5e7d4ebcbc1cba2d8817a746.svg" />
     <text>暂无找到符合的商品</text>
   </view> 
   <!-- 有搜索商品 非预售商品 -->
-  <view class="has-shop" wx:if="{{isShow}}">
+  <view class="has-shop" wx:if="{{isShow && wxSearchData.length!=0}}">
 
     <!-- 非预售商品 -->
     <view class="shop-con" wx:if="{{bizLine!='PRESALE'}}" catchtap='details' data-item="{{item}}" wx:for="{{order}}" wx:key="index">
-      <view class="refundValue" wx:if="{{we.isNumber(item.refundValue)}}">
-        返现¥{{we.toFixed(item.refundValue)}}
+      <view class="refundValue" wx:if="{{we.isNumber(item.refundValue) && item.promotionRule.promotionType!='MULTIPLE_RETURN'}}">返¥{{we.toFixed(item.refundValue)}}</view>
+      <!-- <view class="refundValue" wx:if="{{we.isNumber(item.refundValue) && item.promotionRule.promotionType=='MULTIPLE_RETURN'}}">返¥{{we.toFixed(item.refundValue)}}x{{item.promotionRule.promotionRule[0].multipleValue}}</view> -->
+      <view class="normal-img">
+        <image src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
+        <view class="multipleRefund" wx:if="{{item.promotionRule.promotionType=='MULTIPLE_RETURN'&&item.refundValue!=null&&item.refundValue!=0}}">
+          <text class="two-multipleRefund-left">会员返现</text>
+          <view class="two-multipleRefund-right">
+            <text class="two-multipleRefund-right-childen">¥</text >{{item.refundValue}}
+            <text class="two-multipleRefund-right-childen-cls"> x </text>{{item.promotionRule.promotionRule[0].multipleValue}}
+          </view>
+        </view>
       </view>
-      <image class="normal-img" src="{{item.picAddr==''?'https://antspace-prod-img-1.oss-cn-shenzhen.aliyuncs.com/16b5af2afaa.png':item.picAddr}}" />
       <view class="shop-main">
-        <text class="shop-name">{{item.itemName}}</text>
+        <view class="shop-name">{{item.itemName}}</view>
         <view class="discount">
           <view class="satisfied" wx:key="index" wx:if="{{item.satisfied.length!==0}}">{{item.satisfied[0]}}</view>
           <view class="stName" wx:if="{{item.stTimes.length!==0}}">{{item.stTimes[0].stName}}</view>
         </view>
         <view class="shop-price">
-          <text>¥{{we.toFixed(item.salePrice)}}</text>
-          <text wx:if="{{item.disPrice!=null}}">¥{{we.toFixed(item.disPrice)}}</text>
+          <text class="shop-disPrice">¥{{we.toFixed(item.disPrice?item.disPrice:item.salePrice)}}</text>
+          <text class="shop-salePrice" wx:if="{{item.disPrice}}">¥{{we.toFixed(item.salePrice)}}</text>
           <image catchtap='touchOnGoods' data-item="{{item}}" class="" src="../../images/add.svg" />
         </view>
       </view>
@@ -68,9 +74,8 @@
 
     <!-- 预售商品 -->
     <view class="shop-con" wx:if="{{bizLine=='PRESALE'}}" catchtap='details' data-item="{{item}}" wx:for="{{order}}" wx:key="index">
-      <view class="refundValue" wx:if="{{we.isNumber(item.refundValue)}}">
-        返现¥{{we.toFixed(item.refundValue)}}
-      </view>
+      <view class="refundValue" wx:if="{{we.isNumber(item.refundValue) && item.promotionRule.promotionType!='MULTIPLE_RETURN' && item.refundValue!=0}}">返¥{{we.toFixed(item.refundValue)}}</view>
+      <!-- <view class="refundValue" wx:if="{{we.isNumber(item.refundValue) && item.promotionRule.promotionType=='MULTIPLE_RETURN' && item.refundValue!=0}}">返¥{{we.toFixed(item.refundValue)}}x{{item.promotionRule.promotionRule[0].multipleValue}}</view> -->
       <view class="shop-img">
         <view class="shop-message" wx:if="{{we.isShowMessage(item.quantityLimitTotal,item.dateTo)}}">
           <text wx:if="{{we.isNumber(item.quantityLimitTotal)}}">限购{{item.quantityLimitTotal}}件</text>

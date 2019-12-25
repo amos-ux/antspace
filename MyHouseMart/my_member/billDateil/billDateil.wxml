@@ -8,10 +8,10 @@
     <block wx:for="{{recordList}}" wx:key="index">
       <view class="record">
         <view class="record-view">
-          <view class="consumption">{{item.transType=="CHARGE"?"充值":item.transType=="REFUND"?"订单返现":item.transType=="VBRANCH"?"店铺收入":item.transType=="SALES"?"订单消费":item.transType=="REGISTER"?"注册送":item.transType=="FIRSTORDER"?"首单送":item.transType=='ORETURN'?"系统回收":"分享消费返现"}}</view>
+          <view class="consumption">{{item.transType=="CHARGE"?"充值":item.transType=="REFUND"?"订单返现":item.transType=="VBRANCH"?"店铺收入":item.transType=="SALES"?"订单消费":item.transType=="REGISTER"?"注册送":item.transType=="FIRSTORDER"?"首单送":item.transType=='ORETURN'?"系统回收":item.transType=='WALLETREFUND'?'售后退款':"分享消费返现"}}</view>
           <view class="record-date">{{item.tranDate}}</view>
         </view>
-        <view class="record-view1" style="{{item.transType=='SALES' || item.transType=='ORETURN'?'color:#FF7459':'color:#2B2D33'}}">{{item.transType=="SALES" || item.transType=='ORETURN'?"-":"+"}}{{we.toFixed(item.transAmt)}}</view>
+        <view class="record-view1" style="{{item.transType=='SALES' || item.transType=='ORETURN'?'color:#2B2D33':'color:#FF7459'}}">{{item.transType=="SALES" || item.transType=='ORETURN'?"-":"+"}}{{we.toFixed(item.transAmt)}}</view>
       </view>
     </block>
   </view>
